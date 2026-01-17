@@ -1,0 +1,15 @@
+bin
+tmp
+*.db
+*.env
+*.exe
+*.deb
+db/generated/
+*.log
+/logs
+go.mod
+go.sum
+.air.toml
+Makefile
+tailwindcss
+

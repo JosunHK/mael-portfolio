@@ -1,0 +1,101 @@
+package accordion
+
+import (
+	"mael/web/templates/components/ui/icon"
+	twmerge "github.com/Oudwins/tailwind-merge-go/pkg/twmerge"
+    "github.com/google/uuid"
+)
+
+var M = twmerge.Merge
+
+type Props struct {
+	Class string
+	Attrs templ.Attributes
+}
+
+var accordionScriptHandle = templ.NewOnceHandle();
+templ AccordionScript(){
+    @accordionScriptHandle.Once() {
+        <script nonce={ templ.GetNonce(ctx) }>
+            document.addEventListener('alpine:init', () => {
+                Alpine.data('accordion', () => ({
+                    activeTab: '',
+                    setActiveTab() {
+                        if(!this.isActive()){
+                            this.activeTab = this.$root.getAttribute("tab-id");
+                            return;
+                        }
+                        this.activeTab = '';
+                    },
+                    isActive() {
+                        return this.activeTab === this.$root.getAttribute("tab-id");
+                    },
+                    getOrientation() {
+                        return this.isActive() ? 'rotate-180' : 'rotate-0';
+                    },
+                    getShrink() {
+                        return this.isActive() ? 'grid-rows-[1fr]' : 'grid-rows-[0fr]';
+                    },
+                }))
+            })
+        </script>
+    }
+}
+
+templ Accordion(props Props) {
+	<div
+		x-data="accordion"
+		class={ props.Class }
+		{ props.Attrs... }
+	>
+		{ children... }
+	</div>
+}
+
+templ AccordionItem(props Props) {
+	<div
+        x-data=""
+        tab-id={ uuid.NewString() }
+		class={ M("border-b w-full", props.Class) }
+		{ props.Attrs... }
+	>
+		{ children... }
+	</div>
+}
+
+templ AccordionHeader(props Props) {
+	<button
+		class="flex w-full rounded-md focus-visible:ring-eBlue focus-visible:ring-2 focus-visible:outline-none"
+        x-ref="header"
+		@click="setActiveTab"
+	>
+		<div
+			class={ M("flex flex-1 items-center justify-between py-4 font-medium transition-all hover:underline [&[data-state=open]>svg]:rotate-180", props.Class) }
+			{ props.Attrs... }
+		>
+			{ children... }
+			@icon.Wrapper(icon.Props{
+                Class:"transition-all",
+                Attrs:templ.Attributes{
+                    ":class":"getOrientation",
+                },
+            }) {
+				@icon.ChevronDown()
+			}
+		</div>
+	</button>
+}
+
+templ AccordionContent(props Props) {
+	<div
+		class={ `overflow-hidden text-sm transition-all grid` }
+        :class="getShrink"
+		{ props.Attrs... }
+	>
+		<div
+            class={ M("pt-0 overflow-hidden", props.Class) }
+        >
+			{ children... }
+		</div>
+	</div>
+}

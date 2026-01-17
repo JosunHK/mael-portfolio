@@ -1,0 +1,40 @@
+
+package animation
+
+import (
+	"github.com/gungun974/gocva"
+)
+
+type IntersectProps struct {
+	Name  string
+	Class string
+	Attrs templ.Attributes
+	Variant gocva.Variant
+}
+
+var onIntersectScriptHandle = templ.NewOnceHandle();
+templ OnIntersectScript(){
+    @onIntersectScriptHandle.Once() {
+        <script nonce={templ.GetNonce(ctx)}>
+            document.addEventListener('alpine:init', () => {
+                Alpine.data('onIntersect', () => ({
+                    show: false,
+                    showToggle() {
+                        this.show = true;
+                    },
+                }))
+            })
+        </script>
+    }
+}
+
+templ OnIntersect(props IntersectProps) {
+    <div
+        x-data="onIntersect"
+        x-intersect="showToggle"
+		class={ props.Class }
+        { props.Attrs... }
+    >
+		{ children... }
+	</div>
+}

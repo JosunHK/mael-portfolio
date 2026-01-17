@@ -1,0 +1,292 @@
+package dropDownMenu
+
+import (
+	twmerge "github.com/Oudwins/tailwind-merge-go/pkg/twmerge"
+	"mael/web/templates/components/ui/icon"
+)
+
+var M = twmerge.Merge
+
+type Props struct {
+	Name  string
+	Class string
+	Attrs templ.Attributes
+}
+
+var dropDownMenuScriptHandle = templ.NewOnceHandle();
+templ DropDownMenuScript(){
+    @dropDownMenuScriptHandle.Once() {
+        <script nonce={templ.GetNonce(ctx)}>
+            document.addEventListener('alpine:init', () => {
+                Alpine.data('dropDownMenu', () => ({
+                    open: false,
+                    toggle() {
+                        if (this.open) {
+                            this.$refs.button.firstChild.focus()
+                            return this.close()
+                        }
+                        this.open = true
+                    },
+                    close(focusAfter) {
+                        if (!this.open) return
+                        this.open = false
+                        focusAfter && focusAfter.focus()
+                    },
+		            closeEscape(){
+                        return this.close(this.$refs.button.firstChild);
+                    },
+                    idButton : ['dropdown-button'],
+                    content:{
+                        ["x-ref"](){
+                            return "panel"
+                        },
+                        ["x-show"](){
+                            return this.open;
+                        },
+                        ["x-effect"](){
+                            return this.open && setTimeout(()=>this.$el.getElementsByTagName('button')[0].focus(),0)
+                        },
+                        ["x-anchor"](){
+                            return this.$refs.button;
+                        },
+                        ["x-on:keydown.escape"](){
+                            return this.close(this.$refs.button.firstChild);
+                        },
+                        ["x-on:click.outside"](){
+                            return this.close(this.$refs.button.firstChild);
+                        },
+                        [":id"](){
+                            return this.$id('dropdown-button');
+                        },
+                    },
+                    item:{
+                        ['x-on:keydown.tab.prevent.stop']() {
+                             return;
+                        },
+                        ['x-on:keydown.shift.tab.prevent.stop']() {
+                            return;
+                        },
+                        ["x-on:keydown.down.prevent.stop"](){
+                                return this.$el.nextElementSibling && this.$el.nextElementSibling.tagName === 'BUTTON'
+                                ? this.$el.nextElementSibling.focus() 
+                                : this.$el.parentElement.querySelectorAll('button')[0].focus()
+                        },
+                        ["x-on:keydown.up.prevent.stop"](){
+                            return this.$el.previousElementSibling&&this.$el.previousElementSibling.tagName === 'BUTTON'
+                            ? this.$el.previousElementSibling.focus()
+                            : [...this.$el.parentElement.querySelectorAll('button')].pop().focus() 
+                        },
+                        ["@click"](){
+                            this.toggle();
+                            this.$dispatch('item-clicked');
+                        },
+                    },
+
+                }));
+                Alpine.data('subDropDownMenu', () => ({
+                    open: false,
+                    toggle() {
+                        if (this.open) {
+                            this.$refs.button.firstChild.focus()
+                            return this.close()
+                        }
+
+                        this.open = true
+                    },
+                    close(focusAfter) {
+                        if (! this.open) return
+                        this.open = false
+                        focusAfter && focusAfter.focus()
+                    },
+                    trigger: {
+                        ["x-id"](){
+                            return ['dropdown-button'];
+                        },
+                        ["x-on:click"](){
+                            return this.toggle();
+                        },
+                        [":aria-expanded"](){
+                            return this.open;
+                        },
+                        [":aria-controls"](){
+                            return this.$id('dropdown-button');
+                        },
+                        ['x-on:keydown.tab.prevent.stop']() {
+                             return;
+                        },
+                        ['x-on:keydown.shift.tab.prevent.stop']() {
+                            return;
+                        },
+                        ["x-on:keydown.down.prevent.stop"](){
+                            return this.$el.nextElementSibling&&this.$el.nextElementSibling.tagName === 'BUTTON'
+                            ? this.$el.nextElementSibling.focus() 
+                            : this.$el.parentElement.querySelectorAll('button')[0].focus()
+                        },
+                        ["x-on:keydown.up.prevent.stop"](){
+                            return this.$el.previousElementSibling&&this.$el.previousElementSibling.tagName === 'BUTTON'
+                            ? this.$el.previousElementSibling.focus()
+                            : [...this.$el.parentElement.querySelectorAll('button')].pop().focus() 
+                        },
+                    },
+                    content:{
+                        ["x-ref"](){
+                            return "panel"
+                        },
+                        ["x-show"](){
+                            return this.open;
+                        },
+                        ["x-effect"](){
+                            return this.open && setTimeout(()=>this.$el.getElementsByTagName('button')[0].focus(),0)
+                        },
+                        ["x-anchor.right-start"](){
+                            return this.$refs.button;
+                        },
+                        ["x-on:keydown.escape"](){
+                            return this.close(this.$refs.button);
+                        },
+                        ["x-on:click.outside"](){
+                            return this.close(this.$refs.button);
+                        },
+                        [":id"](){
+                            return this.$id('dropdown-button');
+                        },
+                    },
+                }));
+            })
+        </script>
+    }
+}
+
+templ DropDownMenuTriggerIcon(props Props) {
+	<div
+		class={ M("m-1 h-5 w-5", props.Class) }
+		{ props.Attrs... }
+	>
+		{ children... }
+	</div>
+}
+
+templ DropDownMenuIcon(props Props) {
+	<div
+		class={ M("mr-2 h-4 w-4", props.Class) }
+		{ props.Attrs... }
+	>
+		{ children... }
+	</div>
+}
+
+templ DropDownMenuTrigger(props Props) {
+	<div
+		class={ props.Class }
+		x-ref="button"
+		x-on:click="toggle"
+		:aria-expanded="open"
+		{ props.Attrs... }
+	>
+		{ children... }
+	</div>
+}
+
+templ DropDownMenuSub(props Props) {
+	<div
+		class={ M("relative", props.Class) }
+	>
+		<div
+			{ props.Attrs... }
+		>
+			{ children... }
+		</div>
+	</div>
+}
+
+templ DropDownMenuSubTrigger(props Props) {
+	<button
+        x-data="subDropDownMenu"
+        x-ref="button"
+		class={ M("w-full flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-eBlue ", props.Class) }
+        x-bind="trigger"
+		{ props.Attrs... }
+	>
+		{ children... }
+		@DropDownMenuIcon(Props{
+			Class: "ml-auto h-4 w-4",
+		}) {
+			@icon.ChevronRight()
+		}
+	</button>
+}
+
+templ DropDownMenuSubContent(props Props) {
+	<template x-teleport="body">
+		<div
+			role="menu"
+            x-bind="content"
+			x-transition.origin.top.left
+			class={ M(`z-50 min-w-[max-content] overflow-hidden rounded-md border absolute top-0 left-full bg-popover p-1
+                text-popover-foreground shadow-lg`, props.Class) }
+			{ props.Attrs... }
+		>
+			{ children... }
+		</div>
+	</template>
+}
+
+templ DropDownMenuContent(props Props) {
+	<template x-teleport="body">
+		<div
+            x-bind="content"
+			x-transition.origin.top.left
+			class={ M("z-50 min-w-[max-content] rounded-md border bg-popover p-1 text-popover-foreground shadow-md absolute", props.Class) }
+			{ props.Attrs... }
+		>
+			{ children... }
+		</div>
+	</template>
+}
+
+templ DropDownMenuItem(props Props) {
+	<button
+        x-bind="item"
+		class={ M("w-full relative flex cursor-default select-none items-center rounded-sm px-2 py-1.5 text-sm outline-none focus-visible:ring-2 focus-visible:ring-eBlue transition-colors hover:bg-accent hover:text-accent-foreground ", props.Class) }
+		{ props.Attrs... }
+	>
+		{ children... }
+	</button>
+}
+
+templ DropDownMenuLabel(props Props) {
+	<div
+		class={ M("px-2 py-1.5 text-sm font-semibold", props.Class) }
+		{ props.Attrs... }
+	>
+		{ children... }
+	</div>
+}
+
+templ DropDownMenu(props Props) {
+	<div
+		class={ M("relative w-min h-min", props.Class) }
+		x-data="dropDownMenu"
+		x-on:keydown.escape.prevent.stop="closeEscape"
+		x-id="idButton"
+		{ props.Attrs... }
+	>
+		{ children... }
+	</div>
+}
+
+templ DropDownMenuSeparator(props Props) {
+	<hr
+		class={ M("-mx-1 my-1 h-px bg-muted", props.Class) }
+		{ props.Attrs... }
+	/>
+}
+
+templ DropDownMenuShortcut(props Props) {
+	<span
+		class={ M("ml-auto text-xs tracking-widest opacity-60", props.Class) }
+		{ props.Attrs... }
+	>
+		{ children... }
+	</span>
+}

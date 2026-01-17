@@ -1,0 +1,35 @@
+package label
+
+import (
+	twmerge "github.com/Oudwins/tailwind-merge-go/pkg/twmerge"
+	"github.com/gungun974/gocva"
+)
+
+var M = twmerge.Merge
+
+type Props struct {
+	Name  string
+	Class string
+	Attrs templ.Attributes
+	Variant gocva.Variant
+}
+
+var cva = gocva.CVA{
+	Base: "block",
+	Variants: gocva.Variants{
+		"variant": {
+			"default": "text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70",
+			"title": "text-md font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-center",
+			"bigtitle": "text-[3rem] font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 text-center",
+		},
+	},
+}
+
+templ Label(props Props) {
+	<label
+		class={ M(cva.Render(props.Variant), props.Class) }
+        { props.Attrs... }
+	>
+		{ children... }
+	</label>
+}

@@ -1,0 +1,300 @@
+package menubar
+
+import (
+    "fmt"
+	"mael/cmd/util/menuProvider"
+	sqlc "mael/db/generated"
+	"mael/web/templates/components/ui/button"
+	card "mael/web/templates/components/ui/card"
+	"mael/web/templates/components/ui/dropDownMenu"
+	"mael/web/templates/components/ui/icon"
+	"mael/web/templates/components/ui/input"
+	"mael/web/templates/components/ui/accordion"
+	label "mael/web/templates/components/ui/label"
+	gocva "github.com/gungun974/gocva"
+	"strings"
+)
+
+templ Menubar() {
+	@card.Card(card.Props{
+		Class: "flex flex-row w-full justify-between items-center p-2 md:p-4 bg-background h-[25rem] z-10 border-0 shadow-none",
+	}) {
+        @title()
+        <div class="flex flex-col h-full items-end pr-8">
+            <img src="/static/temp/logo.jpeg" class="xl:block hidden w-[50rem]"/>
+            @Nav()
+            <div class="flex flex-row justify-end">
+                @SideMenu() {
+                    @SideMenuContent()
+                }
+                @buttonRow()
+            </div>
+        </div>
+	}
+}
+
+templ title() {
+    <img
+        src="/static/temp/title.jpeg"
+        class="h-full"
+        hx-on:click="window.location.href='/'"
+    />
+}
+
+templ buttonRow(){
+    <div class="flex-row gap-1 items-center hidden xl:flex">
+        <div
+            class="flex-row gap-1 items-center hidden xl:flex bg-ePurple rounded-2xl p-3 mr-4 "
+        >
+            @input.Input(input.Props{
+                Class: "w-[40rem] rounded-2xl",
+                Attrs: templ.Attributes{
+                    "placeholder": "⌕...",
+                },
+            })
+//            @button.Button(button.Props{
+//                Variant: gocva.Variant{
+//                    "variant": "outline",
+//                    "size":    "icon",
+//                },
+//            }) {
+//                @icon.Wrapper(icon.Props{
+//                    Class: "m-1 h-5 w-5 mx-2",
+//                }) {
+//                    @icon.Search()
+//                }
+//            }
+            @button.Button(button.Props{
+                Variant: gocva.Variant{
+                    "variant": "purple",
+                    "size":    "icon",
+                },
+            }) {
+                @icon.Wrapper(icon.Props{
+                    Class: "m-1 h-5 w-5 mx-2",
+                }) {
+                    @icon.User()
+                }
+            }
+            @button.Button(button.Props{
+                Variant: gocva.Variant{
+                    "variant": "purple",
+                    "size":    "icon",
+                },
+            }) {
+                @icon.Wrapper(icon.Props{
+                    Class: "m-1 h-5 w-5 mx-2",
+                }) {
+                    @icon.ShoppingCart()
+                }
+            }
+        </div>
+    </div>
+}
+
+templ Nav() {
+	<div Class=" flex flex-row justify-end items-center bg-background rounded-none z-10 border-none h-full">
+		<div Class="pt-1 flex-row w-min gap-0 items-end p-3 bg-background rounded-none border-none xl:flex hidden shadow-xl">
+			for _, nav := range menuProvider.GetMenu(ctx, "main_nav") {
+                <div class="text-xl px-16 w-max h-min focus-within:ring-eBlue focus-within:ring-2 focus-within:outline-none rounded-md">
+                    <a class="focus-within:outline-none text-foreground text-3xl" href={ templ.URL(nav.Value) }>{ nav.Label } </a>
+                </div>
+			}
+		</div>
+	</div>
+}
+
+templ NavBanner(imageURL string) {
+    @Banner(imageURL)
+    @PageNav()
+}
+
+templ Banner(imageURL string) {
+	<section
+		class="2xl:h-[60vh] md:h-[45vh] h-[30vh] mt-4 px-4 rounded-md animate-fade-in mb-32"
+		aria-label="Banner"
+	>
+        <img class="w-full max-h-full object-cover" src={imageURL}/>
+    </section>
+}
+templ PageNav() {
+    <div Class="pt-1 flex-row w-full gap-4 justify-evenly items-end p-3 bg-background rounded-none h-full border-none xl:flex hidden mb-24">
+        for _, nav := range menuProvider.GetMenu(ctx, "page_nav") {
+            @NavLink(nav)
+        }
+    </div>
+}
+
+templ NavLink(nav sqlc.MenuItem) {
+    <a class="w-full text-xl focus-within:ring-eBlue focus-within:ring-2 focus-within:outline-none text-eBrown" href={ templ.URL(nav.Value) }>
+        <div class="relative h-[10rem] border border-eBrown rounded-md grow shrink basis-0 flex justify-center items-center flex-col">
+            <img src={"/static/temp/"+menuProvider.GetLabel(ctx, nav.Value)} class="absolute" alt="" width="100%" height="100%" >
+            <span class="z-10 text-4xl text-background">{ nav.Label }</span>
+        </div>
+    </a>
+}
+
+templ SideNavLink(nav sqlc.MenuItem) {
+    if strings.HasPrefix(nav.Value, "/") {
+        <div
+            class="w-full flex flex-1 items-center justify-between py-2 font-medium transition-all hover:underline "
+        >
+            <a href={ templ.URL(nav.Value) }>{ nav.Label } </a>
+        </div>
+    } else {
+        @accordion.AccordionItem(accordion.Props{
+                Class:"border-none",
+            }) {
+            @accordion.AccordionHeader(accordion.Props{}) {
+                {nav.Label}
+            }
+            @accordion.AccordionContent(accordion.Props{
+                Class:"pl-4 mb-2",
+            }) {
+			    @SideSubNav(nav)
+            }
+        }
+    }
+}
+
+templ SideSubNav(nav sqlc.MenuItem) {
+    <div class="flex flex-col gap-2">
+        for _, subNav := range menuProvider.GetMenu(ctx, nav.Value) {
+            <a href={ templ.URL(subNav.Value) }>{ subNav.Label } </a>
+        }
+    </div>
+}
+
+templ SubNav(nav sqlc.MenuItem) {
+	@dropDownMenu.DropDownMenuContent(dropDownMenu.Props{
+		Class: "min-w-36 pt-2 opacity-85 backdrop-blur-xl shadow-slate-500",
+		Attrs: templ.Attributes{
+			"@mouseover":      "open=true",
+			"@mouseover.away": "open=false",
+		},
+	}) {
+		for _, subNav := range menuProvider.GetMenu(ctx, nav.Value) {
+			@dropDownMenu.DropDownMenuItem(dropDownMenu.Props{
+				Class: "text-lg w-full border-b-1 border-black pl-4",
+                Attrs:templ.Attributes{
+                    "@item-clicked": fmt.Sprintf("window.location = '%s'", subNav.Value),
+                },
+			}) {
+                @label.Label(label.Props{}){
+                    {subNav.Label}
+                }
+			}
+		}
+	}
+}
+
+//not compatible with csp build, requires refactor
+templ SideMenu() {
+	<div
+		class="flex-row gap-1 items-center flex xl:hidden"
+		x-data="{
+            open: false,
+        }"
+	>
+		@button.Button(button.Props{
+			Attrs: templ.Attributes{
+				"@click": "open=true",
+			},
+			Variant: gocva.Variant{
+				"variant": "outline",
+				"size":    "icon",
+			},
+		}) {
+			@icon.Wrapper(icon.Props{
+				Class: "m-1 h-5 w-5 mx-2",
+			}) {
+				@icon.Menu()
+			}
+		}
+		<template x-teleport="body">
+			<div
+				x-show="open"
+				class="fixed top-0 left-0 z-30 h-screen w-screen backdrop-blur-sm bg-white/10"
+			></div>
+		</template>
+		<template x-teleport="body">
+			<div
+                x-show="open"
+                x-transition.opacity.duration.100ms
+				:class="open?'animate-slide-in':'animate-slide-out'"
+				class="z-40 border bg-popover
+                       text-popover-foreground shadow-md fixed
+                       overflow-y-auto h-screen right-0 w-0"
+				x-on:mousedown.outside="open=false"
+			>
+				{ children... }
+			</div>
+		</template>
+	</div>
+}
+
+templ SideMenuContent() {
+	<div class="h-[6rem]">
+		@button.Button(button.Props{
+			Class: "absolute right-0 mr-1 top-0 mt-6",
+            Attrs:templ.Attributes{
+				"@click": "open=false",
+            },
+			Variant: gocva.Variant{
+				"variant": "ghost",
+				"size":    "icon",
+			},
+		}) {
+			@icon.Wrapper(icon.Props{
+				Class: "m-1 h-5 w-5 mx-2",
+			}) {
+				@icon.X()
+			}
+		}
+	</div>
+	<div class="flex flex-rows mx-1 mt-2">
+		@input.Input(input.Props{
+			Attrs: templ.Attributes{
+				"placeholder": "⌕...",
+			},
+		})
+	</div>
+	<div class="flex flex-rows mt-2 justify-between">
+		@button.Button(button.Props{
+			Variant: gocva.Variant{
+				"variant": "ghost",
+				"size":    "icon",
+			},
+		}) {
+			@icon.Wrapper(icon.Props{
+				Class: "m-1 h-5 w-5 mx-2",
+			}) {
+				@icon.User()
+			}
+		}
+		@button.Button(button.Props{
+			Variant: gocva.Variant{
+				"variant": "ghost",
+				"size":    "icon",
+			},
+		}) {
+			@icon.Wrapper(icon.Props{
+				Class: "m-1 h-5 w-5 mx-2",
+			}) {
+				@icon.ShoppingCart()
+			}
+		}
+	</div>
+	<div Class="pt-1 mt-4 flex-col items-center w-full gap-4 bg-background rounded-none border-none flex">
+        @accordion.Accordion(accordion.Props{
+            Class:"w-[70%]",
+        }) {
+            for _, nav := range menuProvider.GetMenu(ctx, "main_nav") {
+                @SideNavLink(nav)
+            }
+            for _, nav := range menuProvider.GetMenu(ctx, "page_nav") {
+                @SideNavLink(nav)
+            }
+        }
+	</div>
+}

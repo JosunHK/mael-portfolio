@@ -1,0 +1,67 @@
+package card 
+
+import (
+	twmerge "github.com/Oudwins/tailwind-merge-go/pkg/twmerge"
+)
+
+var M = twmerge.Merge
+
+type Props struct {
+	Name        string
+	Class       string
+	Attrs       templ.Attributes
+}
+
+templ Card(props Props) {
+	<div
+		class={ M("w-[350px] rounded-lg border bg-card text-card-foreground shadow-sm", props.Class) }
+		{ props.Attrs... }
+	>
+		{ children... }
+	</div>
+}
+
+templ Header(props Props) {
+	<div
+		class={ M("flex flex-col space-y-1.5 p-6", props.Class) }
+		{ props.Attrs... }
+	>
+		{ children... }
+	</div>
+}
+
+templ Title(props Props) {
+	<h3
+		class={ M("text-2xl font-semibold leading-none tracking-tight", props.Class) }
+		{ props.Attrs... }
+	>
+		{ children... }
+	</h3>
+}
+
+templ Description(props Props) {
+	<p
+		class={ M("text-sm text-muted-foreground", props.Class) }
+		{ props.Attrs... }
+	>
+		{ children... }
+	</p>
+}
+
+templ Content(props Props) {
+	<div
+		class={ M("p-6 pt-0", props.Class) }
+		{ props.Attrs... }
+	>
+		{ children... }
+	</div>
+}
+
+templ Footer(props Props) {
+	<div
+		class={ M("flex items-center p-6 pt-0", props.Class) }
+		{ props.Attrs... }
+	>
+		{ children... }
+	</div>
+}

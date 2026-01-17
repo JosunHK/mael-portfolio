@@ -1,0 +1,42 @@
+package selectBox
+
+import (
+    sqlc "mael/db/generated"
+)
+
+templ Select(menu []sqlc.MenuItem, selectProps BodyProps) {
+	@SelectBody(selectProps) {
+		@SelectTrigger(Props{}) {
+			@SelectDisplay(Props{})
+		}
+		if len(menu) > 0 {
+			@SelectContent(Props{}) {
+				for _, item := range menu {
+					@SelectItem(Props{ Attrs: selectProps.ItemAttrs, }, item) {
+						{ item.Label }
+					}
+				}
+			}
+		}
+	}
+}
+
+templ LabeledSelect(label string, menu []sqlc.MenuItem, selectProps BodyProps) {
+	@SelectBody(selectProps) {
+		@SelectTrigger(Props{}) {
+			@SelectDisplay(Props{})
+		}
+		@SelectContent(Props{}) {
+			@SelectLabel(Props{}) {
+				{ label }
+			}
+			if len(menu) > 0 {
+				for _, item := range menu {
+					@SelectItem(Props{}, item) {
+						{ item.Label }
+					}
+				}
+			}
+		}
+	}
+}

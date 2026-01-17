@@ -1,0 +1,327 @@
+package selectBox 
+
+import (
+	sqlc "mael/db/generated"
+	"mael/web/templates/components/ui/icon"
+	twmerge "github.com/Oudwins/tailwind-merge-go/pkg/twmerge"
+)
+
+var M = twmerge.Merge
+
+type Props struct {
+	Selected sqlc.MenuItem
+	Name     string
+	Class    string
+	Attrs    templ.Attributes
+}
+
+type BodyProps struct {
+	Selected  sqlc.MenuItem
+	Name      string
+	Id        string
+	Class     string
+	Attrs     templ.Attributes
+	ItemAttrs templ.Attributes
+	Required  bool
+	ExtraInit string
+}
+
+var selectScriptHandle = templ.NewOnceHandle();
+templ SelectScript(){
+    @selectScriptHandle.Once() {
+        <script nonce={templ.GetNonce(ctx)}>
+            document.addEventListener('alpine:init', () => {
+                Alpine.data('select', () => ({
+                    open: false,
+                    selectedLabel: '',
+                    selectedValue: '',
+                    maxLength: 0,
+                    options: new Map(),
+                    disabled: new Map(),
+                    id() {
+                        return ['dropdown-button'];
+                    },
+		            onEsc() {
+                        this.close(this.$refs.button);
+                    },
+                    onFocus() {
+                        !this.$refs.panel.contains(this.$event.target) && this.close();
+                    },
+                    setDefault() {
+                        const label = this.$el.getAttribute("item-label");
+                        const value = this.$el.getAttribute("item-value");
+                        if (this.selectedLabel === ''){
+                            this.setOption(label, value);
+                        }
+                    },
+                    setOption(label, value) {
+                        if (label && value) {
+                            this.selectedLabel = label; 
+                            this.selectedValue = value;
+                        }
+                    },
+                    disableOption: function(value){
+                        if (value === '') {
+                            return;
+                        }
+                        let opt = this.options.get(value);
+                        this.disabled.set(value, opt);
+                        if(this.selectedValue === value){
+                            for (let [key, val] of this.options) {
+                                 if(!this.disabled.has(key)){
+                                    this.selectedLabel = val.getAttribute('item-label');
+                                    this.selectedValue = val.getAttribute('item-value');
+                                    break;
+                                }
+                            }
+                            if(this.selectedValue === value){
+                                this.selectedLabel = '';
+                                this.selectedValue = '';
+                            }
+                        }
+                    },
+                    clearDisabled: function(){
+                        this.disabled = new Map();
+                    },
+                    toggle() {
+                        if (this.open) {
+                            return this.close();
+                        }
+                        this.$refs.button.focus();
+                        this.open = true;
+                    },
+                    setLength(length) {
+                        if (length > this.maxLength) {
+                            this.maxLength = length;
+                        } 
+                    },
+                    close(focusAfter) {
+                        if (!this.open) return;
+                        this.open = false;
+                        focusAfter && focusAfter.focus();
+                    },
+                    getTextWidth(text, font) {
+                        var canvas = this.getTextWidth.canvas || (this.getTextWidth.canvas = document.createElement('canvas'));
+                        var context = canvas.getContext('2d');
+                        context.font = font;
+                        var metrics = context.measureText(text);
+                        return metrics.width;
+                    },
+                    getCssStyle(element, prop) {
+                        return window.getComputedStyle(element, null).getPropertyValue(prop);
+                    },
+                    getCanvasFont(el = document.body) {
+                        const fontWeight = this.getCssStyle(el, 'font-weight') || 'normal';
+                        const fontSize = this.getCssStyle(el, 'font-size') || '16px';
+                        const fontFamily = this.getCssStyle(el, 'font-family') || 'Times New Roman';
+                        return `${fontWeight} ${fontSize} ${fontFamily}`;
+                    },
+                    display: {
+                        ['x-text']() {
+                            return this.selectedLabel;
+                        },
+                        ['x-effect']() {
+		                    return this.$el.style.width = `${this.maxLength + 10}px`;
+                        }
+                    },
+                    trigger: {
+                        ['x-intersect:leave.full']() {
+		                    this.close(this.$refs.button);
+                        },
+                        ['@click']() {
+                            this.toggle();
+                        },
+                        [':aria-expanded']() {
+                            this.open;
+                        },
+                        [':id']() {
+                            this.$id('dropdown-button');
+                        },
+                    },
+                    content:{
+                        ['x-show'](){
+                            return this.open;
+                        },
+                        ['x-effect'](){
+                            const el = this.$el;
+                            this.open && setTimeout(()=>{
+                                el.getElementsByTagName('button')[0].focus();
+                            },0);
+                        },
+                        ['x-anchor'](){
+                            return this.$refs.button;
+                        },
+                        ['x-on:mousedown.outside'](){
+                            this.close(this.$refs.button);
+                        },
+                    },
+                    item: {
+                        ['x-init']() {
+                            const label = this.$el.getAttribute("item-label");
+                            const value = this.$el.getAttribute("item-value");
+                            this.options.set(value, this.$el);
+                            this.setLength(this.getTextWidth(label, this.getCanvasFont(this.$el)));
+                            if (this.selectedLabel === '') {
+                                this.setOption(label, value);
+                            }
+                        },
+                        ['@click.stop'](){
+                            this.close(this.$refs.button);
+                            this.selectedLabel = this.$el.getAttribute("item-label");
+                            this.selectedValue = this.$el.getAttribute("item-value");
+                            this.$dispatch('item-clicked');
+                        },
+                        ['x-effect'](){
+                            this.$el.style.width = `${this.maxLength + 50}px`;
+                        },
+                        [':class'](){
+                            return this.disabled.has(this.$el.getAttribute("item-value")) ? "pointer-events-none opacity-50" : "";
+                        },
+                        ['x-on:keydown.tab.prevent.stop']() {
+                             return;
+                        },
+                        ['x-on:keydown.shift.tab.prevent.stop']() {
+                            return;
+                        },
+                        ['x-on:keydown.down.prevent.stop']() {
+                             return this.$el.nextElementSibling && this.$el.nextElementSibling.tagName === 'BUTTON' ? this.$el.nextElementSibling.focus() : this.$el.parentElement.querySelectorAll('button')[0].focus();
+                        },
+                        ['x-on:keydown.up.prevent.stop']() {
+                            return this.$el.previousElementSibling && this.$el.previousElementSibling.tagName === 'BUTTON' ? this.$el.previousElementSibling.focus() : [...this.$el.parentElement.querySelectorAll('button')].pop().focus();
+                        }
+                    },
+                    icon:{
+                        ['x-show']() {
+                            return this.selectedValue === this.$el.getAttribute("item-value");
+                        }
+                    },
+                    label:{
+		                ['x-init']() {
+                            this.setLength(this.getTextWidth(this.$el.innerText, this.getCanvasFont(this.$el)));
+                        }
+                    }
+                }))
+            })
+        </script>
+    }
+}
+
+templ SelectTriggerIcon(props Props) {
+	<div
+		class={ M("m-1 h-5 w-5", props.Class) }
+		{ props.Attrs... }
+	>
+		{ children... }
+	</div>
+}
+
+templ SelectIcon(props Props) {
+	<div
+		class={ M("ml-2 h-4 w-4", props.Class) }
+		{ props.Attrs... }
+	>
+		{ children... }
+	</div>
+}
+
+templ SelectDisplay(props Props) {
+	<div
+        x-bind="display"
+		class={ M("flex items-center", props.Class) }
+		{ props.Attrs... }
+	></div>
+}
+
+templ SelectTrigger(props Props) {
+	<button
+		x-ref="button"
+        x-bind="trigger"
+		class={ M("lex h-10 w-full items-center justify-between rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50 [&>span]:line-clamp-1", props.Class) }
+		type="button"
+		{ props.Attrs... }
+	>
+		<div
+			class="flex items-center justify-between flex-row"
+		>
+			{ children... }
+			@SelectIcon(Props{}) {
+				@icon.ChevronDown()
+			}
+		</div>
+	</button>
+}
+
+templ SelectContent(props Props) {
+	<template x-teleport="body">
+		<div
+			x-ref="panel"
+			x-transition.origin.top
+            x-bind="content"
+			class={ M("z-50 rounded-md border bg-popover p-1 text-popover-foreground shadow-md fixed max-h-[12rem] overflow-y-auto scrollbar-hide", props.Class) }
+			{ props.Attrs... }
+		>
+			{ children... }
+		</div>
+	</template>
+}
+
+templ SelectItem(props Props, item sqlc.MenuItem) {
+	<button
+        item-label={ item.Label }
+        item-value={ item.Value }
+        x-bind="item"
+        class={ M("relative flex cursor-default select-none items-center justify-between rounded-sm px-2 py-1.5 text-sm outline-none transition-colors hover:bg-accent hover:text-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-eBlue", props.Class) }
+		{ props.Attrs... }
+	>
+		{ children... }
+		@SelectIcon(Props{
+			Class: "ml-2",
+			Attrs: templ.Attributes{
+                "item-value": item.Value,
+				"x-bind": "icon",
+			},
+		}) {
+			@icon.Check()
+		}
+	</button>
+}
+
+templ SelectLabel(props Props) {
+	<div
+        x-bind="label"
+		class={ M("px-2 py-1.5 text-sm font-semibold", props.Class) }
+		{ props.Attrs... }
+	>
+		{ children... }
+	</div>
+}
+
+templ SelectBody(props BodyProps) {
+	<div
+		x-data="select"
+		class={ M("max-w-min relative", props.Class) }
+        item-label={ props.Selected.Label }
+        item-value={ props.Selected.Value }
+		x-init="setDefault"
+		x-on:keydown.escape.prevent.stop="onEsc"
+		x-on:focusin.window="onFocus"
+		x-id="id"
+		{ props.Attrs... }
+	>
+		<input
+			type="text"
+			class="hidden"
+			name={ props.Name }
+			x-model="selectedValue"
+			required?={ props.Required }
+		/>
+		{ children... }
+	</div>
+}
+
+templ SelectSeparator(props Props) {
+	<hr
+		class={ M("-mx-1 my-1 h-px bg-muted", props.Class) }
+		{ props.Attrs... }
+	/>
+}

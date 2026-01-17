@@ -1,0 +1,88 @@
+package card
+
+import (
+	button "mael/web/templates/components/ui/button"
+	input "mael/web/templates/components/ui/input"
+	label "mael/web/templates/components/ui/label"
+	"github.com/gungun974/gocva"
+)
+
+type DemoProps struct {
+	Name        string
+	Class       string
+	Attrs       templ.Attributes
+	Title       string
+	Description string
+	Footer      string
+}
+
+templ LoginCard(cardProps DemoProps) {
+	@Card(Props{}) {
+		@Header(Props{}) {
+			@Title(Props{}) {
+				{ cardProps.Title }
+			}
+		}
+		@Content(Props{}) {
+			@label.Label(
+				label.Props{
+					Variant: gocva.Variant{"variant": "default"},
+				},
+			) {
+				Username 
+			}
+			@input.Input(
+				input.Props{
+			
+					Type:  "text",
+					Class: "my-2",
+				},
+			)
+			@label.Label(
+				label.Props{
+					Variant: gocva.Variant{
+						"variant": "default",
+					},
+				},
+			) {
+				Password 
+			}
+			@input.Input(
+				input.Props{
+					Type:  "password",
+					Class: "my-2",
+				},
+			)
+		}
+		@Footer(Props{}) {
+			@button.Button(button.Props{}) {
+				Login
+			}
+		}
+	}
+}
+
+templ InfoCard(cardProps DemoProps) {
+	@Card(Props{}) {
+		@Header(Props{}) {
+			@Title(Props{}) {
+				{ cardProps.Title }
+			}
+			@Description(Props{}) {
+				{ cardProps.Description }
+			}
+		}
+		@Content(Props{}) {
+			@input.Input(
+				input.Props{
+					Type:  "text",
+					Class: "my-2",
+				},
+			)
+			{ children... }
+		}
+		@Footer(Props{}) {
+			{ cardProps.Footer }
+		}
+	}
+}

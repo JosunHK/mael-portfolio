@@ -1,0 +1,63 @@
+package layoutTemplates
+
+import (
+	"fmt"
+	"os"
+	"mael/web/templates/components/common/menubar"
+)
+
+templ header() {
+	<!DOCTYPE html>
+	<html>
+		<head>
+			<title>H4P2</title>
+			<meta charset="UTF-8"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+			<meta name="htmx-config" content={ fmt.Sprint(`{"inlineScriptNonce":"`+templ.GetNonce(ctx)+`", "inlineStyleNonce":"`+templ.GetNonce(ctx)+`"}`) }/>
+			if os.Getenv("env") == "production" {
+				<link rel="stylesheet" href="/static/style.min.css" nonce={ templ.GetNonce(ctx) }/>
+			} else {
+				<link rel="stylesheet" href="/static/style.css" nonce={ templ.GetNonce(ctx) }/>
+			}
+			<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=LXGW+WenKai+Mono+TC:wght@300;400;700&family=Varela+Round&display=swap" nonce={ templ.GetNonce(ctx) }/>
+			<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fira+Sans:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=LXGW+WenKai+Mono+TC:wght@300;400;700&family=Poiret+One&family=Varela+Round&display=swap" nonce={ templ.GetNonce(ctx) }/>
+			<link rel="stylesheet" href="/static/splide-core.min.css" nonce={ templ.GetNonce(ctx) }/>
+			<link rel="stylesheet" href="/static/splide.min.css" nonce={ templ.GetNonce(ctx) }/>
+
+            //scripts for components, has to be loded first before alpine package
+            @Scripts()
+
+			//others
+			<script defer src="/static/countup.js" nonce={ templ.GetNonce(ctx) }></script>
+			<script defer src="/static/splide.min.js" nonce={ templ.GetNonce(ctx) }></script>
+
+			//htmx 
+			<script src="/static/htmx-min.js" nonce={ templ.GetNonce(ctx) }></script>
+			<script defer src="/static/htmx-sse-ext.js" nonce={ templ.GetNonce(ctx) }></script>
+
+			//alpine js
+			<script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/anchor@3.x.x/dist/cdn.min.js" nonce={ templ.GetNonce(ctx) }></script>
+			<script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js" nonce={ templ.GetNonce(ctx) }></script>
+			<script src="https://cdn.jsdelivr.net/npm/@alpinejs/persist@3.x.x/dist/cdn.min.js" nonce={ templ.GetNonce(ctx) }></script>
+            <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/csp@3.x.x/dist/cdn.min.js" nonce={ templ.GetNonce(ctx) }></script>
+		</head>
+		<body class="bg-background flex flex-col overflow-y-auto scrollbar-hide">
+			<div class="w-full max-w-full relative scrollbar-hide">
+				{ children... }
+			</div>
+		</body>
+	</html>
+}
+
+templ Layout(content templ.Component) {
+	@header() {
+		@content
+	}
+}
+
+templ ErrorPage(content templ.Component) {
+	@header() {
+        @menubar.PageNav()
+		@content
+	}
+}

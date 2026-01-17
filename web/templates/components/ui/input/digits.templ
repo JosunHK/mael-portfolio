@@ -1,0 +1,102 @@
+package input
+
+import (
+    "strconv"
+)
+
+var scriptHandle = templ.NewOnceHandle()
+
+type DigitsProps struct {
+	Name  string
+	Class string
+	Attrs templ.Attributes
+}
+
+
+var inputScriptHandle = templ.NewOnceHandle();
+templ InputScript(){
+    @inputScriptHandle.Once() {
+        <script nonce={templ.GetNonce(ctx)}>
+            document.addEventListener('alpine:init', () => {
+                Alpine.data('input', () => ({
+                    get legnth(){
+                        return this.$el.getAttribute("digits");
+                    },
+                    value: '',
+                    get inputs() {
+                        return this.$refs.otpInputContainer.querySelectorAll('.otpInput');
+                    },
+                    handleInput(e, index) {
+                        if (isNaN(e.target.value)) {
+                            e.target.value = ''
+                            return
+                        }
+                        const inputValues = [...this.inputs].map(input => input.value);
+                        this.value = inputValues.join('');
+                        if (e.target.value) {
+                            const nextInput = this.inputs[index + 1];
+                            if (nextInput) {
+                                nextInput.focus();
+                                nextInput.select();
+                            }
+                        }
+                    },
+                    handlePaste(e) {
+                        const paste = e.clipboardData.getData('text').slice(0, this.length);
+                        paste.split('').forEach((char, i) => {
+                            if (this.inputs[i]) {
+                                this.inputs[i].value = char;
+                            }
+                        });
+                        this.value = [...this.inputs].map(input => input.value).join('');
+                    },
+                    handleBackspace(e, index) {
+                        if (index > 0) {
+                            this.inputs[index - 1].focus();
+                            this.inputs[index - 1].select();
+                        }
+                    },
+                    resetCaret(el) {
+                        var val = el.value; 
+                        el.value = ''; 
+                        el.value = val; 
+                    }
+                }))
+            })
+        </script>
+    }
+}
+
+templ Digits(props DigitsProps, digits int) {
+	<div
+        digits={ strconv.Itoa(digits) }
+        x-data="input"
+        class={ props.Class }
+    >
+		<div 
+            class="flex justify-center"
+            { props.Attrs... }
+        >
+			<div
+				class="flex justify-center w-min"
+				x-ref="otpInputContainer"
+			>
+				<template x-for="(input, index) in length" :key="index">
+					@InputRaw(Props{
+                        Class: "otpInput w-[2.5rem] h-[2.5rem] text-center text-md border focus:border-2 focus:border-primary focus:outline-none focus-visible:ring-0 focus-visible:ring-offset-0 font-bold rounded-none first-of-type:rounded-l-md first-of-type:border-l last:rounded-r-md transition-all caret-transparent ease-in-out duration-[30ms]",
+                        Attrs: templ.Attributes{
+                            "type":                   "tel",
+                            "maxlength":              "1",
+                            "inputMode":              "numeric",
+                            "x-on:input":             "handleInput($event, index)",
+                            "x-on:click":             "resetCaret($el)",
+                            "x-on:paste":             "handlePaste($event)",
+                            "x-on:keydown.backspace": "$event.target.value || handleBackspace($event, index)",
+                        },
+					})
+				</template>
+			</div>
+			<input type="hidden" name={ props.Name } x-model="value"/>
+		</div>
+	</div>
+}

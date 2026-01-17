@@ -1,0 +1,52 @@
+package button  
+
+import (
+	twmerge "github.com/Oudwins/tailwind-merge-go/pkg/twmerge"
+	"github.com/gungun974/gocva"
+)
+
+var M = twmerge.Merge
+
+var cva = gocva.CVA{
+	Base: "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+	Variants: gocva.Variants{
+		"variant": {
+			"default":     "bg-eGreen text-background hover:bg-eGreen/80",
+			"destructive": "bg-eRed text-destructive-foreground hover:bg-destructive/100",
+			"outline":     "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
+			"secondary":   "bg-eYellow text-background hover:bg-eYellow/80",
+			"ghost":       "hover:bg-accent hover:text-accent-foreground",
+			"link":        "text-primary underline-offset-4 hover:underline",
+			"purple":      "bg-ePurple text-background hover:bg-ePurple/100",
+		},
+		"size": {
+			"default": "h-10 px-4 py-2",
+			"sm":      "h-9 rounded-md px-3",
+			"nav":     "h-3 w-10",
+			"lg":      "h-11 rounded-md px-8",
+			"readmore": "h-11 rounded-xs px-24 py-8 text-md",
+			"icon":    "h-10 w-10",
+			"iconsm":  "h-8 w-8",
+			"iconxs":  "h-7 w-7",
+		},
+	},
+	DefaultVariants: gocva.Variant{
+		"variant": "default",
+		"size":    "default",
+	},
+}
+
+type Props struct {
+	Class   string
+	Attrs   templ.Attributes
+	Variant gocva.Variant
+}
+
+templ Button(props Props) {
+	<button
+		class={ M(cva.Render(props.Variant), props.Class) }
+		{ props.Attrs... }
+	>
+		{ children... }
+	</button>
+}

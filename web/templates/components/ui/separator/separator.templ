@@ -1,0 +1,28 @@
+package separator
+
+import (
+    twmerge "github.com/Oudwins/tailwind-merge-go/pkg/twmerge"
+)
+
+var M = twmerge.Merge
+
+type Props struct {
+	Name  string
+	Class string
+	Attrs templ.Attributes
+}
+
+func getOrientation(orientation string) string {
+	if orientation == "horizontal" {
+		return "h-[1px] w-full"
+	}
+	return "h-full w-[1px]"
+}
+
+templ Separator(props Props, orientation string) {
+	<div
+		class={ M(
+            "shrink-0 bg-border", getOrientation(orientation), props.Class,
+          ) }
+	></div>
+}

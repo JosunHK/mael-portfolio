@@ -1,0 +1,89 @@
+package cmp
+
+import (
+	twmerge "github.com/Oudwins/tailwind-merge-go/pkg/twmerge"
+	"mael/web/templates/components/ui/button"
+	"mael/web/templates/components/ui/dropDownMenu"
+	"mael/web/templates/components/ui/icon"
+	"github.com/gungun974/gocva"
+)
+
+var M = twmerge.Merge
+
+templ DemoDropDown() {
+	@dropDownMenu.DropDownMenu(dropDownMenu.Props{}) {
+		@dropDownMenu.DropDownMenuTrigger(dropDownMenu.Props{}) {
+			@button.Button(button.Props{
+				Variant: gocva.Variant{
+					"variant": "outline",
+				},
+			}) {
+				Click me
+			}
+		}
+		@dropDownMenu.DropDownMenuContent(dropDownMenu.Props{}) {
+			@dropDownMenu.DropDownMenuLabel(dropDownMenu.Props{}) {
+				Demo DropDown Menu
+			}
+			@dropDownMenu.DropDownMenuSeparator(dropDownMenu.Props{})
+			@dropDownMenu.DropDownMenuItem(dropDownMenu.Props{
+				Attrs: templ.Attributes{
+					"@item-clicked": "",
+				},
+			}) {
+				@dropDownMenu.DropDownMenuIcon(dropDownMenu.Props{}) {
+					@icon.Settings()
+				}
+				Item 1 
+				@dropDownMenu.DropDownMenuShortcut(dropDownMenu.Props{}) {
+					Ctrl + S
+				}
+			}
+			@dropDownMenu.DropDownMenuItem(dropDownMenu.Props{
+				Attrs: templ.Attributes{
+					"@item-clicked": "",
+				},
+			}) {
+				@dropDownMenu.DropDownMenuIcon(dropDownMenu.Props{}) {
+					@icon.Axe()
+				}
+				Button item
+				@dropDownMenu.DropDownMenuShortcut(dropDownMenu.Props{}) {
+					Ctrl + E
+				}
+			}
+				@dropDownMenu.DropDownMenuSubTrigger(dropDownMenu.Props{}) {
+					@dropDownMenu.DropDownMenuIcon(dropDownMenu.Props{}) {
+						@icon.Tv()
+					}
+					test
+				@dropDownMenu.DropDownMenuSubContent(dropDownMenu.Props{}) {
+					@dropDownMenu.DropDownMenuLabel(dropDownMenu.Props{}) {
+						Sub menu label
+					}
+					@dropDownMenu.DropDownMenuSeparator(dropDownMenu.Props{})
+					@dropDownMenu.DropDownMenuItem(dropDownMenu.Props{
+						Attrs: templ.Attributes{
+							"@item-clicked": "",
+						},
+					}) {
+						@dropDownMenu.DropDownMenuIcon(dropDownMenu.Props{}) {
+							@icon.Folder()
+						}
+						Sub item 1
+					}
+					@dropDownMenu.DropDownMenuItem(dropDownMenu.Props{
+						Attrs: templ.Attributes{
+							"@item-clicked": "",
+						},
+					}) {
+						@dropDownMenu.DropDownMenuIcon(dropDownMenu.Props{}) {
+							@icon.Apple()
+						}
+						Sub item 2
+					}
+                }
+			}
+		}
+	}
+}

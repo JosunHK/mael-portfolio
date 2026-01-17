@@ -1,0 +1,7 @@
+CREATE TABLE label (
+    id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    label_key varchar(150) NOT NULL PRIMARY KEY,
+    label nvarchar(150) CHARACTER SET utf8 NOT NULL,
+    active BOOLEAN NOT NULL DEFAULT TRUE
+);
+

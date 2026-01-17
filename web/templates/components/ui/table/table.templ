@@ -1,0 +1,87 @@
+package table 
+
+import (
+    twmerge "github.com/Oudwins/tailwind-merge-go/pkg/twmerge"
+)
+
+var M = twmerge.Merge
+
+type Props struct {
+	Name  string
+	Class string
+	Attrs templ.Attributes
+}
+
+templ Table(props Props) {
+	<div className="relative w-full overflow-auto">
+		<table
+			class={ M("w-full caption-bottom text-sm", props.Class) }
+			{ props.Attrs... }
+		>
+		{ children... }
+        </table>
+	</div>
+}
+
+templ Header(props Props) {
+	<thead
+		class={ M("[&_tr]:border-b", props.Class) }
+		{ props.Attrs... }
+	>
+		{ children... }
+	</thead>
+}
+
+templ Body(props Props) {
+	<tbody
+		class={ M("[&_tr:last-child]:border-0", props.Class) }
+		{ props.Attrs... }
+	>
+		{ children... }
+	</tbody>
+}
+
+templ Footer(props Props) {
+	<tfoot
+		class={ M("border-t bg-muted/50 font-medium [&>tr]:last:border-b-0", props.Class) }
+		{ props.Attrs... }
+	>
+		{ children... }
+	</tfoot>
+}
+
+templ Row(props Props) {
+	<tr
+		class={ M("border-b transition-colors hover:bg-muted/50 data-[state=selected]:bg-muted", props.Class) }
+		{ props.Attrs... }
+	>
+		{ children... }
+	</tr>
+}
+
+templ Head(props Props) {
+	<th
+		class={ M("h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0", props.Class) }
+		{ props.Attrs... }
+	>
+		{ children... }
+	</th>
+}
+
+templ Cell(props Props) {
+	<td
+		class={ M("p-4 align-middle [&:has([role=checkbox])]:pr-0", props.Class) }
+		{ props.Attrs... }
+	>
+		{ children... }
+	</td>
+}
+
+templ Caption(props Props) {
+	<caption
+		class={ M("mt-4 text-sm text-muted-foreground", props.Class) }
+		{ props.Attrs... }
+	>
+		{ children... }
+	</caption>
+}

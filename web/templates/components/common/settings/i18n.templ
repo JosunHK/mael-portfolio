@@ -1,0 +1,44 @@
+package settings 
+
+import (
+	i18nUtil "mael/cmd/util/i18n"
+	"mael/web/templates/components/ui/button"
+	"mael/web/templates/components/ui/dropDownMenu"
+	"mael/web/templates/components/ui/icon"
+	"github.com/gungun974/gocva"
+)
+
+templ I18n(variant string) {
+	@dropDownMenu.DropDownMenu(dropDownMenu.Props{}) {
+		@dropDownMenu.DropDownMenuTrigger(dropDownMenu.Props{}) {
+			@button.Button(button.Props{
+				Variant: gocva.Variant{
+					"variant": variant,
+					"size":    "icon",
+				},
+			}) {
+				@dropDownMenu.DropDownMenuTriggerIcon(dropDownMenu.Props{}) {
+					@icon.Languages()
+				}
+			}
+		}
+		@dropDownMenu.DropDownMenuContent(dropDownMenu.Props{}) {
+			@dropDownMenu.DropDownMenuItem(dropDownMenu.Props{
+				Attrs: templ.Attributes{
+                    "hx-post": "/i18n/set/en",
+                    "hx-on::after-request":"window.location.reload()",
+                },
+			}) {
+				{ i18nUtil.T(ctx,"english") }
+			}
+			@dropDownMenu.DropDownMenuItem(dropDownMenu.Props{
+				Attrs: templ.Attributes{
+                    "hx-post": "/i18n/set/zh",
+                    "hx-on::after-request":"window.location.reload()",
+                },
+			}) {
+				{ i18nUtil.T(ctx,"chinese") }
+			}
+		}
+	}
+}

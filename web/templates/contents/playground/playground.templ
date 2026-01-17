@@ -1,0 +1,174 @@
+package playgroundTemplates
+
+import (
+	"github.com/gungun974/gocva"
+	sqlc "mael/db/generated"
+	cmp "mael/web/templates/components/common/dropDownMenu"
+	"mael/web/templates/components/ui/accordion"
+	"mael/web/templates/components/ui/alert"
+	"mael/web/templates/components/ui/toast"
+	"mael/web/templates/components/ui/button"
+	"mael/web/templates/components/ui/card"
+	"mael/web/templates/components/ui/datepicker"
+	"mael/web/templates/components/ui/dialog"
+	"mael/web/templates/components/ui/icon"
+	"mael/web/templates/components/ui/input"
+	"mael/web/templates/components/ui/selectBox"
+	"mael/web/templates/components/ui/tabs"
+	toggle "mael/web/templates/components/ui/switchToggle"
+)
+
+var addresses = []sqlc.MenuItem{
+	{Label: "1234 Fake St", Value: "1234"},
+	{Label: "5678 Fake St", Value: "5678"},
+	{Label: "9101 Fake St", Value: "9101"},
+	{Label: "1121 Fake St", Value: "1121"},
+	{Label: "3141 Fake St", Value: "3141"},
+}
+
+templ Playground() {
+	<div class="w-full h-full flex flex-col justify-center items-center gap-1 mt-8">
+		@Select()
+        @toast.AlertToast("Hi!")
+		@Alert()
+		@Accordion()
+		@Button()
+        @toggle.Toggle(toggle.Props{}, false)
+		@card.LoginCard(card.DemoProps{Title: "Login"})
+		@datepicker.DatePicker()
+		@cmp.DemoDropDown()
+		@input.Digits(input.DigitsProps{
+			Name: "roomNo",
+		},
+			4,
+		)
+		@Tabs()
+		@Dialog()
+	</div>
+}
+
+templ Tabs() {
+	@tabs.TabsContext(tabs.Props{Class: "p-5"}, "tab1") {
+		@tabs.TabsList(tabs.Props{
+			Class: "w-full flex flex-row justify-center items-center gap-4 z-[100]",
+		}) {
+			@tabs.TabsTrigger(tabs.Props{
+				Class: "grow",
+			}, "tab1") {
+				Tab 1
+			}
+			@tabs.TabsTrigger(tabs.Props{
+				Class: "grow",
+			}, "tab2") {
+				Tab 2
+			}
+			@tabs.TabsTrigger(tabs.Props{
+				Class: "grow",
+			}, "tab3") {
+				Tab 3
+			}
+		}
+		<div class="h-min min-h-[15rem]">
+			@tabs.TabsContent(tabs.Props{}, "tab1") {
+				Tab1
+			}
+			@tabs.TabsContent(tabs.Props{}, "tab2") {
+				Tab2
+			}
+			@tabs.TabsContent(tabs.Props{}, "tab3") {
+				Tab3
+			}
+		</div>
+	}
+}
+
+templ Dialog() {
+	@dialog.Dialog(dialog.Props{
+		Attrs: templ.Attributes{
+			"x-on:close-dialog.window": "dialogClose",
+		},
+		Class: "w-full h-full flex flex-col mt-1",
+	}) {
+		@dialog.DialogContent(dialog.Props{}) {
+			Dialog Content
+		}
+		@dialog.DialogTrigger(dialog.Props{}) {
+			@button.Button(button.Props{
+				Class: "w-min",
+				Attrs: templ.Attributes{},
+			}) {
+				@icon.Wrapper(icon.Props{}) {
+					@icon.Plus()
+				}
+			}
+		}
+	}
+}
+
+templ Select() {
+	@selectBox.LabeledSelect(
+		"A kida very fucking long label test",
+		addresses,
+		selectBox.BodyProps{
+			Id:   "test2",
+			Name: "hehe",
+		},
+	)
+}
+
+templ Button() {
+	@button.Button(button.Props{
+		Variant: gocva.Variant{
+			"variant": "default",
+			"size":    "lg",
+		},
+	}) {
+		Click Me
+	}
+}
+
+templ Alert() {
+	@alert.Alert(alert.Props{
+		Class:   "w-[400px]",
+		Variant: gocva.Variant{"variant": "destructive"},
+	}) {
+		@alert.AlertTitle(alert.Props{}) {
+			Warning!
+		}
+		@alert.AlertDescription(alert.Props{}) {
+			This is a warning message!
+		}
+	}
+}
+
+templ Accordion() {
+	@accordion.Accordion(accordion.Props{
+		Class: "w-[200px] ",
+	}) {
+		@accordion.AccordionItem(accordion.Props{}) {
+			@accordion.AccordionHeader(accordion.Props{}) {
+				HUH
+			}
+			@accordion.AccordionContent(accordion.Props{}) {
+				HIHIHIHIHIHIHIIHI HIHIHIHIHIHIHIIHI
+				HIHIHIHIHIHIHIIHI
+			}
+		}
+		@accordion.AccordionItem(accordion.Props{}) {
+			@accordion.AccordionHeader(accordion.Props{}) {
+				asdasd
+			}
+			@accordion.AccordionContent(accordion.Props{}) {
+				HIHIHIHIHIHIHIIHI HIHIHIHIHIHIHIIHI
+			}
+		}
+		@accordion.AccordionItem(accordion.Props{}) {
+			@accordion.AccordionHeader(accordion.Props{}) {
+				OIOIOI
+			}
+			@accordion.AccordionContent(accordion.Props{}) {
+				HIHIHIHIHIHIHIIHI
+			}
+		}
+	}
+}

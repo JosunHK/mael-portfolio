@@ -1,0 +1,67 @@
+package toast
+
+import (
+	i18nUtil "mael/cmd/util/i18n"
+	"mael/web/templates/components/ui/alert"
+	twmerge "github.com/Oudwins/tailwind-merge-go/pkg/twmerge"
+	"github.com/gungun974/gocva"
+)
+
+var M = twmerge.Merge
+
+type Props struct {
+	Class string
+	Attrs templ.Attributes
+}
+
+var alertScriptHandle = templ.NewOnceHandle();
+templ AlertScript(){
+    @alertScriptHandle.Once() {
+        <script nonce={templ.GetNonce(ctx)}>
+            document.addEventListener('alpine:init', () => {
+                Alpine.data('alert', () => ({
+                    open: false,
+                    init() {
+                        this.$nextTick(()=>{
+                            this.open = true;
+                            setTimeout(() =>{
+                                this.open = false;
+                            },5000);
+                        });
+                    },
+                    close() {
+                        this.open = false;
+                    },
+                }))
+            })
+        </script>
+    }
+}
+
+templ AlertToast(desc string) {
+	@Toast(Props{}) {
+		@alert.Alert(alert.Props{
+			Class:   "w-[300px] text-md",
+			Variant: gocva.Variant{"variant": "default"},
+		}) {
+			@alert.AlertDescription(alert.Props{}) {
+				{ i18nUtil.T(ctx, desc) }
+			}
+		}
+	}
+}
+
+templ Toast(props Props) {
+	<template x-teleport="body" x-data="">
+		<div
+			x-data="alert"
+			class={ M("fixed bottom-3 flex items-center justify-center z-[150] w-full", props.Class) }
+			x-show="open"
+			@click="close"
+			x-transition.duration.500ms
+			{ props.Attrs... }
+		>
+			{ children... }
+		</div>
+	</template>
+}

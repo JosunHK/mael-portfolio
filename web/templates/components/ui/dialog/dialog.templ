@@ -1,0 +1,77 @@
+package dialog
+
+import twmerge "github.com/Oudwins/tailwind-merge-go/pkg/twmerge"
+
+var M = twmerge.Merge
+
+type Props struct {
+	Class string
+	Attrs templ.Attributes
+	Title string
+}
+
+var dialogScriptHandle = templ.NewOnceHandle();
+templ DialogScript(){
+    @dialogScriptHandle.Once() {
+        <script nonce={templ.GetNonce(ctx)}>
+            document.addEventListener('alpine:init', () => {
+                Alpine.data('dialog', () => ({
+                    open: false,
+                    dialogToggle() {
+                        if (this.open) {
+                            return this.dialogClose()
+                        }
+         
+                        this.open = true
+                    },
+                    dialogClose() {
+                        if (!this.open) return
+
+                        const focusAfter = this.$el
+                        this.open = false
+                        focusAfter && focusAfter.focus()
+                    },
+                }))
+            })
+        </script>
+    }
+}
+
+templ DialogContent(props Props) {
+	<template x-teleport="body">
+		<div
+			class={ M("fixed top-0 left-0 h-screen w-screen inset-0 z-50 bg-zinc-800/50", props.Class) }
+			x-show="open"
+			x-transition.opacity.duration.150ms
+		>
+			<div class="h-full w-full flex justify-center items-center">
+				<div
+					class="relative h-min w-min"
+					x-on:click.outside="dialogClose"
+					{ props.Attrs... }
+				>
+                    { children... }
+				</div>
+			</div>
+		</div>
+	</template>
+}
+
+templ DialogTrigger(props Props) {
+	<div
+		class={ props.Class }
+		x-on:click="dialogToggle"
+		{ props.Attrs... }
+	>
+		{ children... }
+	</div>
+}
+
+templ Dialog(props Props) {
+	<div
+		x-data="dialog"
+		{ props.Attrs... }
+	>
+		{ children... }
+	</div>
+}
