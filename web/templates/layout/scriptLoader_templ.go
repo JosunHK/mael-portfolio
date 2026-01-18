@@ -9,6 +9,7 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 import (
+	"mael/web/templates/components/common/cursor"
 	"mael/web/templates/components/ui/accordion"
 	"mael/web/templates/components/ui/animation"
 	"mael/web/templates/components/ui/dialog"
@@ -74,6 +75,10 @@ func Scripts() templ.Component {
 			return templ_7745c5c3_Err
 		}
 		templ_7745c5c3_Err = animation.OnIntersectScript().Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = cursor.CursorScript().Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -1,0 +1,62 @@
+package cursor
+
+templ Cursor() {
+    <div id="custom-cursor" class="rotate-[55deg] origin-left w-min fixed left-[-100px] top-[-100px]">
+        <div id="cursor-stroke-horizontal" class="bg-orange-400 w-[24px] h-[2px]"></div>
+        <div id="cursor-stroke-vertical" class="bg-orange-400 w-[22px] h-[2px] cursor-stroke-vertical-transform origin-left"></div>
+    </div>
+    for i := range 3  {
+        <div class="custom-cursor-trail rotate-[55deg] origin-left w-min fixed left-[-100px] top-[-100px]" delay={(i+1) * 30}>
+            <div class="bg-orange-300 bg-opacity-20 w-[20px] h-[2px]"></div>
+            <div class="bg-orange-300 bg-opacity-20 w-[18px] h-[2px] cursor-stroke-vertical-transform origin-left"></div>
+        </div>
+    }
+} 
+
+
+var cursorHandle = templ.NewOnceHandle();
+templ CursorScript(){
+    @cursorHandle.Once() {
+        <script nonce={templ.GetNonce(ctx)}>
+            document.addEventListener('DOMContentLoaded', function() {
+                let isMouseInViewport = false;
+                document.body.addEventListener('mouseenter', function() {
+                    isMouseInViewport = true;
+                });
+
+                document.body.addEventListener('mouseleave', function(e) {
+                    isMouseInViewport = false;
+                    const cursor = document.getElementById("custom-cursor");
+                    const cursorTrails = document.getElementsByClassName("custom-cursor-trail");
+                    cursor.style.left = "-100px";
+                    cursor.style.top = "-100px";
+                    for(let i=0;i<cursorTrails.length;i++){
+                        const cursorTrail = cursorTrails[i];
+                        cursorTrail.style.left = "-100px";
+                        cursorTrail.style.top = "-100px";
+                    }
+                });
+                document.body.addEventListener("mousemove", function(event){
+                    const x = event.clientX;
+                    const y = event.clientY;
+                    const cursor = document.getElementById("custom-cursor");
+                    const cursorTrails = document.getElementsByClassName("custom-cursor-trail");
+                    if(isMouseInViewport) {
+                        cursor.style.left = x + "px";
+                        cursor.style.top = y + "px";
+                    }
+                    for(let i=0;i<cursorTrails.length;i++){
+                        const cursorTrail = cursorTrails[i];
+                        const delay = cursorTrail.getAttribute("delay");
+                        setTimeout(function(){
+                            if(isMouseInViewport) {
+                                cursorTrail.style.left = x + "px";
+                                cursorTrail.style.top = y + "px";
+                            }
+                        }, delay);
+                    }
+                })
+            })
+        </script>
+    }
+}

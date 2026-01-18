@@ -4,7 +4,7 @@
 
 @layer base {
     :root {
-        --background: 0 0% 100%;
+        --background: 47 100% 95%;
         --foreground: 240 10% 3.9%;
         --card: 0 100% 98.43%;
         --card-foreground: 240 10% 3.9%;
@@ -109,5 +109,9 @@
     .hx-fade-in{
       opacity: 1;
       transition: opacity 250ms ease-out;
+    }
+
+    .cursor-stroke-vertical-transform{
+      transform: rotate(35deg) translateY(-2px);
     }
 } 
