@@ -2,14 +2,14 @@ package menubar
 
 templ PageNav() {
     <div Class="flex-row w-full gap-4 justify-evenly items-end p-3 h-[5vh] xl:flex hidden">
-        @NavLink("ANIMATIONS")
-        @NavLink("CHARACTERS")
-        @NavLink("ABOUT ME")
+        @NavLink("ANIMATIONS", "/")
+        @NavLink("CHARACTERS", "/characters")
+        @NavLink("ABOUT ME", "/about")
     </div>
 }
 
-templ NavLink(title string) {
+templ NavLink(title string, toPath string) {
     <div class="font-barlow text-[1.5rem]">
-        {title}
+        <a href={templ.URL(toPath)}>{title}</a>
     </div>
 }

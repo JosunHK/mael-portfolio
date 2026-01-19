@@ -1,14 +1,14 @@
 package cursor
 
 templ Cursor() {
-    <div id="custom-cursor" class="rotate-[55deg] origin-left w-min fixed left-[-100px] top-[-100px]">
-        <div id="cursor-stroke-horizontal" class="bg-orange-400 w-[22px] h-[2px]"></div>
-        <div id="cursor-stroke-vertical" class="bg-orange-400 w-[20px] h-[2px] cursor-stroke-vertical-transform origin-left"></div>
+    <div id="custom-cursor" class="cursors rotate-[55deg] origin-left w-min fixed opacity-0 pointer-events-none">
+        <div id="cursor-stroke-horizontal" class="bg-black w-[22px] h-[2px] transition-transform duration-300"></div>
+        <div id="cursor-stroke-vertical" class="bg-black w-[20px] h-[2px]  transition-transform duration-300 cursor-stroke-vertical-transform origin-left"></div>
     </div>
     for i := range 3  {
-        <div class="custom-cursor-trail rotate-[55deg] origin-left w-min fixed left-[-100px] top-[-100px]" delay={(i+1) * 30}>
-            <div class="bg-orange-300 bg-opacity-20 w-[20px] h-[2px]"></div>
-            <div class="bg-orange-300 bg-opacity-20 w-[18px] h-[2px] cursor-stroke-vertical-transform origin-left"></div>
+        <div class="cursors custom-cursor-trail rotate-[55deg] origin-left w-min fixed left-[-100px] top-[-100px] pointer-events-none opacity-0" delay={(i+1) * 35}>
+            <div class="bg-black bg-opacity-20 w-[22px] h-[2px] transition-transform duration-300 ease-in-out"></div>
+            <div class="bg-black bg-opacity-20 w-[20px] h-[2px] transition-transform duration-300 ease-in-out cursor-stroke-vertical-transform origin-left"></div>
         </div>
     }
 } 
@@ -20,6 +20,30 @@ templ CursorScript(){
         <script nonce={templ.GetNonce(ctx)}>
             document.addEventListener('DOMContentLoaded', function() {
                 let isMouseInViewport = false;
+
+                //handles mouse-over-navs (anchor tag)
+                const navs = document.querySelectorAll("a");
+                for(let i=0;i<navs.length;i++){
+                    const nav = navs[i];
+                    nav.addEventListener('mouseover', function() {
+                       const cursors = document.getElementsByClassName("cursors");
+                        for(let j=0;j<cursors.length;j++){
+                            const cursor = cursors[j];
+                            cursor.children[0].style.transform = "rotate(-55deg) translateX(-6px) translateY(-6px)"
+                            cursor.children[1].style.transform = "rotate(215deg) translateX(-12px) translateY(1px)"
+                        }
+                    });
+                    nav.addEventListener('mouseout', function() {
+                       const cursors = document.getElementsByClassName("cursors");
+                        for(let j=0;j<cursors.length;j++){
+                            const cursor = cursors[j];
+                            cursor.children[0].style.transform = "rotate(0deg) translateX(0) translateY(0)"
+                            cursor.children[1].style.transform = "rotate(35deg) translateX(0) translateY(-2px)"
+                        }
+                    });
+                };
+
+                //determinds if mouse is in viewport or not
                 document.body.addEventListener('mouseenter', function() {
                     isMouseInViewport = true;
                 });
@@ -28,34 +52,37 @@ templ CursorScript(){
                     isMouseInViewport = false;
                     const cursor = document.getElementById("custom-cursor");
                     const cursorTrails = document.getElementsByClassName("custom-cursor-trail");
-                    cursor.style.left = "-100px";
-                    cursor.style.top = "-100px";
+                    cursor.style.opacity = "0";
                     for(let i=0;i<cursorTrails.length;i++){
                         const cursorTrail = cursorTrails[i];
-                        cursorTrail.style.left = "-100px";
-                        cursorTrail.style.top = "-100px";
+                        cursorTrail.style.opacity = "0";
                     }
                 });
+
                 document.body.addEventListener("mousemove", function(event){
                     const x = event.clientX;
                     const y = event.clientY;
                     const cursor = document.getElementById("custom-cursor");
                     const cursorTrails = document.getElementsByClassName("custom-cursor-trail");
                     if(isMouseInViewport) {
-                        cursor.style.left = x + "px";
-                        cursor.style.top = y + "px";
+                        cursor.style.opacity = "100%";
                     }
+                    cursor.style.left = x + "px";
+                    cursor.style.top = y + "px";
+
                     for(let i=0;i<cursorTrails.length;i++){
                         const cursorTrail = cursorTrails[i];
                         const delay = cursorTrail.getAttribute("delay");
                         setTimeout(function(){
                             if(isMouseInViewport) {
-                                cursorTrail.style.left = x + "px";
-                                cursorTrail.style.top = y + "px";
+                                cursorTrail.style.opacity = "100%";
                             }
+                            cursorTrail.style.left = x + "px";
+                            cursorTrail.style.top = y + "px";
                         }, delay);
                     }
                 })
+                document.body.dispatchEvent(new Event("mousemove"));
             })
         </script>
     }
