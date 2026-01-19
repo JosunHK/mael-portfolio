@@ -29,7 +29,7 @@ func Cursor() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div id=\"custom-cursor\" class=\"rotate-[55deg] origin-left w-min fixed left-[-100px] top-[-100px]\"><div id=\"cursor-stroke-horizontal\" class=\"bg-orange-400 w-[24px] h-[2px]\"></div><div id=\"cursor-stroke-vertical\" class=\"bg-orange-400 w-[22px] h-[2px] cursor-stroke-vertical-transform origin-left\"></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div id=\"custom-cursor\" class=\"rotate-[55deg] origin-left w-min fixed left-[-100px] top-[-100px]\"><div id=\"cursor-stroke-horizontal\" class=\"bg-orange-400 w-[22px] h-[2px]\"></div><div id=\"cursor-stroke-vertical\" class=\"bg-orange-400 w-[20px] h-[2px] cursor-stroke-vertical-transform origin-left\"></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

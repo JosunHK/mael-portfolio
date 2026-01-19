@@ -53,6 +53,7 @@ func main() {
 		log.Error(err)
 		return
 	}
+
 	defer database.DB.Close()
 
 	if err := i18nUtil.InitI18n(); err != nil {
@@ -60,7 +61,7 @@ func main() {
 		return
 	}
 
-	e := echo.New()
+	e := echo.New() //http client
 	e.Use(eMiddleware.Secure())
 	e.Use(eMiddleware.Recover())
 	e.Use(middleware.Logger)

@@ -2,8 +2,8 @@ package cursor
 
 templ Cursor() {
     <div id="custom-cursor" class="rotate-[55deg] origin-left w-min fixed left-[-100px] top-[-100px]">
-        <div id="cursor-stroke-horizontal" class="bg-orange-400 w-[24px] h-[2px]"></div>
-        <div id="cursor-stroke-vertical" class="bg-orange-400 w-[22px] h-[2px] cursor-stroke-vertical-transform origin-left"></div>
+        <div id="cursor-stroke-horizontal" class="bg-orange-400 w-[22px] h-[2px]"></div>
+        <div id="cursor-stroke-vertical" class="bg-orange-400 w-[20px] h-[2px] cursor-stroke-vertical-transform origin-left"></div>
     </div>
     for i := range 3  {
         <div class="custom-cursor-trail rotate-[55deg] origin-left w-min fixed left-[-100px] top-[-100px]" delay={(i+1) * 30}>

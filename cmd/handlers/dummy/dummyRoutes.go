@@ -10,4 +10,5 @@ import (
 func RegisterRoutes(e *echo.Echo) {
 	//dummy routes
 	e.GET("/", middleware.Pages(layout.Layout, Dummy))
+	e.GET("/characters", middleware.Pages(layout.Layout, Char))
 }

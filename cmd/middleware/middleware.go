@@ -28,7 +28,7 @@ func WithCSP(next echo.HandlerFunc) echo.HandlerFunc {
 		cspHeader := fmt.Sprintf(`default-src 'self';
             script-src 'nonce-%s';
             style-src 'self' 'nonce-%s' https://fonts.gstatic.com;
-			img-src 'self' https://pcws.isocial.systems http://pcws.isocial.systems;
+			img-src 'self';
             style-src-elem 'nonce-%s';
             font-src 'self' 'nonce-%s' https://fonts.gstatic.com;`, nonce, nonce, nonce, nonce)
 		c.Response().Header().Set("Content-Security-Policy", cspHeader)

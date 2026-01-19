@@ -9,3 +9,7 @@ import (
 func Dummy(c echo.Context) templ.Component {
 	return dummyTemplates.Dummy()
 }
+
+func Char(c echo.Context) templ.Component {
+	return dummyTemplates.Char()
+}
