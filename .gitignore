@@ -2,10 +2,7 @@ bin
 tmp
 *.db
 *.env
-*.exe
-*.deb
 *.log
 /logs
 go.sum
 tailwindcss
-

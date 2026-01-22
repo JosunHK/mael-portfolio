@@ -16,6 +16,9 @@ install sqlc base on your environment
 install templ base on your environment
 `go install github.com/a-h/templ/cmd/templ@latest`
 
+install goose to manage database migration
+`go install github.com/pressly/goose/v3/cmd/goose@latest`
+
 ## Setting Up
 create a log file 
 `./logs/app.log`
@@ -28,3 +31,18 @@ The project uses a makefile to run the server and the client.
 To run the server, use the following command:
 
 `make dev`
+
+`make tailwind-watch` to watch & update css changes
+
+### Database Schema 
+To update database schema, we do this through goose
+
+use `goose create <migration_name> sql` to creat new migration
+
+see [documentations](https://github.com/pressly/goose) for how to do this.
+
+`goose up` to apply changes
+
+`goose down` to revert changes
+
+`sqlc generate` to auto generate schema as structs

@@ -1,4 +1,5 @@
-.PHONY: tailwind-watch tailwind-watch:
+.PHONY: tailwind-watch 
+tailwind-watch:
 	./tailwindcss -i ./web/static/input.css -o ./web/static/style.css --watch
 
 .PHONY: tailwind-build
