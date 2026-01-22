@@ -1,0 +1,37 @@
+package dummyTemplates
+
+templ frontArt(){
+	<div>
+        <div class="font-barlow">
+                Hello World!6
+        </div>
+
+        <div class="">
+                <div class="h-auto w-full" style="" id="frontArtDiv">
+                        <img src="/static/assets/Sixsix_MorningRoutine/Sixsix_MorningRoutine_0001.jpeg" style="" class="frontArt opacity-0 absolute" id=frontArtId">
+                        <img src="/static/assets/Sixsix_MorningRoutine/Sixsix_MorningRoutine_0002.jpeg" style="" class="frontArt opacity-0 absolute">
+                        <img src="/static/assets/Sixsix_MorningRoutine/Sixsix_MorningRoutine_0002.jpeg" style="" class="frontArt opacity-0 absolute">
+                        <img src="/static/assets/Sixsix_MorningRoutine/Sixsix_MorningRoutine_0002.jpeg" style="" class="frontArt opacity-0 absolute">
+                        <img src="/static/assets/Sixsix_MorningRoutine/Sixsix_MorningRoutine_0002.jpeg" style="" class="frontArt opacity-0 absolute">
+                        <img src="/static/assets/Sixsix_MorningRoutine/Sixsix_MorningRoutine_0002.jpeg" style="" class="frontArt opacity-0 absolute">
+
+
+                </div>
+                <input id="rangeBar1" type="range" min="0" max="100" class="relative"/>
+                <h1 id="test" class="relative">1</h1>
+        </div>
+	</div>
+}
+
+
+templ frontArtScript(){
+	 <script nonce={ templ.GetNonce(ctx) }>
+                document.addEventListener("mousemove", function(event) {
+                const mouse = event.clientX;
+                document.getElementById("test").textContent = mouse;
+                console.log(mouse);
+        })document.dispatchEvent(new Event("mousemove"));
+
+        </script>
+
+}

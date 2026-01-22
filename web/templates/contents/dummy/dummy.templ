@@ -2,8 +2,67 @@ package dummyTemplates
 
 
 templ Dummy() {
-    <div class="font-barlow">
-        Hello World!
-    </div>
+<div class="h-100% absolute">
+	<div class="flex flex-col t-10rem">
+		<div class="col-1 image-wrapper" style="" id="frontArtDiv">
+			<img src="/static/assets/Sixsix_MorningRoutine/Sixsix_MorningRoutine_0001.jpeg" style="" class="frontArt opacity-1" id=frontArtId">
+			
+		
+		</div>
+		<div class="w-full">	
+		<input id="rangeBar1" type="range" min="1" value="0"  max="103" class="relative w-full"/>
+		</div>		
+		//<div class=""><button id="playButt" class="border justify-center">play</button></div>
+		@DummyScript()
+	</div>	
+
+
+
+</div>
 }
 
+templ DummyScript(){
+	<script nonce={ templ.GetNonce(ctx) }>
+
+		//Image
+		const rangeBar1 = document.getElementById("rangeBar1");
+		const imgs = document.getElementById("frontArtId");
+		const totalImgs = 103;
+		//console.log(totalImgs);
+		rangeBar1.addEventListener("input", function() {
+            
+			const currentValue = this.value;
+                
+			for (let i = 1; i <= totalImgs; i++) {
+				if (i == currentValue){
+				var num = "0000"+ i.toString();
+				var str = num.substr(num.length-4,4);
+				//console.log(str);
+				imgs.src="/static/assets/Sixsix_MorningRoutine/Sixsix_MorningRoutine_" + str + ".jpeg";
+				}
+			}
+		});
+	
+		document.addEventListener("mousemove", function(event) {
+                const mouse = event.clientX;
+		//document.getElementById("test").textContent = mouse;
+		rangeBar1.value = totalImgs*(mouse/window.innerWidth);
+                rangeBar1.dispatchEvent(new Event('input'));
+		});
+		document.dispatchEvent(new Event("mousemove"));
+		
+		/*const playButt = document.getElementById("playButt");
+		playButt.addEventListener("click", function(event){
+			for (let i = 1; i <= totalImgs; i++) {
+				
+				var num1 = "0000"+ i.toString();
+				var str1 = num1.substr(num1.length-4,4);
+				console.log(str1)
+				imgs.src="/static/assets/Sixsix_MorningRoutine/Sixsix_MorningRoutine_" + str1 + ".jpeg";
+		//		time.Sleep(5000 * time.Millisecond);
+
+			}			
+		});*/
+	</script>
+	
+}
