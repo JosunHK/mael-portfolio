@@ -4,7 +4,7 @@
 
 ### Tailwind CSS
 `https://tailwindcss.com/blog/standalone-cli`
-use -> https://github.com/tailwindlabs/tailwindcss/releases/tag/v3.4.19/tailwindcss-linux-x64
+use the latest version of tailwindcss 3.4+
 
 ### Go dependencies
 install air base on your environment
