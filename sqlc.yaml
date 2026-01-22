@@ -2,7 +2,7 @@ version: "2"
 sql:
   - engine: "mysql"
     queries: "db/query/"
-    schema: "db/schema/"
+    schema: "db/schema/migration/"
     gen:
       go:
         package: "sqlc"

@@ -4,7 +4,6 @@ tmp
 *.env
 *.exe
 *.deb
-db/generated/
 *.log
 /logs
 go.sum

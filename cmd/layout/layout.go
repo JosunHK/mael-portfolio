@@ -11,6 +11,10 @@ func Layout(c echo.Context, content templ.Component) error {
 	return responseUtil.HTML(c, layoutTemplates.Layout(content))
 }
 
+func CMSLayout(c echo.Context, content templ.Component) error {
+	return responseUtil.HTML(c, layoutTemplates.CMSLayout(content))
+}
+
 func ErrorPage(c echo.Context, content templ.Component) error {
 	return responseUtil.HTML(c, layoutTemplates.ErrorPage(content))
 }

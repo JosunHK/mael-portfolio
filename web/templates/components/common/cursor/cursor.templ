@@ -5,12 +5,10 @@ templ Cursor() {
         <div id="cursor-stroke-horizontal" class="bg-black w-[22px] h-[2px] transition-transform duration-300"></div>
         <div id="cursor-stroke-vertical" class="bg-black w-[20px] h-[2px]  transition-transform duration-300 cursor-stroke-vertical-transform origin-left"></div>
     </div>
-    for i := range 3  {
-        <div class="cursors custom-cursor-trail rotate-[55deg] origin-left w-min fixed left-[-100px] top-[-100px] pointer-events-none opacity-0" delay={(i+1) * 35}>
-            <div class="bg-black bg-opacity-20 w-[22px] h-[2px] transition-transform duration-300 ease-in-out"></div>
-            <div class="bg-black bg-opacity-20 w-[20px] h-[2px] transition-transform duration-300 ease-in-out cursor-stroke-vertical-transform origin-left"></div>
-        </div>
-    }
+    <div class="cursors custom-cursor-trail rotate-[55deg] origin-left w-min fixed left-[-100px] top-[-100px] pointer-events-none opacity-0" >
+        <div class="bg-black bg-opacity-20 w-[22px] h-[2px] transition-transform duration-300 ease-in-out"></div>
+        <div class="bg-black bg-opacity-20 w-[20px] h-[2px] transition-transform duration-300 ease-in-out cursor-stroke-vertical-transform origin-left"></div>
+    </div>
 } 
 
 
@@ -77,8 +75,8 @@ templ CursorScript(){
                             if(isMouseInViewport) {
                                 cursorTrail.style.opacity = "100%";
                             }
-                            cursorTrail.style.left = x + "px";
-                            cursorTrail.style.top = y + "px";
+                            cursorTrail.style.left = x -5 + "px";
+                            cursorTrail.style.top = y  +5+ "px";
                         }, delay);
                     }
                 })

@@ -59,6 +59,9 @@
 @layer base {
     * {
         @apply border-border;
+    }
+
+    .no-cursor *{
         cursor: none;
     }
 
