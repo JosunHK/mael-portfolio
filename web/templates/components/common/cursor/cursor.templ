@@ -5,7 +5,7 @@ templ Cursor() {
         <div id="cursor-stroke-horizontal" class="bg-black w-[22px] h-[2px] transition-transform duration-300"></div>
         <div id="cursor-stroke-vertical" class="bg-black w-[20px] h-[2px]  transition-transform duration-300 cursor-stroke-vertical-transform origin-left"></div>
     </div>
-    <div class="cursors custom-cursor-trail rotate-[55deg] origin-left w-min fixed left-[-100px] top-[-100px] pointer-events-none opacity-0" >
+    <div id="custom-cursor-trail" class="cursors rotate-[55deg] origin-left w-min fixed left-[-100px] top-[-100px] pointer-events-none opacity-0" delay="50" >
         <div class="bg-black bg-opacity-20 w-[22px] h-[2px] transition-transform duration-300 ease-in-out"></div>
         <div class="bg-black bg-opacity-20 w-[20px] h-[2px] transition-transform duration-300 ease-in-out cursor-stroke-vertical-transform origin-left"></div>
     </div>
@@ -20,11 +20,11 @@ templ CursorScript(){
                 let isMouseInViewport = false;
 
                 //handles mouse-over-navs (anchor tag)
-                const navs = document.querySelectorAll("a");
+                const navs = $$("a");
                 for(let i=0;i<navs.length;i++){
                     const nav = navs[i];
                     nav.addEventListener('mouseover', function() {
-                       const cursors = document.getElementsByClassName("cursors");
+                       const cursors = $$(".cursors");
                         for(let j=0;j<cursors.length;j++){
                             const cursor = cursors[j];
                             cursor.children[0].style.transform = "rotate(-55deg) translateX(-6px) translateY(-6px)"
@@ -32,7 +32,7 @@ templ CursorScript(){
                         }
                     });
                     nav.addEventListener('mouseout', function() {
-                       const cursors = document.getElementsByClassName("cursors");
+                       const cursors = $$(".cursors");
                         for(let j=0;j<cursors.length;j++){
                             const cursor = cursors[j];
                             cursor.children[0].style.transform = "rotate(0deg) translateX(0) translateY(0)"
@@ -48,37 +48,31 @@ templ CursorScript(){
 
                 document.body.addEventListener('mouseleave', function(e) {
                     isMouseInViewport = false;
-                    const cursor = document.getElementById("custom-cursor");
-                    const cursorTrails = document.getElementsByClassName("custom-cursor-trail");
+                    const cursor = $("#custom-cursor");
+                    const cursorTrail = $("#custom-cursor-trail");
                     cursor.style.opacity = "0";
-                    for(let i=0;i<cursorTrails.length;i++){
-                        const cursorTrail = cursorTrails[i];
-                        cursorTrail.style.opacity = "0";
-                    }
+                    cursorTrail.style.opacity = "0";
                 });
 
                 document.body.addEventListener("mousemove", function(event){
                     const x = event.clientX;
                     const y = event.clientY;
-                    const cursor = document.getElementById("custom-cursor");
-                    const cursorTrails = document.getElementsByClassName("custom-cursor-trail");
+                    const cursor = $("#custom-cursor");
+                    const cursorTrail = $("#custom-cursor-trail");
                     if(isMouseInViewport) {
                         cursor.style.opacity = "100%";
                     }
                     cursor.style.left = x + "px";
                     cursor.style.top = y + "px";
 
-                    for(let i=0;i<cursorTrails.length;i++){
-                        const cursorTrail = cursorTrails[i];
-                        const delay = cursorTrail.getAttribute("delay");
-                        setTimeout(function(){
-                            if(isMouseInViewport) {
-                                cursorTrail.style.opacity = "100%";
-                            }
-                            cursorTrail.style.left = x -5 + "px";
-                            cursorTrail.style.top = y  +5+ "px";
-                        }, delay);
-                    }
+                    const delay = cursorTrail.getAttribute("delay");
+                    setTimeout(function(){
+                        if(isMouseInViewport) {
+                            cursorTrail.style.opacity = "100%";
+                        }
+                        cursorTrail.style.left = x -5 + "px";
+                        cursorTrail.style.top = y  +5+ "px";
+                    }, delay);
                 })
                 document.body.dispatchEvent(new Event("mousemove"));
             })

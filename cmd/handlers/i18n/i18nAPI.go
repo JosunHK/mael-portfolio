@@ -4,13 +4,13 @@ import (
 	"fmt"
 	"slices"
 
+	"github.com/gorilla/schema"
+	"github.com/labstack/echo/v4"
+	log "github.com/sirupsen/logrus"
 	i18nStruct "mael/cmd/struct/i18n"
 	i18nUtil "mael/cmd/util/i18n"
 	responseUtil "mael/cmd/util/response"
 	i18nTemplates "mael/web/templates/contents/i18n"
-	"github.com/gorilla/schema"
-	"github.com/labstack/echo/v4"
-	log "github.com/sirupsen/logrus"
 )
 
 var decoder = schema.NewDecoder()

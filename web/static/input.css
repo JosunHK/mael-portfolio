@@ -61,8 +61,11 @@
         @apply border-border;
     }
 
-    .no-cursor *{
+    .no-cursor{
         cursor: none;
+        & *{
+            cursor: none;
+        }
     }
 
 

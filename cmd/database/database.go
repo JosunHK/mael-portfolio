@@ -11,8 +11,7 @@ import (
 var DB *sql.DB
 
 func InitDB(credentials string) error {
-	var err error
-	DB, err = sql.Open("mysql", credentials)
+	DB, err := sql.Open("mysql", credentials)
 
 	if err != nil {
 		return fmt.Errorf("could not connect to DB, %v", err)

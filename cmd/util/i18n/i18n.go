@@ -86,7 +86,7 @@ func readJSON(locale string) (string, error) {
 
 	byteValue, err := io.ReadAll(jsonFile)
 	if err != nil {
-		return "", nil
+		return "", err
 	}
 
 	return string(byteValue), nil

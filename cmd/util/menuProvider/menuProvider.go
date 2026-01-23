@@ -35,18 +35,18 @@ func GetMenu(ctx context.Context, key string) []sqlc.MenuItem {
 	return TranslMenu(ctx, rawMenu)
 }
 
-func GetLabel(ctx context.Context, key string) string {
-	DB := database.DB
-	queries := sqlc.New(DB)
-
-	result, err := queries.GetLabel(ctx, key)
-	if err != nil {
-		log.Error("Error getting label : ", err)
-		return ""
-	}
-
-	return result
-}
+// func GetLabel(ctx context.Context, key string) string {
+// 	DB := database.DB
+// 	queries := sqlc.New(DB)
+//
+// 	result, err := queries.GetLabel(ctx, key)
+// 	if err != nil {
+// 		log.Error("Error getting label : ", err)
+// 		return ""
+// 	}
+//
+// 	return result
+// }
 
 func GetRawMenu(ctx context.Context, key string) []sqlc.MenuItem {
 	DB := database.DB
