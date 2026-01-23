@@ -1,9 +1,20 @@
 package dummyTemplates
 
+import (
+    "strconv"
+)
+
+func leftPad(i int, length int) string {
+    s := strconv.Itoa(i);
+    length -= len(s);
+    for range length{
+        s = "0" + s;
+    }
+    return s;
+}
 
 templ Dummy() {
     <div class="font-barlow">
         Hello World!
     </div>
 }
-

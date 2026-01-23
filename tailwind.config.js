@@ -23,8 +23,6 @@ module.exports = {
         extend: {
             fontFamily: {
                 'sans': ['Inter', 'sans-serif', "ui-sans-serif", "system-ui", "sans-serif", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"],
-                'marker': ["Poiret One", "sans-serif"],
-                'chill': ["LXGW WenKai Mono TC", "monospace"],
                 'barlow': ["Barlow", "sans-serif"],
             },
             colors: {
