@@ -1,0 +1,34 @@
+package cmsComponent
+
+import(
+	input "mael/web/templates/components/ui/input"
+	button "mael/web/templates/components/ui/button"
+    twmerge "github.com/Oudwins/tailwind-merge-go/pkg/twmerge"
+    "mael/cmd/util/templ"
+	"github.com/gungun974/gocva"
+)
+
+var M = twmerge.Merge;
+var MV = templUtil.MergeVariant;
+var MA = templUtil.MergeAttrs;
+
+templ Input(props input.Props){
+    @input.Input(
+        input.Props{
+            Type:  "text",
+            Name:  props.Name,
+            Class: M(`my-2 bg-cms-background border-2 border-cms-border
+            ring-eYellow focus-visible:border-eYellow`, props.Class),
+        },
+    ) 
+}
+
+templ Button(props button.Props){
+    @button.Button(button.Props{
+        Variant: MV(props.Variant, gocva.Variant{"variant": "secondary"}),
+        Attrs: MA(props.Attrs, templ.Attributes{ "type": "submit",}),
+        Class: "mb-2.5 mt-2",
+    }) {
+        {children...}
+    }
+}

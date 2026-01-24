@@ -61,7 +61,7 @@ templ Row(props Props) {
 
 templ Head(props Props) {
 	<th
-		class={ M("h-12 px-4 text-left align-middle font-medium text-muted-foreground [&:has([role=checkbox])]:pr-0", props.Class) }
+		class={ M("h-12 px-4 text-left align-middle font-medium [&:has([role=checkbox])]:pr-0", props.Class) }
 		{ props.Attrs... }
 	>
 		{ children... }
@@ -79,7 +79,7 @@ templ Cell(props Props) {
 
 templ Caption(props Props) {
 	<caption
-		class={ M("mt-4 text-sm text-muted-foreground", props.Class) }
+		class={ M("mt-4 text-sm", props.Class) }
 		{ props.Attrs... }
 	>
 		{ children... }

@@ -3,13 +3,23 @@ package responseUtil
 import (
 	"context"
 
-	i18nUtil "mael/cmd/util/i18n"
 	"github.com/a-h/templ"
 	"github.com/labstack/echo/v4"
+	"mael/cmd/struct/error"
+	i18nUtil "mael/cmd/util/i18n"
+	"mael/web/templates/contents/errorAlert"
 )
 
 func HTML(c echo.Context, cmp templ.Component) error {
 	c.Response().Header().Set(echo.HeaderContentType, echo.MIMETextHTML)
+	return cmp.Render(c.Request().Context(), c.Response().Writer)
+}
+
+func HTMX(c echo.Context, cmp templ.Component, err *resError.Error) error {
+	c.Response().Header().Set(echo.HeaderContentType, echo.MIMETextHTML)
+	if err != nil {
+		cmp = errorTemplate.ErrorToastWrap(*err, cmp)
+	}
 	return cmp.Render(c.Request().Context(), c.Response().Writer)
 }
 

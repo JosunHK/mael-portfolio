@@ -22,6 +22,7 @@ import (
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 
+	"github.com/sirupsen/logrus"
 	log "github.com/sirupsen/logrus"
 )
 
@@ -65,7 +66,18 @@ func main() {
 	e := echo.New() //http client
 	e.Use(eMiddleware.Secure())
 	e.Use(eMiddleware.Recover())
-	e.Use(middleware.Logger)
+	e.Use(eMiddleware.RequestLoggerWithConfig(eMiddleware.RequestLoggerConfig{
+		LogURI:    true,
+		LogStatus: true,
+		LogValuesFunc: func(c echo.Context, values eMiddleware.RequestLoggerValues) error {
+			log.WithFields(logrus.Fields{
+				"URI":    values.URI,
+				"status": values.Status,
+			}).Info("request")
+
+			return nil
+		},
+	}))
 	e.Use(middleware.WithLocale)
 	e.Use(middleware.WithCSP)
 	e.Pre(eMiddleware.RemoveTrailingSlashWithConfig(

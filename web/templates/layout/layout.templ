@@ -5,6 +5,7 @@ import (
 	"os"
 	"mael/web/templates/components/common/menubar"
 	"mael/web/templates/components/common/cursor"
+	"mael/web/templates/contents/cms"
 )
 
 templ header() {
@@ -65,8 +66,9 @@ templ Layout(content templ.Component) {
 
 templ CMSLayout(content templ.Component) {
 	@header() {
-		<body class="bg-background flex flex-col overflow-y-auto scrollbar-hide min-h-screen">
+		<body class="bg-cms-background flex flex-col overflow-y-auto scrollbar-hide min-h-screen">
 			<div class="w-full max-w-full relative scrollbar-hide">
+                @cmsTemplates.Nav()
                 @content
 			</div>
 		</body>

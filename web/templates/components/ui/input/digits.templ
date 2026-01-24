@@ -14,11 +14,11 @@ type DigitsProps struct {
 
 
 var inputScriptHandle = templ.NewOnceHandle();
-templ InputScript(){
+templ DigitInputScript(){
     @inputScriptHandle.Once() {
         <script nonce={templ.GetNonce(ctx)}>
             document.addEventListener('alpine:init', () => {
-                Alpine.data('input', () => ({
+                Alpine.data('digitInput', () => ({
                     get legnth(){
                         return this.$el.getAttribute("digits");
                     },
@@ -70,7 +70,7 @@ templ InputScript(){
 templ Digits(props DigitsProps, digits int) {
 	<div
         digits={ strconv.Itoa(digits) }
-        x-data="input"
+        x-data="digitInput"
         class={ props.Class }
     >
 		<div 

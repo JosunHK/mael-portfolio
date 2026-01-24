@@ -35,12 +35,7 @@ templ Input(props Props) {
 		type={ props.Type }
 		name={ props.Name }
 		value={ props.Value }
-        x-on:input="function($event){
-            let type = $event.target.getAttribute('type');
-            if (type === 'number') {
-                $event.target.value = $event.target.value.replace(/[^0-9]/, '');
-            }
-        }"
+        x-data="input"
 		class={ M(
             `flex h-10 w-full rounded-md border ring-primary bg-background
             px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent
@@ -53,23 +48,21 @@ templ Input(props Props) {
 	/>
 }
 
-//general number input with decimal point 
-templ NumberInput(props Props) {
-	<input
-		type="text"
-		name={ props.Name }
-		value={ props.Value }
-        x-on:input="function($event){
-            $event.target.value = $event.target.value.replace(/[^0-9.+-]/, '');
-        }"
-		class={ M(
-            `flex h-10 w-full rounded-md border border-input bg-background
-            px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent
-            file:text-sm file:font-medium placeholder:text-muted-foreground focus-visible:outline-none
-            focus-visible:border-2 focus-visible:border-ring 
-            disabled:cursor-not-allowed disabled:opacity-50`,
-            props.Class,
-        )}
-		{ props.Attrs... }
-	/>
+var InputScriptHandle = templ.NewOnceHandle();
+templ InputScript(){
+    @InputScriptHandle.Once() {
+        <script nonce={templ.GetNonce(ctx)}>
+            document.addEventListener('alpine:init', () => {
+                Alpine.data('input', () => ({
+                    ["x-on:input"](){
+                        let type = this.$event.target.getAttribute('type');
+                        if (type === 'number') {
+                            this.$event.target.value = this.$event.target.value.replace(/[^0-9]/, '');
+                        }
+
+                    }
+                }))
+            })
+        </script>
+    }
 }

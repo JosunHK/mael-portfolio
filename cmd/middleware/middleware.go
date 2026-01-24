@@ -17,6 +17,7 @@ type nothingHandler func() error
 type requestHandler func(echo.Context) error
 type redirectHandler func(echo.Context) (string, error)
 type pageHandler func(echo.Context, templ.Component) error
+type errorHandler func(echo.Context, templ.Component, error) error
 type serviceHandler func(echo.Context) (err error, statusCode int, resObj any)
 type PageHandler func(echo.Context) templ.Component
 type FileHandler func(echo.Context) (err error, fileType string, resObj []byte)

@@ -50,6 +50,7 @@ templ CursorScript(){
                     isMouseInViewport = false;
                     const cursor = $("#custom-cursor");
                     const cursorTrail = $("#custom-cursor-trail");
+                    if(!cursor || !cursorTrail) return;
                     cursor.style.opacity = "0";
                     cursorTrail.style.opacity = "0";
                 });
@@ -59,6 +60,7 @@ templ CursorScript(){
                     const y = event.clientY;
                     const cursor = $("#custom-cursor");
                     const cursorTrail = $("#custom-cursor-trail");
+                    if(!cursor || !cursorTrail) return;
                     if(isMouseInViewport) {
                         cursor.style.opacity = "100%";
                     }

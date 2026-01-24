@@ -1,0 +1,163 @@
+package cmsTemplates
+
+import (
+    "fmt"
+	gocva "github.com/gungun974/gocva"
+	"mael/db/generated"
+	button "mael/web/templates/components/ui/button"
+	"mael/web/templates/components/ui/card"
+	icon "mael/web/templates/components/ui/icon"
+	input "mael/web/templates/components/ui/input"
+	label "mael/web/templates/components/ui/label"
+	cmsComp "mael/web/templates/components/cms"
+	"mael/web/templates/components/ui/table"
+)
+
+templ Animations() {
+	<div class="flex h-full w-full flex-col items-center justify-center">
+        <form
+            x-data="animationForm"
+            @htmx:after-request="reset"
+            hx-post="/cms/animation"
+            hx-swap="innerHTML transition:true"
+            hx-target="#animations-table"
+        >
+            @card.Card(card.Props{
+                Class: "scrollbar-hide text-cms-foreground mt-24 h-min max-h-[500px] w-[1000px] overflow-y-scroll bg-cms-background shadow-xl border-cms-border border",
+            }) {
+                @table.Table(table.Props{}) {
+                    @animationsHeader()
+                    @table.Body(table.Props{
+                        Attrs: templ.Attributes{
+                            "id": "animations-table",
+                            "hx-get": "/cms/animation",
+                            "hx-trigger": "load",
+                        },
+                    })
+                }
+            }
+	    </form>
+	</div>
+    @AnimationScript()
+}
+
+templ animationsHeader() {
+	@table.Header(table.Props{}) {
+		@table.Row(table.Props{
+            Class: "border-cms-border border-b hover:bg-cms-muted/90",
+        }) {
+            @table.Head(table.Props{
+                Class: "text-lg",
+                Attrs: templ.Attributes{"colspan": "3"},
+            }) {
+                Animation Profiles
+            }
+		}
+		@table.Row(table.Props{
+            Class: "border-cms-border border-b hover:bg-cms-muted/90",
+        }) {
+            @table.Head(table.Props{
+                Attrs: templ.Attributes{"colspan": "1"},
+            }) {
+                Label
+            }
+            @table.Head(table.Props{
+                Attrs: templ.Attributes{"colspan": "2"},
+            }) {
+                Description
+            }
+		}
+		@NewRow()
+	}
+}
+
+templ AnimationsTable(animations []sqlc.Animation) {
+    for _, item := range animations{
+        @table.Row(table.Props{
+            Class: "border-cms-border border-b-1 hover:bg-cms-muted/90",
+        }) {
+            @table.Cell(table.Props{}) {
+                { item.Label }
+            }
+            @table.Cell(table.Props{}) {
+                { item.AnimationDesc }
+            }
+            @table.Cell(table.Props{}) {
+                @cmsComp.Button(button.Props{
+                        Variant: gocva.Variant{"variant": "destructive"},
+                        Attrs: templ.Attributes{
+                            "type": "button",
+                            "hx-delete": fmt.Sprintf("/cms/animation/%d", item.ID),
+                            "hx-trigger": "click",
+                            "hx-swap":"innerHTML transition:true",
+                            "hx-target":"#animations-table",
+                        },
+                    }){
+                    @label.Label(
+                        label.Props{
+                            Variant: gocva.Variant{"variant": "title"},
+                        },
+                    ) {
+                        @icon.Wrapper(icon.Props{}) {
+                            @icon.X()
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+templ NewRow() {
+    @table.Row(table.Props{
+        Class: "border-top-none border-cms-border hover:bg-cms-muted/90 table-row",
+    }) {
+		@table.Cell(table.Props{}) {
+			@cmsComp.Input(
+				input.Props{
+					Name:  "label",
+				},
+			)
+		}
+		@table.Cell(table.Props{}) {
+			@cmsComp.Input(
+				input.Props{
+					Name:  "desc",
+				},
+			)
+		}
+		@table.Cell(table.Props{}) {
+            @cmsComp.Button(button.Props{
+                    Attrs: templ.Attributes{
+                        "type": "submit",
+                    },
+				    Variant: gocva.Variant{"variant": "default"},
+                }){
+				@label.Label(
+					label.Props{
+						Variant: gocva.Variant{"variant": "title"},
+					},
+				) {
+					@icon.Wrapper(icon.Props{}) {
+						@icon.Plus()
+					}
+				}
+            }
+		}
+	}
+}
+
+var animationScriptHandle = templ.NewOnceHandle();
+templ AnimationScript(){
+    @animationScriptHandle.Once() {
+        <script nonce={templ.GetNonce(ctx)}>
+            document.addEventListener('alpine:init', () => {
+                Alpine.data('animationForm', () => ({
+                    reset() {
+                        this.$el.reset();
+                    }
+                }))
+            })
+        </script>
+    }
+}

@@ -8,15 +8,15 @@ import (
 var M = twmerge.Merge
 
 var cva = gocva.CVA{
-	Base: "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
+	Base: "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
 	Variants: gocva.Variants{
 		"variant": {
 			"default":     "bg-eGreen text-background hover:bg-eGreen/80",
-			"destructive": "bg-eRed text-destructive-foreground hover:bg-destructive/100",
+			"destructive": "bg-eRed text-destructive-foreground hover:bg-eRed/80",
 			"outline":     "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
-			"secondary":   "bg-eYellow text-background hover:bg-eYellow/80",
+			"secondary":   "bg-eYellow text-background hover:bg-eYellow/80 ring-eYellow focus-visible:border-eYellow",
 			"ghost":       "hover:bg-accent hover:text-accent-foreground",
-			"link":        "text-primary underline-offset-4 hover:underline",
+			"link":        "text-primary hover:underline",
 			"purple":      "bg-ePurple text-background hover:bg-ePurple/100",
 		},
 		"size": {
