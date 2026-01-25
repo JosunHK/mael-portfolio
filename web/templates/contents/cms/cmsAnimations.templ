@@ -48,7 +48,7 @@ templ Animations() {
         <form
             x-data="animationForm"
             @htmx:after-request="reset"
-            hx-patch="/cms/animation/table"
+            hx-post="/cms/animation"
             hx-swap="innerHTML transition:true"
             hx-target="#animations-table"
         >

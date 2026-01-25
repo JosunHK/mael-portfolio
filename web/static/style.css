@@ -968,6 +968,10 @@ body {
   height: 580px;
 }
 
+.h-\[510px\] {
+  height: 510px;
+}
+
 .max-h-\[12rem\] {
   max-height: 12rem;
 }
