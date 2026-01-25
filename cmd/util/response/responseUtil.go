@@ -8,6 +8,7 @@ import (
 	"mael/cmd/struct/error"
 	i18nUtil "mael/cmd/util/i18n"
 	"mael/web/templates/contents/errorAlert"
+	"mael/web/templates/contents/successAlert"
 )
 
 func HTML(c echo.Context, cmp templ.Component) error {
@@ -19,6 +20,16 @@ func HTMX(c echo.Context, cmp templ.Component, err *resError.Error) error {
 	c.Response().Header().Set(echo.HeaderContentType, echo.MIMETextHTML)
 	if err != nil {
 		cmp = errorTemplate.ErrorToastWrap(*err, cmp)
+	}
+	return cmp.Render(c.Request().Context(), c.Response().Writer)
+}
+
+func HTMXWithSuccess(c echo.Context, cmp templ.Component, err *resError.Error) error {
+	c.Response().Header().Set(echo.HeaderContentType, echo.MIMETextHTML)
+	if err != nil {
+		cmp = errorTemplate.ErrorToastWrap(*err, cmp)
+	} else {
+		cmp = successTemplate.SuccessToastWrap("Success!", "Save successful!", cmp)
 	}
 	return cmp.Render(c.Request().Context(), c.Response().Writer)
 }

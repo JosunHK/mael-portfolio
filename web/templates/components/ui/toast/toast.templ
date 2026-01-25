@@ -27,6 +27,9 @@ templ AlertScript(){
                             setTimeout(() =>{
                                 this.open = false;
                             },5000);
+                            setTimeout(() =>{
+                                this.$el.remove()
+                            },6000);
                         });
                     },
                     close() {
@@ -49,6 +52,21 @@ templ AlertToast(desc string) {
 			}
 		}
 	}
+}
+
+templ SuccessToast(props Props) {
+	<template x-teleport="body" x-data="">
+		<div
+			x-data="alert"
+			class={ M("fixed bottom-3 flex items-center justify-center z-[150] w-full", props.Class) }
+			x-show="open"
+			@click="close"
+			x-transition.duration.500ms
+			{ props.Attrs... }
+		>
+			{ children... }
+		</div>
+	</template>
 }
 
 templ Toast(props Props) {

@@ -10,6 +10,7 @@ type Props struct {
 	Attrs templ.Attributes
 	Type  string
 	Value string
+	Placeholder string
 }
 
 templ InputRaw(props Props) {
@@ -17,6 +18,7 @@ templ InputRaw(props Props) {
 		type={ props.Type }
 		name={ props.Name }
 		value={ props.Value }
+		placeholder ={ props.Placeholder}
 		class={ M(
             `flex h-10 w-full rounded-md border ring-primary bg-background
             px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent
@@ -35,6 +37,7 @@ templ Input(props Props) {
 		type={ props.Type }
 		name={ props.Name }
 		value={ props.Value }
+		placeholder={ props.Placeholder}
         x-data="input"
 		class={ M(
             `flex h-10 w-full rounded-md border ring-primary bg-background

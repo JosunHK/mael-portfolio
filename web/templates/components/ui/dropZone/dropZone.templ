@@ -1,0 +1,87 @@
+package dropZone
+
+import (
+    twmerge "github.com/Oudwins/tailwind-merge-go/pkg/twmerge"
+    "mael/cmd/util/templ"
+)
+
+var M = twmerge.Merge
+
+type Props struct {
+	Class string
+	Attrs templ.Attributes
+}
+
+templ DropZoneWrapper(props Props){
+    <div 
+        x-data="dropZone"
+        class={M("bg-white mt-1 w-full relative p-4 text- border border-gray-300 rounded-md shadow-sm", props.Class)}
+        { props.Attrs... }
+    >
+        {children...}
+    </div>
+}
+
+templ DropZoneBody(props Props){
+        <div
+            x-ref="dnd"
+            class={M("relative text-gray-400 border-2 border-gray-200 border-dashed rounded cursor-pointer", props.Class)}
+            { props.Attrs... }
+        >
+            {children...}
+        </div>
+}
+
+templ DropZoneInput(props Props){
+    {{
+        attrs := templ.Attributes{
+            "type":"file",
+            "name":"file",
+            "accept":"*",
+        }
+    }}
+
+    <input 
+        x-bind="fileInput"
+        x-ref="file"
+        class={M("absolute inset-0 z-50 w-full h-full p-0 m-0 outline-none opacity-0 cursor-pointer", props.Class)}
+        { templUtil.MergeAttrs(attrs, props.Attrs)... }
+    />
+}
+
+templ DropZoneArea(props Props){
+    <div 
+        class={M("flex flex-col items-center justify-center py-10 text-center", props.Class)}
+        { props.Attrs... }
+    >
+        {children...}
+    </div>
+}
+
+var dropZoneScriptHandle = templ.NewOnceHandle();
+templ DropZoneScript(){
+    @dropZoneScriptHandle.Once() {
+        <script nonce={templ.GetNonce(ctx)}>
+            document.addEventListener('alpine:init', () => {
+                Alpine.data('dropZone', () => ({
+                    fileName: "",
+                    fileInput:{
+                        ["@change"](){
+                            return this.fileName = this.$refs.file.files[0].name
+                        },
+                        ["@dragover"](){
+                            return this.$refs.dnd.classList.add('bg-indigo-50')
+                        },
+                        ["@dragleave"](){
+                            return this.$refs.dnd.classList.remove('bg-indigo-50')
+                        },
+                        ["@drop"](){
+                            return this.$refs.dnd.classList.remove('bg-indigo-50')
+                        },
+                    }
+
+                }))
+            })
+        </script>
+    }
+}

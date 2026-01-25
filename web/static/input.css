@@ -124,6 +124,18 @@
       opacity: 0;
     }
 
+    .htmx-indicator{
+        display:none;
+    }
+
+    .htmx-request .htmx-indicator{
+        display:inline;
+    }
+
+    .htmx-request.htmx-indicator{
+        display:inline;
+    }
+
     .hx-fade-in{
       opacity: 1;
       transition: opacity 250ms ease-out;

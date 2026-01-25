@@ -1,0 +1,27 @@
+package dropZone
+import (
+	icon "mael/web/templates/components/ui/icon"
+)
+
+templ DropZoneDefault(msg string){
+    @DropZoneWrapper(Props{
+            Class: "border-cms-border bg-cms-background",
+        }) {
+        @DropZoneBody(Props{
+            Class: "border-cms-border text-cms-foreground",
+        }){
+            @DropZoneInput(Props{
+                Attrs: templ.Attributes{
+                    "accept": ".zip",
+                },
+            })
+            @DropZoneArea(Props{}){
+                @icon.Wrapper(icon.Props{}) {
+                    @icon.Upload()
+                }
+                <p class="mt-1">{msg}</p>
+                <p class="mt-2 text-cms-foreground/80" x-text="fileName"></p>
+            }
+        }
+    }
+}

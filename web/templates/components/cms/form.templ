@@ -13,21 +13,33 @@ var MV = templUtil.MergeVariant;
 var MA = templUtil.MergeAttrs;
 
 templ Input(props input.Props){
-    @input.Input(
+    @input.InputRaw(
         input.Props{
             Type:  "text",
             Name:  props.Name,
+            Value: props.Value,
+            Placeholder: props.Placeholder,
             Class: M(`my-2 bg-cms-background border-2 border-cms-border
-            ring-eYellow focus-visible:border-eYellow`, props.Class),
+            focus-visible:ring-0 focus-visible:border-cms-foreground`, props.Class),
         },
     ) 
 }
 
 templ Button(props button.Props){
     @button.Button(button.Props{
-        Variant: MV(props.Variant, gocva.Variant{"variant": "secondary"}),
-        Attrs: MA(props.Attrs, templ.Attributes{ "type": "submit",}),
-        Class: "mb-2.5 mt-2",
+        Variant: MV(gocva.Variant{"variant": "secondary"}, props.Variant),
+        Attrs: MA(templ.Attributes{ "type": "submit",}, props.Attrs),
+        Class: M("mb-2.5 mt-2 focus-visible:ring-cms-foreground", props.Class),
+    }) {
+        {children...}
+    }
+}
+
+templ ButtonDisabled(props button.Props){
+    @button.Button(button.Props{
+        Variant: MV(gocva.Variant{"variant": "secondary"}, props.Variant),
+        Attrs: MA(templ.Attributes{ "type": "submit", "disabled": "disabled"}, props.Attrs),
+        Class: M("mb-2.5 mt-2 focus-visible:ring-cms-foreground opacity-30", props.Class),
     }) {
         {children...}
     }

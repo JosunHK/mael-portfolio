@@ -2,6 +2,7 @@ package cmsTemplates
 
 import (
     "fmt"
+    "mael/cmd/util/fp"
 	gocva "github.com/gungun974/gocva"
 	"mael/db/generated"
 	button "mael/web/templates/components/ui/button"
@@ -13,24 +14,53 @@ import (
 	"mael/web/templates/components/ui/table"
 )
 
+var animationScriptHandle = templ.NewOnceHandle();
+templ AnimationScript(){
+    @animationScriptHandle.Once() {
+        <script nonce={templ.GetNonce(ctx)}>
+            document.addEventListener('alpine:init', () => {
+                Alpine.data('animationForm', () => ({
+                    reset() {
+                        this.$el.reset();
+                    }
+                }))
+            })
+        </script>
+    }
+}
+
+var animationRowScriptHandle = templ.NewOnceHandle();
+templ AnimationRowScript(){
+    @animationRowScriptHandle.Once() {
+        <script nonce={templ.GetNonce(ctx)}>
+            Alpine.data('animationRow', () => ({
+                toDetails() {
+                    const animationId = this.$el.getAttribute("animation-id");
+                    window.location = `/cms/animation/${animationId}`
+                }
+            }))
+        </script>
+    }
+}
+
 templ Animations() {
-	<div class="flex h-full w-full flex-col items-center justify-center">
+	<div class="flex h-full w-full flex-row items-center justify-center gap-12 pt-24 font-barlow">
         <form
             x-data="animationForm"
             @htmx:after-request="reset"
-            hx-post="/cms/animation"
+            hx-patch="/cms/animation/table"
             hx-swap="innerHTML transition:true"
             hx-target="#animations-table"
         >
             @card.Card(card.Props{
-                Class: "scrollbar-hide text-cms-foreground mt-24 h-min max-h-[500px] w-[1000px] overflow-y-scroll bg-cms-background shadow-xl border-cms-border border",
+                Class: "scrollbar-hide text-cms-foreground mt-24 h-min max-h-[500px] w-[800px] overflow-y-scroll bg-cms-background shadow-xl border-cms-border border",
             }) {
                 @table.Table(table.Props{}) {
                     @animationsHeader()
                     @table.Body(table.Props{
                         Attrs: templ.Attributes{
                             "id": "animations-table",
-                            "hx-get": "/cms/animation",
+                            "hx-get": "/cms/animation/table",
                             "hx-trigger": "load",
                         },
                     })
@@ -50,21 +80,7 @@ templ animationsHeader() {
                 Class: "text-lg",
                 Attrs: templ.Attributes{"colspan": "3"},
             }) {
-                Animation Profiles
-            }
-		}
-		@table.Row(table.Props{
-            Class: "border-cms-border border-b hover:bg-cms-muted/90",
-        }) {
-            @table.Head(table.Props{
-                Attrs: templ.Attributes{"colspan": "1"},
-            }) {
-                Label
-            }
-            @table.Head(table.Props{
-                Attrs: templ.Attributes{"colspan": "2"},
-            }) {
-                Description
+                Animations 
             }
 		}
 		@NewRow()
@@ -76,11 +92,14 @@ templ AnimationsTable(animations []sqlc.Animation) {
         @table.Row(table.Props{
             Class: "border-cms-border border-b-1 hover:bg-cms-muted/90",
         }) {
-            @table.Cell(table.Props{}) {
+            @table.Cell(table.Props{
+                Attrs: templ.Attributes{
+                    "x-data": "animationRow",
+                    "@click.self": "toDetails",
+                    "animation-id" : item.ID,
+                },
+            }) {
                 { item.Label }
-            }
-            @table.Cell(table.Props{}) {
-                { item.AnimationDesc }
             }
             @table.Cell(table.Props{}) {
                 @cmsComp.Button(button.Props{
@@ -104,25 +123,30 @@ templ AnimationsTable(animations []sqlc.Animation) {
                     }
                 }
             }
+            @table.Cell(table.Props{
+                Class: "w-[5%]",
+            }) {
+                {{
+                    isFirst := fputil.ElemIndex(item, animations) == 0
+                    isLast:= fputil.ElemIndex(item, animations) == (len(animations) -1)
+                }}
+                @SortOrderButtonRow(item, isFirst, isLast)
+            }
         }
     }
+    @AnimationRowScript()
 }
 
 templ NewRow() {
     @table.Row(table.Props{
-        Class: "border-top-none border-cms-border hover:bg-cms-muted/90 table-row",
+        Class: "border-top-none border-cms-border hover:bg-cms-muted/90 table-row w-[80%]",
     }) {
-		@table.Cell(table.Props{}) {
+		@table.Cell(table.Props{
+            Class: "w-[80%]",
+        }) {
 			@cmsComp.Input(
 				input.Props{
 					Name:  "label",
-				},
-			)
-		}
-		@table.Cell(table.Props{}) {
-			@cmsComp.Input(
-				input.Props{
-					Name:  "desc",
 				},
 			)
 		}
@@ -144,20 +168,42 @@ templ NewRow() {
 				}
             }
 		}
+		@table.Cell(table.Props{
+            Class: "w-[5%]",
+        }) {}
 	}
 }
 
-var animationScriptHandle = templ.NewOnceHandle();
-templ AnimationScript(){
-    @animationScriptHandle.Once() {
-        <script nonce={templ.GetNonce(ctx)}>
-            document.addEventListener('alpine:init', () => {
-                Alpine.data('animationForm', () => ({
-                    reset() {
-                        this.$el.reset();
-                    }
-                }))
-            })
-        </script>
-    }
+templ SortOrderButtonRow(item sqlc.Animation, isFirst bool, isLast bool){
+    <div class="flex flex-col justify-center items-center">
+        @SortOrderButton(item.ID, isFirst, "orderUp", icon.ArrowUp)
+        @SortOrderButton(item.ID, isLast, "orderDown", icon.ArrowDown)
+    </div>
+}
+
+templ SortOrderButton(id int64, isShow bool, action string, buttonIcon func() templ.Component) {
+    <form 
+        hx-patch={fmt.Sprintf("/cms/animation/%d", id)}
+        hx-swap="innerHTML transition:true"
+        hx-target="#animations-table"
+    >
+        <input type="hidden" name="action" value={action}>
+        {{
+            upButton := cmsComp.Button
+            if isShow {
+                upButton = cmsComp.ButtonDisabled
+            }
+        }}
+        @upButton(button.Props{
+                Attrs: templ.Attributes{
+                    "type": "submit",
+                },
+                Variant: gocva.Variant{"variant": "ghost", "size":"iconsm"},
+                Class: "mt-0 mb-0",
+        }){
+            @icon.Wrapper(icon.Props{}) {
+                @buttonIcon()
+            }
+        }
+    </form>
 }

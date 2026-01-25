@@ -29,6 +29,7 @@ templ header() {
             //splide
 			<link rel="stylesheet" href="/static/splide-core.min.css" nonce={ templ.GetNonce(ctx) }/>
 			<link rel="stylesheet" href="/static/splide.min.css" nonce={ templ.GetNonce(ctx) }/>
+            <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/tippy.css" nonce={ templ.GetNonce(ctx) }/>
 
             //scripts for components, has to be loded first before alpine package
             @Scripts()
@@ -44,6 +45,7 @@ templ header() {
 			//alpine js
 			<script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/anchor@3.x.x/dist/cdn.min.js" nonce={ templ.GetNonce(ctx) }></script>
 			<script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/intersect@3.x.x/dist/cdn.min.js" nonce={ templ.GetNonce(ctx) }></script>
+            <script src="https://cdn.jsdelivr.net/npm/@ryangjchandler/alpine-tooltip@1.x.x/dist/cdn.min.js" nonce={ templ.GetNonce(ctx) } defer> </script>
 			<script src="https://cdn.jsdelivr.net/npm/@alpinejs/persist@3.x.x/dist/cdn.min.js" nonce={ templ.GetNonce(ctx) }></script>
             <script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/csp@3.x.x/dist/cdn.min.js" nonce={ templ.GetNonce(ctx) }></script>
 		</head>

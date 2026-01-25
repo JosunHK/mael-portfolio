@@ -1,0 +1,71 @@
+package successTemplate
+
+import (
+	"mael/web/templates/components/ui/alert"
+	"mael/web/templates/components/ui/icon"
+	"mael/web/templates/components/ui/label"
+	"github.com/gungun974/gocva"
+    i18nUtil "mael/cmd/util/i18n"
+)
+
+templ SuccessAlert(title, desc string) {
+	<div
+		class="w-full h-full flex flex-row justify-center items-center"
+	>
+		@alert.Alert(alert.Props{
+			Class:   "w-[400px]",
+			Variant: gocva.Variant{"variant": "success"},
+		}) {
+			@icon.Wrapper(icon.Props{}) {
+				@icon.Check()
+			}
+			@alert.AlertTitle(alert.Props{}) {
+                { i18nUtil.T(ctx, title) }
+			}
+			@alert.AlertDescription(alert.Props{}) {
+                { i18nUtil.T(ctx, desc) }
+			}
+		}
+	</div>
+}
+
+templ SimpleSuccess(desc string) {
+	<span class="text-eGreen">{ desc }</span>
+}
+
+templ SuccessToastWrap(title string, msg string, content templ.Component) {
+    @content
+    @SuccessToast(title, msg)
+}
+
+templ SuccessToast(title string, msg string) {
+    <template x-teleport="body">
+        <div 
+			x-data="alert"
+            class="fixed bottom-3 right-3 flex items-center justify-center z-[150] alert-toast" 
+			x-show="open"
+			@click="close"
+			x-transition.duration.500ms
+        >
+            @alert.Alert(alert.Props{
+                Class:   "w-[300px] text-md bg-cms-background",
+                Variant: gocva.Variant{"variant": "success"},
+            }) {
+                <div class="flex flex-row items-center">
+                    @icon.Wrapper(icon.Props{}) {
+                        @icon.Check()
+                    }
+                    @label.Label(label.Props{
+			            Variant: gocva.Variant{"variant": "title"},
+                        Class: "ml-2",
+                    }){
+                        { title }
+                    }
+                </div>
+                @alert.AlertDescription(alert.Props{}) {
+                    { msg }
+                }
+            }
+        </div>
+    </template>
+}
