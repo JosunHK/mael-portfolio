@@ -11,19 +11,19 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-var animattionActions = map[string]cmsUtil.AnimationPatch{
+var animationActions = map[string]cmsUtil.AnimationPatch{
 	"orderUp":      cmsUtil.OrderUp,
 	"orderDown":    cmsUtil.OrderDown,
 	"modifyDetail": cmsUtil.ModifyDetail,
 }
 
-var animattionActionsResBody = map[string]cmsUtil.AnimationPatchResBody{
+var animationActionsResBody = map[string]cmsUtil.AnimationPatchResBody{
 	"orderUp":      cmsUtil.GetAnimtions,
 	"orderDown":    cmsUtil.GetAnimtions,
 	"modifyDetail": cmsUtil.GetAnimtionDetail,
 }
 
-var animattionActionsResFunc = map[string]cmsUtil.AnimationPatchResFunc{
+var animationActionsResFunc = map[string]cmsUtil.AnimationPatchResFunc{
 	"orderUp":      responseUtil.HTMX,
 	"orderDown":    responseUtil.HTMX,
 	"modifyDetail": responseUtil.HTMXWithSuccess,
@@ -54,7 +54,7 @@ func DeleteAnimationRes(c echo.Context) error {
 
 func PatchAnimation(c echo.Context) error {
 	action := c.FormValue("action")
-	actionFunc := animattionActions[action]
+	actionFunc := animationActions[action]
 
 	//error msg in case no action
 	resErr := resError.New(fmt.Sprintf("Invalid Action : %v", action), "")
@@ -62,7 +62,7 @@ func PatchAnimation(c echo.Context) error {
 		resErr = actionFunc(c)
 	}
 
-	actionResBody := animattionActionsResBody[action]
+	actionResBody := animationActionsResBody[action]
 	if actionResBody == nil { //only happens if YOU fucked up
 		return responseUtil.HTML(c, errorTemplate.ErrorAlert("404 Page Not Found", "The path you requested is invalid."))
 	}
@@ -71,7 +71,7 @@ func PatchAnimation(c echo.Context) error {
 		resErr = err
 	}
 
-	resFunc := animattionActionsResFunc[action]
+	resFunc := animationActionsResFunc[action]
 	if resFunc == nil { //only happens if YOU fucked up
 		return responseUtil.HTML(c, errorTemplate.ErrorAlert("404 Page Not Found", "The path you requested is invalid."))
 	}
