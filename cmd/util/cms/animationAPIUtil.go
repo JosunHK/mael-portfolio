@@ -1,16 +1,18 @@
 package cmsUtil
 
 import (
+	"database/sql"
 	"fmt"
-	"github.com/a-h/templ"
-	"github.com/labstack/echo/v4"
-	log "github.com/sirupsen/logrus"
 	"mael/cmd/database"
 	"mael/cmd/struct/cms"
 	"mael/cmd/struct/error"
 	"mael/db/generated"
 	"mael/web/templates/contents/cms"
 	"strconv"
+
+	"github.com/a-h/templ"
+	"github.com/labstack/echo/v4"
+	log "github.com/sirupsen/logrus"
 )
 
 type AnimationPatch func(echo.Context) *resError.Error
@@ -154,14 +156,19 @@ func ModifyDetail(c echo.Context) *resError.Error {
 		return resError.New("Failed update animation record ", err.Error())
 	}
 
+	count, err := savesAnimationReturnCount(c, id)
+	if err != nil {
+		log.Error(fmt.Errorf("Failed save animation frames %v", err))
+		return resError.New("Failed save animation frames ", err.Error())
+	}
+
+	if count > 0 {
+		req.FramesCount = sql.NullInt32{Valid: true, Int32: int32(count)}
+	}
+
 	if err = modifyAnimation(c, req, id); err != nil {
 		log.Error(fmt.Errorf("Failed update animation record %v", err))
 		return resError.New("Failed update animation record ", err.Error())
-	}
-
-	if err = savesAnimation(c, id); err != nil {
-		log.Error(fmt.Errorf("Failed save animation frames %v", err))
-		return resError.New("Failed save animation frames ", err.Error())
 	}
 
 	return nil

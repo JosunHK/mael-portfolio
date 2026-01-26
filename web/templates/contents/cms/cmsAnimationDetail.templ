@@ -161,6 +161,7 @@ templ AnimationDetailForm(animation sqlc.Animation){
                                     Type: "number",
                                     Class: "w-12",
                                     Value: templUtil.ExtractInt32(animation.FramesCount),
+                                    Attrs: templ.Attributes{"disabled":"disabled"},
                                 },
                             )
                             @label.Label(label.Props{}) {

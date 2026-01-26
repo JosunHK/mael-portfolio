@@ -1,15 +1,112 @@
 package cmsTemplates
 
+import (
+	gocva "github.com/gungun974/gocva"
+	button "mael/web/templates/components/ui/button"
+	icon "mael/web/templates/components/ui/icon"
+)
+
+var SideMenuScriptHandle = templ.NewOnceHandle();
+templ SideMenuScript(){
+    @SideMenuScriptHandle.Once() {
+        <script nonce={templ.GetNonce(ctx)}>
+            document.addEventListener('alpine:init', () => {
+                Alpine.data('sideMenu', () => ({
+                    open: false,
+                    setOpen(){
+                        this.open = true
+                    },
+                    setClose(){
+                        this.open = false
+                    },
+                    getAnimation(){
+                        return this.open?'animate-slide-in':'animate-slide-out'
+                    },
+
+                }))
+            })
+        </script>
+    }
+}
+
 templ Nav() {
-    <div Class="flex-row w-full gap-4 justify-evenly items-end p-3 h-[5vh] xl:flex hidden">
-        @NavLink("ANIMATIONS", "/cms/animation")
-        @NavLink("CHARACTERS", "/cms/character")
-        @NavLink("ABOUT ME", "/cms/about")
-     </div>
+    @SideMenu() {
+        @SideMenuContent()
+    }
+    @SideMenuScript()
 }
 
 templ NavLink(title string, toPath string) {
     <div class="font-barlow text-[1.5rem] text-cms-foreground">
         <a href={templ.URL(toPath)}>{title}</a>
     </div>
+}
+
+templ SideMenu() {
+	<div
+		class="flex-row gap-1 items-center flex"
+		x-data="sideMenu"
+	>
+		@button.Button(button.Props{
+			Attrs: templ.Attributes{
+				"@click": "setOpen",
+			},
+			Variant: gocva.Variant{
+				"variant": "ghost",
+				"size":    "icon",
+			},
+            Class:"test-cms-foreground",
+		}) {
+			@icon.Wrapper(icon.Props{
+				Class: "m-1 h-5 w-5 mx-2",
+			}) {
+				@icon.Menu()
+			}
+		}
+		<template x-teleport="body">
+			<div
+				x-show="open"
+				class="fixed top-0 left-0 z-30 h-screen w-screen backdrop-blur-sm bg-cms-background/50"
+			></div>
+		</template>
+		<template x-teleport="body">
+			<div
+                x-show="open"
+                x-transition.opacity.duration.100ms
+				:class="getAnimation"
+				class="z-40 border border-cms-border bg-cms-background
+                       text-cms-foreground shadow-md fixed
+                       overflow-y-auto h-screen right-0 w-0"
+				x-on:mousedown.outside="setClose"
+			>
+				{ children... }
+			</div>
+		</template>
+	</div>
+}
+
+templ SideMenuContent() {
+	<div class="h-[6rem]">
+		@button.Button(button.Props{
+			Class: "absolute right-0 mr-1 top-0 mt-6",
+            Attrs:templ.Attributes{
+				"@click": "setClose",
+            },
+			Variant: gocva.Variant{
+				"variant": "ghost",
+				"size":    "icon",
+			},
+		}) {
+			@icon.Wrapper(icon.Props{
+				Class: "m-1 h-5 w-5 mx-2",
+			}) {
+				@icon.X()
+			}
+		}
+	</div>
+	<div Class="pt-1 mt-4 flex-col items-center w-full gap-4 bg-cms-background rounded-none border-none flex">
+        @NavLink("ANIMATIONS", "/cms/animation")
+        @NavLink("CHARACTERS", "/cms/character")
+        @NavLink("ABOUT ME", "/cms/about")
+	</div>
 }

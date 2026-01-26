@@ -31,80 +31,103 @@ var AllowedImageExt = []string{
 	".WEBP",
 }
 
-type decodeFunc func(io.Reader) (image.Image, error)
+type DecodeFunc func(io.Reader) (image.Image, error)
+type ImageHandler func(string, io.ReadCloser) error
 
-var imageDecoder = map[string]decodeFunc{
-	".jpg":  jpeg.Decode,
-	".JPG":  jpeg.Decode,
-	".jpeg": jpeg.Decode,
-	".JPEG": jpeg.Decode,
-	".png":  png.Decode,
-	".PNG":  png.Decode,
+var imageHandlerMap = map[string]ImageHandler{
+	".jpg":  convertJpegAndSaveWebp,
+	".JPG":  convertJpegAndSaveWebp,
+	".jpeg": convertJpegAndSaveWebp,
+	".JPEG": convertJpegAndSaveWebp,
+	".png":  convertPngAndSaveWebp,
+	".PNG":  convertPngAndSaveWebp,
+	".webp": scaleAndSaveWebp,
+	".WEBP": scaleAndSaveWebp,
 }
 
 var destPrefixAnimation = "./assets/uploads/animation/"
 var destPrefixImages = "./assets/uploads/images/"
 
-func savesAnimation(c echo.Context, id int64) error {
+func savesAnimationReturnCount(c echo.Context, id int64) (int, error) {
 	srcFile, err := c.FormFile("file")
 	if err != nil {
-		return nil //no file provided
+		return 0, nil //no file provided
 	}
 
 	src, err := srcFile.Open()
 	if err != nil {
-		return fmt.Errorf("Unable to open file")
+		return 0, fmt.Errorf("Unable to open file")
 	}
 	defer src.Close()
 
 	ext := filepath.Ext(srcFile.Filename)
 	if ext != ".zip" {
-		return fmt.Errorf("Not a .zip file")
+		return 0, fmt.Errorf("Not a .zip file")
 	}
 
 	reader, err := zip.NewReader(src, srcFile.Size)
 	if err != nil {
-		return fmt.Errorf("Failed to create Reader %v", err)
+		return 0, fmt.Errorf("Failed to create Reader %v", err)
 	}
 
 	files := sortZippedFiles(reader)
 	if !(len(files) > 0) {
-		return fmt.Errorf("Zip contains no images")
+		return 0, fmt.Errorf("Zip contains no images")
 	}
 
 	if err = clearAndCreateDir(fmt.Sprintf("%v%d/", destPrefixAnimation, id)); err != nil {
-		return fmt.Errorf("Failed to create Reader %v", err)
+		return 0, fmt.Errorf("Failed to create Reader %v", err)
 	}
 
+	pathPrefix := fmt.Sprintf("%v%d/", destPrefixAnimation, id)
+
+	return saveUnzippedFilesReturnCount(pathPrefix, files), nil
+}
+
+func saveUnzippedFilesReturnCount(path string, files []*zip.File) int {
 	index := 0
 	for _, file := range files {
-		fileExt := filepath.Ext(file.Name)
-		if fileExt == "" || !slices.Contains(AllowedImageExt, fileExt) {
-			log.Errorf("Invalid file Ext %v ", fileExt)
+		path := fmt.Sprintf("%v%v.webp", path, index)
+		if err := saveUnzippedFile(path, file); err != nil {
+			log.Errorf("Failed to save unzipped file %v", err)
 			continue
 		}
 
-		imgFile, err := file.Open()
-		if err != nil {
-			log.Errorf("Failed to open file %v ", err)
-			continue
-		}
-		defer imgFile.Close()
+		index++
+	}
+	return index
+}
 
-		err = convertImageAndSaveWebp(index, id, imgFile, fileExt)
-		if err != nil {
-			log.Errorf("Failed to save file %v ", err)
-			continue
-		} else {
-			index++
-		}
+func saveUnzippedFile(path string, file *zip.File) error {
+	fileExt := filepath.Ext(file.Name)
+	if fileExt == "" || !slices.Contains(AllowedImageExt, fileExt) {
+		return fmt.Errorf("Invalid file Ext %v ", fileExt)
 	}
 
+	imgFile, err := file.Open()
+	if err != nil {
+		return fmt.Errorf("Failed to open file %v ", err)
+	}
+	defer imgFile.Close()
+
+	err = saveImage(path, imgFile, fileExt)
+	if err != nil {
+		return fmt.Errorf("Failed to save file %v ", err)
+	}
 	return nil
 }
 
-func scaleAndSaveWebp(index int, id int64, file io.ReadCloser) error {
-	output, err := os.Create(fmt.Sprintf("%v%d/%v.webp", destPrefixAnimation, id, index))
+func saveImage(path string, imgFile io.ReadCloser, fileExt string) error {
+	imageHandler := imageHandlerMap[fileExt]
+	if imageHandler == nil {
+		return fmt.Errorf("Missing config for image type %v ", fileExt)
+	}
+
+	return imageHandler(path, imgFile)
+}
+
+func scaleAndSaveWebp(path string, file io.ReadCloser) error {
+	output, err := os.Create(path)
 	if err != nil {
 		return fmt.Errorf("Failed to create encoder for image %v ", err)
 	}
@@ -123,17 +146,16 @@ func scaleAndSaveWebp(index int, id int64, file io.ReadCloser) error {
 	return nil
 }
 
-func convertImageAndSaveWebp(index int, id int64, file io.ReadCloser, fileExt string) error {
-	if fileExt == ".webp" || fileExt == ".WEBP" {
-		return scaleAndSaveWebp(index, id, file)
-	}
+func convertJpegAndSaveWebp(path string, file io.ReadCloser) error {
+	return convertImageAndSaveWebp(path, file, jpeg.Decode)
+}
 
-	decoder := imageDecoder[fileExt]
-	if decoder == nil {
-		return fmt.Errorf("Cannot find decoder for %v ", fileExt)
-	}
+func convertPngAndSaveWebp(path string, file io.ReadCloser) error {
+	return convertImageAndSaveWebp(path, file, png.Decode)
+}
 
-	img, err := decoder(file)
+func convertImageAndSaveWebp(path string, file io.ReadCloser, decodeFunc DecodeFunc) error {
+	img, err := decodeFunc(file)
 	if err != nil {
 		return fmt.Errorf("Failed to create decoder %v ", err)
 	}
@@ -150,13 +172,14 @@ func convertImageAndSaveWebp(index int, id int64, file io.ReadCloser, fileExt st
 		return fmt.Errorf("Failed add options to lossy encoder %v ", err)
 	}
 
-	output, err := os.Create(fmt.Sprintf("%v%d/%v.webp", destPrefixAnimation, id, index))
+	output, err := os.Create(path)
 	if err != nil {
 		return fmt.Errorf("Failed to create path for image %v ", err)
 	}
 	defer output.Close()
 
 	if err := webp.Encode(output, scaledImg, options); err != nil {
+		os.Remove(path) // remove the file created on failed write
 		return fmt.Errorf("Failed write image to path %v ", err)
 	}
 

@@ -66,6 +66,7 @@ func PatchAnimation(c echo.Context) error {
 	if actionResBody == nil { //only happens if YOU fucked up
 		return responseUtil.HTML(c, errorTemplate.ErrorAlert("404 Page Not Found", "The path you requested is invalid."))
 	}
+
 	resBody, err := actionResBody(c)
 	if err != nil && resErr == nil { //we pioritize the error of action
 		resErr = err

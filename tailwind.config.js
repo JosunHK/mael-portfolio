@@ -117,12 +117,12 @@ module.exports = {
                         width: "0"
                     },
                     to: {
-                        width: "55dvw"
+                        width: "15dvw"
                     },
                 },
                 "slide-out": {
                     from: {
-                        width: "55dvw"
+                        width: "15dvw"
                     },
                     to: {
                         width: "0"

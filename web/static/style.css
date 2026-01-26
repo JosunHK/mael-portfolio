@@ -719,6 +719,14 @@ body {
   z-index: 10;
 }
 
+.z-30 {
+  z-index: 30;
+}
+
+.z-40 {
+  z-index: 40;
+}
+
 .z-50 {
   z-index: 50;
 }
@@ -747,6 +755,11 @@ body {
 .mx-1 {
   margin-left: 0.25rem;
   margin-right: 0.25rem;
+}
+
+.mx-2 {
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
 }
 
 .my-1 {
@@ -799,6 +812,10 @@ body {
   margin-left: auto;
 }
 
+.mr-1 {
+  margin-right: 0.25rem;
+}
+
 .mr-2 {
   margin-right: 0.5rem;
 }
@@ -825,6 +842,10 @@ body {
 
 .mt-4 {
   margin-top: 1rem;
+}
+
+.mt-6 {
+  margin-top: 1.5rem;
 }
 
 .mt-8 {
@@ -931,6 +952,10 @@ body {
   height: 5vh;
 }
 
+.h-\[6rem\] {
+  height: 6rem;
+}
+
 .h-\[85\%\] {
   height: 85%;
 }
@@ -966,6 +991,10 @@ body {
 
 .min-h-screen {
   min-height: 100vh;
+}
+
+.w-0 {
+  width: 0px;
 }
 
 .w-10 {
@@ -1156,6 +1185,34 @@ body {
 
 .animate-pulse {
   animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes slide-in {
+  from {
+    width: 0;
+  }
+
+  to {
+    width: 15dvw;
+  }
+}
+
+.animate-slide-in {
+  animation: slide-in 0.1s ease-in forwards;
+}
+
+@keyframes slide-out {
+  from {
+    width: 15dvw;
+  }
+
+  to {
+    width: 0;
+  }
+}
+
+.animate-slide-out {
+  animation: slide-out 0.1s ease-out forwards;
 }
 
 .cursor-default {
@@ -1448,6 +1505,10 @@ body {
   background-color: rgb(39 39 42 / 0.5);
 }
 
+.bg-cms-background\/50 {
+  background-color: hsl(var(--cms-background) / 0.5);
+}
+
 .bg-opacity-20 {
   --tw-bg-opacity: 0.2;
 }
@@ -1557,6 +1618,10 @@ body {
 
 .pt-0 {
   padding-top: 0px;
+}
+
+.pt-1 {
+  padding-top: 0.25rem;
 }
 
 .pt-2 {
@@ -1798,6 +1863,12 @@ body {
 
 .ring-offset-background {
   --tw-ring-offset-color: hsl(var(--background));
+}
+
+.backdrop-blur-sm {
+  --tw-backdrop-blur: blur(4px);
+  -webkit-backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
+  backdrop-filter: var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);
 }
 
 .transition {
