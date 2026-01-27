@@ -22,6 +22,9 @@ templ AnimationScript(){
                 Alpine.data('animationForm', () => ({
                     reset() {
                         this.$el.reset();
+                    },
+                    reset() {
+                        this.$el.reset();
                     }
                 }))
             })
@@ -45,6 +48,22 @@ templ AnimationRowScript(){
 
 templ Animations() {
 	<div class="flex h-full w-full flex-row items-center justify-center gap-12 pt-24 font-barlow">
+        @card.Card(card.Props{
+            Class: "scrollbar-hide text-cms-foreground mt-24 h-[800px] w-[500px] overflow-y-scroll bg-cms-background shadow-xl border-cms-border border p-8 ",
+        }) {
+            @card.Card(card.Props{
+                Class: "border-2 border-dashed border-cms-border w-full h-full bg-cms-background flex justify-center items-center",
+            }) { 
+                @label.Label(
+                    label.Props{
+                        Variant: gocva.Variant{"variant": "title"},
+                        Class: "text-cms-muted font-barlow italic",
+                    },
+                ) {
+                    Hover profile to preview
+                }
+            }
+        }
         <form
             x-data="animationForm"
             @htmx:after-request="reset"
@@ -53,20 +72,25 @@ templ Animations() {
             hx-target="#animations-table"
         >
             @card.Card(card.Props{
-                Class: "scrollbar-hide text-cms-foreground mt-24 h-min max-h-[500px] w-[800px] overflow-y-scroll bg-cms-background shadow-xl border-cms-border border",
+                Class: "scrollbar-hide text-cms-foreground mt-24 h-min h-[450px] w-[800px] bg-cms-background shadow-xl border-cms-border border flex flex-col",
             }) {
                 @table.Table(table.Props{}) {
                     @animationsHeader()
-                    @table.Body(table.Props{
-                        Attrs: templ.Attributes{
-                            "id": "animations-table",
-                            "hx-get": "/cms/animation/table",
-                            "hx-trigger": "load",
-                        },
-                    })
                 }
+                <div class="overflow-y-scroll h-full">
+                    @table.Table(table.Props{}) {
+                        @table.Body(table.Props{
+                            Attrs: templ.Attributes{
+                                "id": "animations-table",
+                                "hx-get": "/cms/animation/table",
+                                "hx-trigger": "load",
+                            },
+                        })
+                    }
+                </div>
             }
 	    </form>
+        @card.Card(card.Props{ Class: "w-[500px] opacity-0" })
 	</div>
     @AnimationScript()
 }
@@ -93,6 +117,7 @@ templ AnimationsTable(animations []sqlc.Animation) {
             Class: "border-cms-border border-b-1 hover:bg-cms-muted/90",
         }) {
             @table.Cell(table.Props{
+                Class: "w-[80%]",
                 Attrs: templ.Attributes{
                     "x-data": "animationRow",
                     "@click.self": "toDetails",

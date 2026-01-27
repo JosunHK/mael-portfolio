@@ -44,7 +44,7 @@ templ NavLink(title string, toPath string) {
 
 templ SideMenu() {
 	<div
-		class="flex-row gap-1 items-center flex"
+		class="fixed top-2 right-2"
 		x-data="sideMenu"
 	>
 		@button.Button(button.Props{
@@ -53,12 +53,12 @@ templ SideMenu() {
 			},
 			Variant: gocva.Variant{
 				"variant": "ghost",
-				"size":    "icon",
+				"size":    "iconlg",
 			},
-            Class:"test-cms-foreground",
+            Class:"text-cms-foreground border-cms-border border-2",
 		}) {
 			@icon.Wrapper(icon.Props{
-				Class: "m-1 h-5 w-5 mx-2",
+				Class: "m-1 h-6 w-6 mx-2",
 			}) {
 				@icon.Menu()
 			}
@@ -66,6 +66,7 @@ templ SideMenu() {
 		<template x-teleport="body">
 			<div
 				x-show="open"
+                x-transition.opacity.duration.100ms
 				class="fixed top-0 left-0 z-30 h-screen w-screen backdrop-blur-sm bg-cms-background/50"
 			></div>
 		</template>
@@ -88,17 +89,17 @@ templ SideMenu() {
 templ SideMenuContent() {
 	<div class="h-[6rem]">
 		@button.Button(button.Props{
-			Class: "absolute right-0 mr-1 top-0 mt-6",
+			Class: "absolute right-2 top-2 border-cms-border border-2 text-cms-foreground",
             Attrs:templ.Attributes{
 				"@click": "setClose",
             },
 			Variant: gocva.Variant{
 				"variant": "ghost",
-				"size":    "icon",
+				"size":    "iconlg",
 			},
 		}) {
 			@icon.Wrapper(icon.Props{
-				Class: "m-1 h-5 w-5 mx-2",
+				Class: "m-1 h-6 w-6 mx-2",
 			}) {
 				@icon.X()
 			}
