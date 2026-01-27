@@ -80,6 +80,7 @@ func main() {
 	}))
 	e.Use(middleware.WithLocale)
 	e.Use(middleware.WithCSP)
+	e.Use(eMiddleware.Gzip())
 	e.Pre(eMiddleware.RemoveTrailingSlashWithConfig(
 		eMiddleware.TrailingSlashConfig{
 			RedirectCode: http.StatusMovedPermanently,

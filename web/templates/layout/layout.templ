@@ -17,9 +17,9 @@ templ header() {
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 			<meta name="htmx-config" content={ fmt.Sprint(`{"inlineScriptNonce":"`+templ.GetNonce(ctx)+`", "inlineStyleNonce":"`+templ.GetNonce(ctx)+`"}`) }/>
 			if os.Getenv("env") == "production" {
-				<link rel="stylesheet" href="/static/style.min.css" nonce={ templ.GetNonce(ctx) }/>
+				<link rel="stylesheet" href="/static/css/style.min.css" nonce={ templ.GetNonce(ctx) }/>
 			} else {
-				<link rel="stylesheet" href="/static/style.css" nonce={ templ.GetNonce(ctx) }/>
+				<link rel="stylesheet" href="/static/css/style.css" nonce={ templ.GetNonce(ctx) }/>
 			}
 
             //fonts
@@ -27,20 +27,21 @@ templ header() {
             <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap&subset=latin" nonce={ templ.GetNonce(ctx) }/>
 
             //splide
-			<link rel="stylesheet" href="/static/splide-core.min.css" nonce={ templ.GetNonce(ctx) }/>
-			<link rel="stylesheet" href="/static/splide.min.css" nonce={ templ.GetNonce(ctx) }/>
-            <link rel="stylesheet" href="https://unpkg.com/tippy.js@6/dist/tippy.css" nonce={ templ.GetNonce(ctx) }/>
+			<link rel="stylesheet" href="/static/css/splide-core.min.css" nonce={ templ.GetNonce(ctx) }/>
+			<link rel="stylesheet" href="/static/css/splide.min.css" nonce={ templ.GetNonce(ctx) }/>
+            <link rel="stylesheet" href="/static/css/tippy.css" nonce={ templ.GetNonce(ctx) }/>
 
             //scripts for components, has to be loded first before alpine package
             @Scripts()
 
 			//others
-			<script defer src="/static/countup.js" nonce={ templ.GetNonce(ctx) }></script>
-			<script defer src="/static/splide.min.js" nonce={ templ.GetNonce(ctx) }></script>
+			<script defer src="/static/scripts/countup.js" nonce={ templ.GetNonce(ctx) }></script>
+			<script defer src="/static/scripts/splide.min.js" nonce={ templ.GetNonce(ctx) }></script>
 
 			//htmx 
-			<script src="/static/htmx-min.js" nonce={ templ.GetNonce(ctx) }></script>
-			<script defer src="/static/htmx-sse-ext.js" nonce={ templ.GetNonce(ctx) }></script>
+            <script src="https://cdn.jsdelivr.net/npm/htmx.org@2.0.8/dist/htmx.min.js" integrity="sha384-/TgkGk7p307TH7EXJDuUlgG3Ce1UVolAOFopFekQkkXihi5u/6OCvVKyz1W+idaz" crossorigin="anonymous" nonce={ templ.GetNonce(ctx) }></script>
+			//<script src="/static/htmx-min.js" nonce={ templ.GetNonce(ctx) }></script>
+			<script defer src="/static/scripts/htmx-sse-ext.js" nonce={ templ.GetNonce(ctx) }></script>
 
 			//alpine js
 			<script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/anchor@3.x.x/dist/cdn.min.js" nonce={ templ.GetNonce(ctx) }></script>

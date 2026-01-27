@@ -1,10 +1,10 @@
 .PHONY: tailwind-watch 
 tailwind-watch:
-	./tailwindcss -i ./web/static/input.css -o ./web/static/style.css --watch
+	./tailwindcss -i ./web/static/input.css -o ./web/static/css/style.css --watch
 
 .PHONY: tailwind-build
 tailwind-build:
-	./tailwindcss -i ./web/static/input.css -o ./web/static/style.css --minify
+	./tailwindcss -i ./web/static/input.css -o ./web/static/css/style.min.css --minify
 
 .PHONY: templ-generate
 templ-generate:
