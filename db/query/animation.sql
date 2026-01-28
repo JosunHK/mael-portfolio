@@ -52,7 +52,7 @@ WHERE a.id = ?;
 -- name: ModifyAnimation :exec
 UPDATE animation 
 Set label = ?,
-    frames_count = ?,
     fps = ?,
-    animation_desc = ?
+    animation_desc = ?,
+    frames_count = COALESCE(?, frames_count)
 WHERE id = ?;

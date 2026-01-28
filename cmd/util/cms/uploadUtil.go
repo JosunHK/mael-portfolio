@@ -51,7 +51,7 @@ var destPrefixImages = "./assets/uploads/images/"
 func savesAnimationReturnCount(c echo.Context, id int64) (int, error) {
 	srcFile, err := c.FormFile("file")
 	if err != nil {
-		return 0, nil //no file provided
+		return -1, nil
 	}
 
 	src, err := srcFile.Open()

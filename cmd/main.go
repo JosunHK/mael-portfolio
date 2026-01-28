@@ -88,8 +88,8 @@ func main() {
 	))
 
 	//static files
+	e.Static("/assets", "assets")
 	e.Static("/static", "web/static")
-	e.Static("/assets", "/assets")
 	//e.File("/favicon.ico", "web/static/favicon.ico")
 
 	e.GET("/playground", middleware.StaticPages(layout.Layout, playgroundTemplates.Playground()))

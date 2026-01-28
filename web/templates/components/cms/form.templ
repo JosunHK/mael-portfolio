@@ -11,11 +11,12 @@ import(
 var M = twmerge.Merge;
 var MV = templUtil.MergeVariant;
 var MA = templUtil.MergeAttrs;
+var MA_ = templUtil.MergeAttr
 
 templ Input(props input.Props){
-    @input.InputRaw(
+    @input.Input(
         input.Props{
-            Type:  "text",
+            Type:  MA_("text", props.Type),
             Name:  props.Name,
             Value: props.Value,
             Attrs: props.Attrs,

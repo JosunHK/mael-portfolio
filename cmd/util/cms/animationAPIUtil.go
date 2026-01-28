@@ -156,6 +156,13 @@ func ModifyDetail(c echo.Context) *resError.Error {
 		return resError.New("Failed update animation record ", err.Error())
 	}
 
+	newAnimation := sqlc.ModifyAnimationParams{
+		Label:         req.Label,
+		AnimationDesc: req.Desc,
+		Fps:           req.Fps,
+		ID:            id,
+	}
+
 	count, err := savesAnimationReturnCount(c, id)
 	if err != nil {
 		log.Error(fmt.Errorf("Failed save animation frames %v", err))
@@ -163,10 +170,10 @@ func ModifyDetail(c echo.Context) *resError.Error {
 	}
 
 	if count > 0 {
-		req.FramesCount = sql.NullInt32{Valid: true, Int32: int32(count)}
+		newAnimation.FramesCount = sql.NullInt32{Valid: true, Int32: int32(count)}
 	}
 
-	if err = modifyAnimation(c, req, id); err != nil {
+	if err = modifyAnimation(c, newAnimation); err != nil {
 		log.Error(fmt.Errorf("Failed update animation record %v", err))
 		return resError.New("Failed update animation record ", err.Error())
 	}
@@ -177,11 +184,6 @@ func ModifyDetail(c echo.Context) *resError.Error {
 func ValidateAnimationDetail(detail cmsStruct.ModifyAnimationReq) error {
 	if len(detail.Label) > 150 {
 		return fmt.Errorf("Label is too long")
-	}
-
-	framesCount := detail.FramesCount
-	if framesCount.Valid && (0 > framesCount.Int32 || framesCount.Int32 > 1000) {
-		return fmt.Errorf("Invalid Frame Count")
 	}
 
 	fps := detail.Fps
@@ -197,16 +199,9 @@ func ValidateAnimationDetail(detail cmsStruct.ModifyAnimationReq) error {
 	return nil
 }
 
-func modifyAnimation(c echo.Context, req cmsStruct.ModifyAnimationReq, id int64) error {
+func modifyAnimation(c echo.Context, params sqlc.ModifyAnimationParams) error {
 	queries := sqlc.New(database.DB)
-	err := queries.ModifyAnimation(c.Request().Context(), sqlc.ModifyAnimationParams{
-		Label:         req.Label,
-		AnimationDesc: req.Desc,
-		FramesCount:   req.FramesCount,
-		Fps:           req.Fps,
-		ID:            id,
-	})
-
+	err := queries.ModifyAnimation(c.Request().Context(), params)
 	if err != nil {
 		return err
 	}

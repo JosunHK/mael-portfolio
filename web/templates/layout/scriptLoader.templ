@@ -12,6 +12,7 @@ import (
 	"mael/web/templates/components/ui/dropDownMenu"
 	"mael/web/templates/components/common/cursor"
 	toggle "mael/web/templates/components/ui/switchToggle"
+	"mael/web/templates/components/animation"
 )
 
 templ Scripts(){
@@ -28,6 +29,7 @@ templ Scripts(){
     @animation.OnIntersectScript()
     @cursor.CursorScript()
     @dropZone.DropZoneScript()
+    @animationComponent.AnimationSliderScript()
 }
 
 var globalScriptHandle = templ.NewOnceHandle();

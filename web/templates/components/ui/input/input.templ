@@ -39,6 +39,8 @@ templ Input(props Props) {
 		value={ props.Value }
 		placeholder={ props.Placeholder}
         x-data="input"
+        @input="inputOverrides"
+        @keydown="keyDownOverrides"
 		class={ M(
             `flex h-10 w-full rounded-md border ring-primary bg-background
             px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent
@@ -57,12 +59,20 @@ templ InputScript(){
         <script nonce={templ.GetNonce(ctx)}>
             document.addEventListener('alpine:init', () => {
                 Alpine.data('input', () => ({
-                    ["x-on:input"](){
+                    inputOverrides(){
                         let type = this.$event.target.getAttribute('type');
                         if (type === 'number') {
                             this.$event.target.value = this.$event.target.value.replace(/[^0-9]/, '');
                         }
-
+                    },
+                    keyDownOverrides(){
+                        let type = this.$event.target.getAttribute('type');
+                        if (type === 'textarea') {
+                            if (this.$event.key === 'Enter') {
+                              this.$event.preventDefault();
+                              return false;
+                            }
+                        }
                     }
                 }))
             })

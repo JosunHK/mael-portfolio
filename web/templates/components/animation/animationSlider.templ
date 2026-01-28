@@ -1,0 +1,144 @@
+package animationComponent
+
+
+import(
+    "fmt"
+    "mael/db/generated"
+    twmerge "github.com/Oudwins/tailwind-merge-go/pkg/twmerge"
+)
+
+var M = twmerge.Merge
+
+type Props struct {
+	Name  string
+	Class string
+	Attrs templ.Attributes
+}
+
+var animationSliderScriptHandle = templ.NewOnceHandle();
+templ AnimationSliderScript(){
+    @animationSliderScriptHandle.Once() {
+        <script nonce={templ.GetNonce(ctx)}>
+            document.addEventListener('alpine:init', () => {
+                Alpine.data('animationSlider', () => ({
+                    isPlaying: false,
+                    currentPlaybackFrame: 0,
+                    init(){
+                        const frames = this.$refs.sliderBody.children
+                        this.$refs.sliderControl.setAttribute("max", frames.length - 1)
+                        this.updateCurrentFrame();
+                    },
+                    updateToCursorPos(e){
+                        this.stopPlaying()
+                        const x = e.clientX
+                        const maxWidth = document.body.clientWidth;
+                        const frames = this.$refs.sliderBody.children
+                        this.$refs.sliderControl.value = Math.floor(x/(maxWidth/frames.length-1));
+                        this.$refs.sliderControl.dispatchEvent(new Event("input"));
+                    },
+                    updateCurrentFrame(){
+                        const currVal = this.$refs.sliderControl.value;
+                        const frames = this.$refs.sliderBody.children
+                        for (let i = 0; i < frames.length; i++) {
+                            if(i == currVal) {
+                                this.currentPlaybackFrame = i
+                                frames[i].style.opacity = "100%";
+                            } else {
+                                frames[i].style.opacity = "0%";
+                            }
+                        }
+                    },
+                    async play(){
+                        if(this.isPlaying){
+                            this.stopPlaying()
+                            return
+                        }
+                        this.isPlaying = true;
+                        const frames = this.$refs.sliderBody.children
+                        const fps = this.$refs.sliderContainer.getAttribute("slider-fps")*1;
+                        for (let i = this.currentPlaybackFrame; i < frames.length; i++){
+                            if(this.isPlaying === false) return;
+                            this.$refs.sliderControl.value = i
+                            this.$refs.sliderControl.dispatchEvent(new Event("input"));
+                            await new Promise(r => setTimeout(r, (1000/fps)));
+                        }
+                        this.$refs.sliderControl.value = 0
+                        this.$refs.sliderControl.dispatchEvent(new Event("input"));
+                        this.stopPlaying()
+                        this.$refs.sliderBody.dispatchEvent(new Event("click"));
+                    },
+                    stopPlaying(){
+                        this.isPlaying = false;
+                    }
+                }))
+            })
+        </script>
+    }
+}
+
+templ SliderControl(props Props, isTrackCursor bool){
+    <input 
+        class={M("w-full bg-cms-border accent-eGreen", props.Class)}
+        type="range" 
+        min="0" 
+        max="0" 
+        value="0" 
+        @input="updateCurrentFrame" 
+        @mousedown="stopPlaying" 
+        if isTrackCursor {
+            @mousemove.window="updateToCursorPos"
+        }
+        x-ref="sliderControl"
+    >
+
+}
+
+templ AnimationSlider(props Props, fps int){
+    <div 
+        x-data="animationSlider" 
+        x-ref="sliderContainer" 
+        class={M("w-full h-full", props.Class)}
+        slider-fps={fps}
+        { props.Attrs... }
+    >
+        {children...}
+    </div>
+}
+
+templ SliderBody(props Props){
+    <div 
+        x-ref="sliderBody" 
+        @click="play"
+        class={M("w-full h-full relative [&>img]:absolute [&>img]:w-full [&>img]:object-contain", props.Class)}
+        { props.Attrs... }
+    >
+        {children...}
+    </div>
+}
+
+templ SimpleAnimationSlider(animation sqlc.Animation){
+    @AnimationSlider(
+        Props{},
+        int(animation.Fps.Int32),
+    ){
+        @SliderBody(Props{}){
+            for i := range animation.FramesCount.Int32 {
+                <img class="h-full" src={fmt.Sprintf("/assets/uploads/animation/%d/%d.webp", animation.ID, i)} />
+            }
+        }
+        @SliderControl(Props{}, false)
+    }
+}
+
+templ DefaultAnimationSlider(animation sqlc.Animation){
+    @AnimationSlider(Props{},
+        int(animation.Fps.Int32),
+    ){
+        @SliderBody(Props{}){
+            for i := range animation.FramesCount.Int32 {
+                <img class="h-full" src={fmt.Sprintf("/assets/uploads/animation/%d/%d.webp", animation.ID, i)} />
+            }
+        }
+        @SliderControl(Props{}, true)
+    }
+}

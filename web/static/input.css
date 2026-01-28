@@ -90,6 +90,10 @@
         }
     }
 
+    * {
+        scrollbar-width: thin;
+        scrollbar-color: hsl(var(--cms-foreground)) hsl(var(--cms-background));
+    }
 
     input[type="number"]::-webkit-inner-spin-button,
     input[type="number"]::-webkit-outer-spin-button {

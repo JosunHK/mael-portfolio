@@ -13,6 +13,7 @@ import (
 	"mael/web/templates/components/ui/table"
 	"mael/web/templates/components/ui/input"
 	cmsComp "mael/web/templates/components/cms"
+	"mael/web/templates/components/animation"
 )
 
 var animationDetailScriptHandle = templ.NewOnceHandle();
@@ -38,7 +39,7 @@ templ animationDetailScript(){
 }
 
 templ AnimationDetail(animation sqlc.Animation) {
-	<div id="animation-detail" class="flex w-full flex-row items-center justify-center gap-12 pt-24 font-barlow">
+	<div id="animation-detail" class="flex w-full flex-row items-center justify-center gap-12 font-barlow mt-48">
         @animationDetailScript()
         <form 
             x-data="animationDetail"
@@ -51,7 +52,7 @@ templ AnimationDetail(animation sqlc.Animation) {
         >
             <input type="hidden" name="action" value="modifyDetail">
             @card.Card(card.Props{
-                Class: "scrollbar-hide text-cms-foreground mt-24 h-[510px] w-[1000px] overflow-y-scroll bg-cms-background shadow-xl border-cms-border border",
+                Class: "scrollbar-hide text-cms-foreground h-[60vh] w-[60vw] bg-cms-background shadow-xl border-cms-border border",
             }) {
                 @card.Header(card.Props{}){
                     <div class="flex flex-row justify-between items-center">
@@ -126,6 +127,24 @@ templ AnimationDetail(animation sqlc.Animation) {
                 }
             }
         </form>
+        @card.Card(card.Props{
+            Class: "scrollbar-hide text-cms-foreground h-[35vh] w-[35vw] bg-cms-background shadow-xl border-cms-border border p-8 ",
+        }) {
+            @card.Card(card.Props{
+                Class: "border-2 border-dashed border-cms-border w-full h-full bg-cms-background flex justify-center items-center",
+            }) { 
+                if animation.FramesCount.Valid {
+                    @animationComponent.SimpleAnimationSlider(animation)
+                } else {
+                    @label.Label(
+                        label.Props{
+                            Variant: gocva.Variant{"variant": "title"},
+                            Class: "text-cms-muted font-barlow italic",
+                        },
+                    ) { No frames uploaded yet! }
+                }
+            }
+        }
 	</div>
 }
 
@@ -195,6 +214,7 @@ templ AnimationDetailForm(animation sqlc.Animation){
                         @cmsComp.Input(
                             input.Props{
                                 Name:  "desc",
+                                Type: "textarea",
                                 Value: animation.AnimationDesc,
                             },
                         )

@@ -1,20 +1,18 @@
 package dummyTemplates
 
 import (
-    "strconv"
+	"mael/web/templates/components/animation"
+	"mael/db/generated"
+	"database/sql"
 )
 
-func leftPad(i int, length int) string {
-    s := strconv.Itoa(i);
-    length -= len(s);
-    for range length{
-        s = "0" + s;
-    }
-    return s;
-}
-
 templ Dummy() {
-    <div class="font-barlow">
-        Hello World!
+    <div class="w-screen h-[90vh]">
+        @animationComponent.DefaultAnimationSlider(sqlc.Animation{
+            ID: 3,
+            Fps: sql.NullInt32{Valid:true, Int32: 12},
+            FramesCount: sql.NullInt32{Valid:true, Int32: 103},
+        }){
+        }
     </div>
 }
