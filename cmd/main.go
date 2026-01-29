@@ -5,6 +5,7 @@ import (
 	"mael/cmd/consts"
 	"net/http"
 	"os"
+	"strings"
 
 	"mael/cmd/database"
 	"mael/cmd/handlers/cms"
@@ -81,7 +82,11 @@ func main() {
 	}))
 	e.Use(middleware.WithLocale)
 	e.Use(middleware.WithCSP)
-	e.Use(eMiddleware.Gzip())
+	e.Use(eMiddleware.GzipWithConfig(eMiddleware.GzipConfig{
+		Skipper: func(c echo.Context) bool {
+			return strings.Contains(c.Path(), "assets")
+		},
+	}))
 	e.Pre(eMiddleware.RemoveTrailingSlashWithConfig(
 		eMiddleware.TrailingSlashConfig{
 			RedirectCode: http.StatusMovedPermanently,

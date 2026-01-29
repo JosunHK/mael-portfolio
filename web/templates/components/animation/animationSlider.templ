@@ -123,7 +123,7 @@ templ SimpleAnimationSlider(animation sqlc.Animation){
     ){
         @SliderBody(Props{}){
             for i := range animation.FramesCount.Int32 {
-                <img class="h-full" src={fmt.Sprintf("/assets/uploads/animation/%d/%d.webp", animation.ID, i)} />
+                <img class="h-full" loading="lazy" src={fmt.Sprintf("/assets/uploads/animation/%d/%d.webp", animation.ID, i)} />
             }
         }
         @SliderControl(Props{}, false)
@@ -136,7 +136,7 @@ templ DefaultAnimationSlider(animation sqlc.Animation){
     ){
         @SliderBody(Props{}){
             for i := range animation.FramesCount.Int32 {
-                <img class="h-full" src={fmt.Sprintf("/assets/uploads/animation/%d/%d.webp", animation.ID, i)} />
+                <img class="h-full" loading="lazy" src={fmt.Sprintf("/assets/uploads/animation/%d/%d.webp", animation.ID, i)} />
             }
         }
         @SliderControl(Props{}, true)
