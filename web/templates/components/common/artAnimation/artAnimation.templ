@@ -1,0 +1,78 @@
+package artAnimation
+
+import "fmt"
+import "os"
+import "log"
+import "path/filepath"
+templ Animation(fileName string){
+	<div class="">
+		<div class="flex flex-col">
+			
+			<div class="relative h-50%">			
+				@ArtAnimationScript()
+				@movAnimation(fileName)
+			</div>
+			<div class="relative">
+				<input type="range" id="rangeBar" class="w-full" />
+			</div>
+		</div>
+	
+		
+	</div>
+}
+
+templ movAnimation(fileName string){
+
+		@images(fileName, imageLength(fileName))
+
+}
+
+
+templ images(path string, length int){
+	{{paths := fmt.Sprint("/static/assets/", path, "/" ,path, "_")}}
+	for i:= range length{
+		{{
+		num := fmt.Sprint("0000",i+1)
+                str := num[len(num)-4:]
+		images := fmt.Sprint(paths, str, ".jpeg")}}
+		if (i == 0){ 
+			<img src={images} alt={i} class="artAnimations opacity-1 absolute"/> 
+		} else {
+			<img src={images} alt={i} class="artAnimations opacity-0 absolute"/>
+		}
+	}
+		
+}
+var artAnimationHandle = templ.NewOnceHandle();
+templ ArtAnimationScript(){
+	 @artAnimationHandle.Once() {
+	<script nonce={ templ.GetNonce(ctx) }>
+		const imgs = document.getElementsByClassName("artAnimations");
+		document.addEventListener("mousemove", function(event) {
+			const mouse = event.clientX;
+			const currVal = Math.trunc((imgs.length)*(mouse/window.innerWidth));
+			for (let i = 0; i < imgs.length; i++){
+				if (i == currVal){
+					imgs[i].style.opacity = "1";
+				} else {
+					imgs[i].style.opacity = "0";
+				}
+			}
+		});
+		document.dispatchEvent(new Event("mousemove"));
+		
+	</script>
+	}
+}
+
+func imageLength(fileName string) int{
+	
+		fileP := filepath.Join("web/static/assets/",fileName,"/")
+		file, err := os.ReadDir(fileP)
+		if err != nil {
+			log.Fatalf("Failed to read directory: %v", err)
+		}
+		fileLen := len(file)
+		return fileLen
+}
+
