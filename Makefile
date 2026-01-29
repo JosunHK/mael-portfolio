@@ -35,10 +35,16 @@ init-build:
 	chmod +x tailwindcss-linux-x64
 	mv tailwindcss-linux-x64 tailwindcss
 	make tailwind-build
+
 	go install github.com/a-h/templ/cmd/templ@latest
-	templ generate
 	go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
+
+	`go env GOPATH`/bin/templ generate
+	`go env GOPATH`/bin/sqlc generate
+
+	templ generate
 	sqlc generate
+
 	go build -ldflags "-X main.Environment=production" -o ./bin/ ./cmd/main.go
 
 .PHONY: start
