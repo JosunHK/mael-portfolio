@@ -42,6 +42,8 @@ init-build:
 	`go env GOPATH`/bin/templ generate
 	`go env GOPATH`/bin/sqlc generate
 
+	export CGO_ENABLED=1
+
 	templ generate
 	sqlc generate
 
