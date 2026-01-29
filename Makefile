@@ -30,7 +30,7 @@ build:
 	go build -ldflags "-X main.Environment=production" -o ./bin/ ./cmd/main.go
 
 .PHONY: init-build
-build:
+init-build:
 	curl -sLO https://github.com/tailwindlabs/tailwindcss/releases/download/v3.4.19/tailwindcss-linux-x64
 	chmod +x tailwindcss-linux-x64
 	mv tailwindcss-linux-x64 tailwindcss
