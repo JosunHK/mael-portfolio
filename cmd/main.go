@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"mael/cmd/consts"
 	"net/http"
 	"os"
 
@@ -89,11 +90,7 @@ func main() {
 
 	//static files
 
-	if os.Getenv("env") == "production" {
-		e.Static("/assets", "railwayAssets")
-	} else {
-		e.Static("/assets", "assets")
-	}
+	e.Static("/assets", consts.GetUploadPath())
 	e.Static("/static", "web/static")
 	//e.File("/favicon.ico", "web/static/favicon.ico")
 

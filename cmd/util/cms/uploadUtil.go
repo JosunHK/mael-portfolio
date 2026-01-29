@@ -13,6 +13,7 @@ import (
 	"image/jpeg"
 	"image/png"
 	"io"
+	"mael/cmd/consts"
 	"os"
 	"path/filepath"
 	"slices"
@@ -45,8 +46,8 @@ var imageHandlerMap = map[string]ImageHandler{
 	".WEBP": scaleAndSaveWebp,
 }
 
-var destPrefixAnimation = "./assets/uploads/animation/"
-var destPrefixImages = "./assets/uploads/images/"
+var destPrefixAnimation = consts.GetUploadPath() + "/uploads/animation/"
+var destPrefixImages = consts.GetUploadPath() + "/uploads/images/"
 
 func savesAnimationReturnCount(c echo.Context, id int64) (int, error) {
 	srcFile, err := c.FormFile("file")
