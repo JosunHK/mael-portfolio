@@ -139,7 +139,7 @@ func scaleAndSaveWebp(path string, file io.ReadCloser) error {
 		return fmt.Errorf("Cannot decode webp %v", err)
 	}
 
-	m := resize.Resize(1000, 0, img, resize.Lanczos3)
+	m := resize.Resize(1080, 0, img, resize.Lanczos3)
 
 	// write new image to file
 	jpeg.Encode(output, m, nil)
@@ -163,12 +163,12 @@ func convertImageAndSaveWebp(path string, file io.ReadCloser, decodeFunc DecodeF
 
 	var scaledImg image.Image
 	if img.Bounds().Dx() > img.Bounds().Dy() {
-		scaledImg = resize.Resize(1080, 0, img, resize.Lanczos3)
+		scaledImg = resize.Resize(2560, 0, img, resize.Lanczos3)
 	} else {
-		scaledImg = resize.Resize(0, 1080, img, resize.Lanczos3)
+		scaledImg = resize.Resize(0, 2560, img, resize.Lanczos3)
 	}
 
-	options, err := encoder.NewLossyEncoderOptions(encoder.PresetDefault, 100)
+	options, err := encoder.NewLossyEncoderOptions(encoder.PresetDrawing, 50)
 	if err != nil {
 		return fmt.Errorf("Failed add options to lossy encoder %v ", err)
 	}
