@@ -6,9 +6,9 @@ import (
 
 func GetUploadPath() string {
 	if os.Getenv("env") == "production" {
-		return "railwayAssets"
+		return "./railwayAssets"
 	} else {
-		return "assets"
+		return "./assets"
 	}
 
 }

@@ -94,7 +94,6 @@ func main() {
 	))
 
 	//static files
-
 	e.Static("/assets", consts.GetUploadPath())
 	e.Static("/static", "web/static")
 	//e.File("/favicon.ico", "web/static/favicon.ico")
