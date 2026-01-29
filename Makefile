@@ -27,7 +27,7 @@ build:
 	make tailwind-build
 	templ generate
 	sqlc generate
-	go build -ldflags "-X main.Environment=production" -o ./bin/ ./cmd/main.go
+	go build -ldflags="-w -s" -o ./bin/ ./cmd/main.go
 
 .PHONY: init-build
 init-build:
@@ -45,7 +45,9 @@ init-build:
 	templ generate
 	sqlc generate
 
-	go build -ldflags "-X main.Environment=production" -o ./bin/ ./cmd/main.go
+	go mod tidy
+
+	go build -ldflags="-w -s" -o ./bin/ ./cmd/main.go
 
 .PHONY: start
 start:
