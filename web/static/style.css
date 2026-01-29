@@ -724,6 +724,10 @@ body {
   top: 0.3rem;
 }
 
+.bottom-10 {
+  bottom: 2.5rem;
+}
+
 .z-10 {
   z-index: 10;
 }
@@ -945,10 +949,6 @@ body {
   height: 100vh;
 }
 
-.h-60 {
-  height: 15rem;
-}
-
 .max-h-\[12rem\] {
   max-height: 12rem;
 }
@@ -1046,10 +1046,6 @@ body {
   width: 100vw;
 }
 
-.w-auto {
-  width: auto;
-}
-
 .min-w-\[max-content\] {
   min-width: -moz-max-content;
   min-width: max-content;
@@ -1074,6 +1070,10 @@ body {
 
 .shrink-0 {
   flex-shrink: 0;
+}
+
+.flex-grow {
+  flex-grow: 1;
 }
 
 .grow {
@@ -1397,6 +1397,10 @@ body {
 
 .p-6 {
   padding: 1.5rem;
+}
+
+.p-10 {
+  padding: 2.5rem;
 }
 
 .px-0 {
