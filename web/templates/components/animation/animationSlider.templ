@@ -129,13 +129,13 @@ templ SimpleAnimationSlider(animation sqlc.Animation, paths []string){
     }
 }
 
-templ DefaultAnimationSlider(animation sqlc.Animation, paths []string){
+templ FrontPageAnimationSlider(animation sqlc.Animation, paths []string){
     @AnimationSlider(Props{},
         int(animation.Fps.Int32),
     ){
         @SliderBody(Props{}){
             for _, path := range paths {
-                <img class="h-full" loading="lazy" src={path} />
+                <img class="w-full" loading="lazy" src={path} />
             }
         }
         @SliderControl(Props{}, true)

@@ -57,9 +57,8 @@ templ header() {
 
 templ Layout(content templ.Component) {
 	@header() {
-		<body class="bg-background flex flex-col overflow-y-auto scrollbar-hide min-h-screen no-cursor">
+		<body class="bg-background bg-gr flex flex-col overflow-y-auto scrollbar-hide min-h-screen no-cursor">
 			<div class="w-full max-w-full relative scrollbar-hide">
-                @menubar.PageNav()
                 @content
                 @cursor.Cursor()
 			</div>

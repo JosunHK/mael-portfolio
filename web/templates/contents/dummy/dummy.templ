@@ -9,7 +9,7 @@ import (
 
 templ Dummy() {
     <div class="w-screen h-[90vh]">
-        @animationComponent.DefaultAnimationSlider(sqlc.Animation{
+        @animationComponent.FrontPageAnimationSlider(sqlc.Animation{
                 ID: 3,
                 Fps: sql.NullInt32{Valid:true, Int32: 12},
                 FramesCount: sql.NullInt32{Valid:true, Int32: 103},
