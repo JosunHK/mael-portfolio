@@ -2,7 +2,6 @@ package animationComponent
 
 
 import(
-    "fmt"
     "mael/db/generated"
     twmerge "github.com/Oudwins/tailwind-merge-go/pkg/twmerge"
 )
@@ -116,27 +115,27 @@ templ SliderBody(props Props){
     </div>
 }
 
-templ SimpleAnimationSlider(animation sqlc.Animation){
+templ SimpleAnimationSlider(animation sqlc.Animation, paths []string){
     @AnimationSlider(
         Props{},
         int(animation.Fps.Int32),
     ){
         @SliderBody(Props{}){
-            for i := range animation.FramesCount.Int32 {
-                <img class="h-full" loading="lazy" src={fmt.Sprintf("/assets/uploads/animation/%d/%d.webp", animation.ID, i)} />
+            for _, path := range paths {
+                <img class="h-full" loading="lazy" src={path} />
             }
         }
         @SliderControl(Props{}, false)
     }
 }
 
-templ DefaultAnimationSlider(animation sqlc.Animation){
+templ DefaultAnimationSlider(animation sqlc.Animation, paths []string){
     @AnimationSlider(Props{},
         int(animation.Fps.Int32),
     ){
         @SliderBody(Props{}){
-            for i := range animation.FramesCount.Int32 {
-                <img class="h-full" loading="lazy" src={fmt.Sprintf("/assets/uploads/animation/%d/%d.webp", animation.ID, i)} />
+            for _, path := range paths {
+                <img class="h-full" loading="lazy" src={path} />
             }
         }
         @SliderControl(Props{}, true)

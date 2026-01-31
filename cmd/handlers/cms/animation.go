@@ -1,4 +1,4 @@
-package cmsUtil
+package cms
 
 import (
 	"database/sql"

@@ -1,24 +1,28 @@
-package cmsUtil
+package cms
 
 import (
 	"archive/zip"
 	"fmt"
+	"image"
+	"image/jpeg"
+	"image/png"
+	"io"
+	"mael/cmd/consts"
+	formatUtil "mael/cmd/util/format"
+	"os"
+	"path/filepath"
+	"slices"
+	"sort"
+	"strconv"
+	"strings"
+
+	"github.com/google/uuid"
 	"github.com/kolesa-team/go-webp/decoder"
 	"github.com/kolesa-team/go-webp/encoder"
 	"github.com/kolesa-team/go-webp/webp"
 	"github.com/labstack/echo/v4"
 	"github.com/nfnt/resize"
 	log "github.com/sirupsen/logrus"
-	"image"
-	"image/jpeg"
-	"image/png"
-	"io"
-	"mael/cmd/consts"
-	"os"
-	"path/filepath"
-	"slices"
-	"sort"
-	"strings"
 )
 
 var AllowedImageExt = []string{
@@ -88,7 +92,19 @@ func savesAnimationReturnCount(c echo.Context, id int64) (int, error) {
 func saveUnzippedFilesReturnCount(path string, files []*zip.File) int {
 	index := 0
 	for _, file := range files {
-		path := fmt.Sprintf("%v%v.webp", path, index)
+		uuid, err := uuid.NewV7()
+		if err != nil {
+			log.Errorf("Unable to generate id for images %v", err)
+			continue
+		}
+
+		paddedIndex, err := formatUtil.LeftPad(strconv.Itoa(index), 4, '0')
+		if err != nil {
+			log.Errorf("Invalid index size %v", err)
+			continue
+		}
+
+		path := fmt.Sprintf("%v%v_%v.webp", path, paddedIndex, uuid)
 		if err := saveUnzippedFile(path, file); err != nil {
 			log.Errorf("Failed to save unzipped file %v", err)
 			continue

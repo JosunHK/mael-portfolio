@@ -4,6 +4,7 @@ import (
     "fmt"
     "mael/db/generated"
     "mael/cmd/util/templ"
+    "mael/cmd/util/cms"
 	"mael/web/templates/components/ui/card"
 	icon "mael/web/templates/components/ui/icon"
 	button "mael/web/templates/components/ui/button"
@@ -134,7 +135,7 @@ templ AnimationDetail(animation sqlc.Animation) {
                 Class: "border-2 border-dashed border-cms-border w-full h-full bg-cms-background flex justify-center items-center",
             }) { 
                 if animation.FramesCount.Valid {
-                    @animationComponent.SimpleAnimationSlider(animation)
+                    @animationComponent.SimpleAnimationSlider(animation, cmsUtil.GetAnimationPaths(animation.ID))
                 } else {
                     @label.Label(
                         label.Props{

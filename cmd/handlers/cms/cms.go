@@ -3,7 +3,6 @@ package cms
 import (
 	"fmt"
 	"mael/cmd/struct/error"
-	"mael/cmd/util/cms"
 	responseUtil "mael/cmd/util/response"
 	"mael/web/templates/contents/errorAlert"
 
@@ -11,32 +10,32 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
-var animationActions = map[string]cmsUtil.AnimationPatch{
-	"orderUp":      cmsUtil.OrderUp,
-	"orderDown":    cmsUtil.OrderDown,
-	"modifyDetail": cmsUtil.ModifyDetail,
+var animationActions = map[string]AnimationPatch{
+	"orderUp":      OrderUp,
+	"orderDown":    OrderDown,
+	"modifyDetail": ModifyDetail,
 }
 
-var animationActionsResBody = map[string]cmsUtil.AnimationPatchResBody{
-	"orderUp":      cmsUtil.GetAnimtions,
-	"orderDown":    cmsUtil.GetAnimtions,
-	"modifyDetail": cmsUtil.GetAnimtionDetail,
+var animationActionsResBody = map[string]AnimationPatchResBody{
+	"orderUp":      GetAnimtions,
+	"orderDown":    GetAnimtions,
+	"modifyDetail": GetAnimtionDetail,
 }
 
-var animationActionsResFunc = map[string]cmsUtil.AnimationPatchResFunc{
+var animationActionsResFunc = map[string]AnimationPatchResFunc{
 	"orderUp":      responseUtil.HTMX,
 	"orderDown":    responseUtil.HTMX,
 	"modifyDetail": responseUtil.HTMXWithSuccess,
 }
 
 func GetAnimationRes(c echo.Context) error {
-	table, err := cmsUtil.GetAnimtions(c)
+	table, err := GetAnimtions(c)
 	return responseUtil.HTMX(c, table, err)
 }
 
 func AddAnimationRes(c echo.Context) error {
-	resErr := cmsUtil.AddAnimation(c)
-	table, err := cmsUtil.GetAnimtions(c)
+	resErr := AddAnimation(c)
+	table, err := GetAnimtions(c)
 	if err != nil && resErr == nil { //we pioritize the error of action
 		resErr = err
 	}
@@ -44,8 +43,8 @@ func AddAnimationRes(c echo.Context) error {
 }
 
 func DeleteAnimationRes(c echo.Context) error {
-	resErr := cmsUtil.DeleteAnimation(c)
-	table, err := cmsUtil.GetAnimtions(c)
+	resErr := DeleteAnimation(c)
+	table, err := GetAnimtions(c)
 	if err != nil && resErr == nil { //we pioritize the error of action
 		resErr = err
 	}
@@ -81,7 +80,7 @@ func PatchAnimation(c echo.Context) error {
 }
 
 func GetAnimationDetail(c echo.Context) templ.Component {
-	detail, err := cmsUtil.GetAnimtionDetail(c)
+	detail, err := GetAnimtionDetail(c)
 	if err != nil {
 		return errorTemplate.ErrorAlert(err.Title, err.Desc)
 	}
