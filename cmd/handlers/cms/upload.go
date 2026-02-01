@@ -105,10 +105,12 @@ func saveUnzippedFilesReturnCount(path string, files []*zip.File) int {
 		}
 
 		path := fmt.Sprintf("%v%v_%v.webp", path, paddedIndex, uuid)
+		log.Info("Trying to save to : " + path)
 		if err := saveUnzippedFile(path, file); err != nil {
 			log.Errorf("Failed to save unzipped file %v", err)
 			continue
 		}
+		log.Info("Saved to : " + path)
 
 		index++
 	}
