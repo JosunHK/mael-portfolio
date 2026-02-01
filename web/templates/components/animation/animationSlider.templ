@@ -117,8 +117,14 @@ templ SliderControl(props Props, isTrackCursor bool) {
             x-ref="sliderControl"
         />
     </div>
-    <div class="w-full text-end font-barlow text-[0.6rem]" x-ref="framesDisplay" x-init="currentFrame">
-    </div>
+}
+
+templ FrameDisplay(props Props){
+    <div 
+        class={M("w-full text-end font-barlow text-[0.6rem]", props.Class)} 
+        x-ref="framesDisplay" 
+        x-init="currentFrame"
+    ></div>
 }
 
 templ AnimationSlider(props Props, fps int) {
@@ -141,7 +147,7 @@ templ SliderBody(props Props) {
         @mouseleave="handleMouseLeave"
         cursor-player="true"
         :isPlaying="isPlaying"
-		class={ M("w-full h-full grid [&>img]:col-start-1 [&>img]:row-start-1 [&>img]:object-contain", props.Class) }
+		class={ M("w-full h-full grid grid-rows-[100%] justify-center [&>img]:col-start-1 [&>img]:row-start-1 [&>img]:object-contain", props.Class) }
 		{ props.Attrs... }
 	>
 		{ children... }
@@ -155,10 +161,15 @@ templ SimpleAnimationSlider(animation sqlc.Animation, paths []string) {
 	) {
 		@SliderBody(Props{}) {
 			for _, path := range paths {
-				<img class="h-full" loading="lazy" src={ path }/>
+				<img class="h-full max-h-full" loading="lazy" src={ path }/>
 			}
 		}
-		@SliderControl(Props{}, false)
+		@SliderControl(Props{
+            Class:"cursor-move",
+        }, false)
+        @FrameDisplay(Props{
+            Class: "text-cms-foreground",
+        })
 	}
 }
 
@@ -175,8 +186,7 @@ templ FrontPageAnimationSlider(animation sqlc.Animation, paths []string) {
 				<img class="w-full" loading="lazy" src={ path }/>
 			}
 		}
-		@SliderControl(Props{
-
-        }, false)
+		@SliderControl(Props{}, false)
+        @FrameDisplay(Props{})
 	}
 }
