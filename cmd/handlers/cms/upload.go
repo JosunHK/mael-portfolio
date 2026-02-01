@@ -58,6 +58,7 @@ func savesAnimationReturnCount(c echo.Context, id int64) (int, error) {
 	if err != nil {
 		return -1, nil
 	}
+	log.Info("Parsed form file")
 
 	src, err := srcFile.Open()
 	if err != nil {
@@ -69,7 +70,7 @@ func savesAnimationReturnCount(c echo.Context, id int64) (int, error) {
 	if ext != ".zip" {
 		return 0, fmt.Errorf("Not a .zip file")
 	}
-
+	
 	reader, err := zip.NewReader(src, srcFile.Size)
 	if err != nil {
 		return 0, fmt.Errorf("Failed to create Reader %v", err)
@@ -79,10 +80,13 @@ func savesAnimationReturnCount(c echo.Context, id int64) (int, error) {
 	if !(len(files) > 0) {
 		return 0, fmt.Errorf("Zip contains no images")
 	}
+	log.Info("Sorted files")
+
 
 	if err = clearAndCreateDir(fmt.Sprintf("%v%d/", destPrefixAnimation, id)); err != nil {
 		return 0, fmt.Errorf("Failed to create Reader %v", err)
 	}
+	log.Info("clearAndCreateDir() completed")
 
 	pathPrefix := fmt.Sprintf("%v%d/", destPrefixAnimation, id)
 
