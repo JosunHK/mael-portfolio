@@ -9,9 +9,9 @@ import (
 
 	"mael/cmd/database"
 	"mael/cmd/handlers/cms"
-	"mael/cmd/handlers/dummy"
 	"mael/cmd/handlers/i18n"
 	"mael/cmd/handlers/menu"
+	"mael/cmd/handlers/portfolio"
 	"mael/cmd/layout"
 	"mael/cmd/middleware"
 	i18nUtil "mael/cmd/util/i18n"
@@ -102,7 +102,7 @@ func main() {
 
 	menu.RegisterRoutes(e)
 	i18n.RegisterRoutes(e)
-	dummy.RegisterRoutes(e)
+	portfolio.RegisterRoutes(e)
 	cms.RegisterRoutes(e)
 
 	e.RouteNotFound("", middleware.StaticPages(layout.ErrorPage, errorTemplate.ErrorAlert("404 Page Not Found", "The path you requested is invalid.")))

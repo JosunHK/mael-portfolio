@@ -24,6 +24,7 @@ module.exports = {
             fontFamily: {
                 'sans': ['Inter', 'sans-serif', "ui-sans-serif", "system-ui", "sans-serif", "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji"],
                 'barlow': ["Barlow", "sans-serif"],
+                'comfortaa': ["Comfortaa", "sans-serif"],
             },
             colors: {
                 border: "hsl(var(--border))",
@@ -146,7 +147,7 @@ module.exports = {
                 },
             },
             animation: {
-                "fade-in": "fade-in 0.2s ease-in",
+                "fade-in": "fade-in 0.5s ease-out",
                 "slide-in": "slide-in 0.1s ease-in forwards",
                 "slide-out": "slide-out 0.1s ease-out forwards",
                 "accordion-down": "accordion-down 0.2s ease-out",

@@ -5,10 +5,12 @@ import (
 	"fmt"
 	"net/http"
 
+	i18nUtil "mael/cmd/util/i18n"
+	responseUtil "mael/cmd/util/response"
+	"mael/cmd/util/secure"
+
 	"github.com/a-h/templ"
 	"github.com/labstack/echo/v4"
-	i18nUtil "mael/cmd/util/i18n"
-	"mael/cmd/util/secure"
 
 	log "github.com/sirupsen/logrus"
 )
@@ -86,6 +88,12 @@ func StaticPages(next pageHandler, content templ.Component) echo.HandlerFunc {
 func Pages(next pageHandler, p PageHandler) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		return next(c, p(c))
+	}
+}
+
+func HTMX(component templ.Component) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		return responseUtil.HTML(c, component)
 	}
 }
 

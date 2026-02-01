@@ -1,9 +1,8 @@
 package animationComponent
 
-
-import(
-    "mael/db/generated"
-    twmerge "github.com/Oudwins/tailwind-merge-go/pkg/twmerge"
+import (
+	twmerge "github.com/Oudwins/tailwind-merge-go/pkg/twmerge"
+	"mael/db/generated"
 )
 
 var M = twmerge.Merge
@@ -14,18 +13,26 @@ type Props struct {
 	Attrs templ.Attributes
 }
 
-var animationSliderScriptHandle = templ.NewOnceHandle();
-templ AnimationSliderScript(){
-    @animationSliderScriptHandle.Once() {
-        <script nonce={templ.GetNonce(ctx)}>
+var animationSliderScriptHandle = templ.NewOnceHandle()
+templ AnimationSliderScript() {
+	@animationSliderScriptHandle.Once() {
+		<script nonce={ templ.GetNonce(ctx) }>
             document.addEventListener('alpine:init', () => {
                 Alpine.data('animationSlider', () => ({
                     isPlaying: false,
                     currentPlaybackFrame: 0,
                     init(){
                         const frames = this.$refs.sliderBody.children
+                        this.$refs.sliderControl.value = 0;
                         this.$refs.sliderControl.setAttribute("max", frames.length - 1)
                         this.updateCurrentFrame();
+                        this.$nextTick(async () => { this.play() })
+                    },
+                    currentFrame(){
+                        this.$watch('currentPlaybackFrame', value =>{
+                            const frames = this.$refs.sliderBody.children
+                            this.$refs.framesDisplay.textContent = (value + 1) + " / " + frames.length
+                        })
                     },
                     updateToCursorPos(e){
                         this.stopPlaying()
@@ -47,97 +54,129 @@ templ AnimationSliderScript(){
                             }
                         }
                     },
-                    async play(){
+                    handleMouseEnter(){
                         if(this.isPlaying){
-                            this.stopPlaying()
+                            document.body.dispatchEvent(new CustomEvent("animationCursorPlay"));
+                        }else {
+                            document.body.dispatchEvent(new CustomEvent("animationCursorPause"));
+                        }
+                    },
+                    handleMouseLeave(){
+                        document.body.dispatchEvent(new CustomEvent("animationCursorLeave"));
+                    },
+                    async play(e){
+                        if(this.isPlaying){
+                            this.stopPlaying(e)
                             return
                         }
                         this.isPlaying = true;
+                        if(e){ //only update when is triggered via event aka not by init()
+                            document.body.dispatchEvent(new CustomEvent("animationCursorPlay"));
+                        }
                         const frames = this.$refs.sliderBody.children
                         const fps = this.$refs.sliderContainer.getAttribute("slider-fps")*1;
                         for (let i = this.currentPlaybackFrame; i < frames.length; i++){
                             if(this.isPlaying === false) return;
+                            if(!this.$refs.sliderControl) return;
                             this.$refs.sliderControl.value = i
                             this.$refs.sliderControl.dispatchEvent(new Event("input"));
                             await new Promise(r => setTimeout(r, (1000/fps)));
                         }
                         this.$refs.sliderControl.value = 0
                         this.$refs.sliderControl.dispatchEvent(new Event("input"));
-                        this.stopPlaying()
+                        this.stopPlaying(e)
                         this.$refs.sliderBody.dispatchEvent(new Event("click"));
                     },
-                    stopPlaying(){
+                    stopPlaying(e){
                         this.isPlaying = false;
+                        if(e && e.target !== this.$refs.sliderControl){ //only when triggered by body but no control
+                            document.body.dispatchEvent(new CustomEvent("animationCursorPause"));
+                        }
                     }
                 }))
             })
         </script>
-    }
+	}
 }
 
-templ SliderControl(props Props, isTrackCursor bool){
-    <input 
-        class={M("w-full bg-cms-border accent-eGreen", props.Class)}
-        type="range" 
-        min="0" 
-        max="0" 
-        value="0" 
-        @input="updateCurrentFrame" 
-        @mousedown="stopPlaying" 
-        if isTrackCursor {
-            @mousemove.window="updateToCursorPos"
-        }
-        x-ref="sliderControl"
-    >
-
-}
-
-templ AnimationSlider(props Props, fps int){
-    <div 
-        x-data="animationSlider" 
-        x-ref="sliderContainer" 
-        class={M("w-full h-full", props.Class)}
-        slider-fps={fps}
-        { props.Attrs... }
-    >
-        {children...}
+templ SliderControl(props Props, isTrackCursor bool) {
+    <div class="w-full relative flex justify-center items-center flex-col pt-2">
+        <div class="w-full h-[0.1rem] bg-black absolute"></div>
+        <input
+            class={ M("w-full thinRange absolute", props.Class) }
+            type="range"
+            min="0"
+            max="0"
+            value="0"
+            @input="updateCurrentFrame"
+            @mousedown="stopPlaying"
+            @mouseup="play"
+            if isTrackCursor {
+                @mousemove.window="updateToCursorPos"
+            }
+            x-ref="sliderControl"
+        />
+    </div>
+    <div class="w-full text-end font-barlow text-[0.6rem]" x-ref="framesDisplay" x-init="currentFrame">
     </div>
 }
 
-templ SliderBody(props Props){
-    <div 
-        x-ref="sliderBody" 
-        @click="play"
-        class={M("w-full h-full relative [&>img]:absolute [&>img]:w-full [&>img]:object-contain", props.Class)}
-        { props.Attrs... }
-    >
-        {children...}
-    </div>
+templ AnimationSlider(props Props, fps int) {
+	<div
+		x-data="animationSlider"
+		x-ref="sliderContainer"
+		class={ M("w-full h-full", props.Class) }
+		slider-fps={ fps }
+		{ props.Attrs... }
+	>
+		{ children... }
+	</div>
 }
 
-templ SimpleAnimationSlider(animation sqlc.Animation, paths []string){
-    @AnimationSlider(
-        Props{},
-        int(animation.Fps.Int32),
-    ){
-        @SliderBody(Props{}){
-            for _, path := range paths {
-                <img class="h-full" loading="lazy" src={path} />
-            }
-        }
-        @SliderControl(Props{}, false)
-    }
+templ SliderBody(props Props) {
+	<div
+		x-ref="sliderBody"
+		@click="play"
+        @mouseenter="handleMouseEnter"
+        @mouseleave="handleMouseLeave"
+        cursor-player="true"
+        :isPlaying="isPlaying"
+		class={ M("w-full h-full grid [&>img]:col-start-1 [&>img]:row-start-1 [&>img]:object-contain", props.Class) }
+		{ props.Attrs... }
+	>
+		{ children... }
+	</div>
 }
 
-templ FrontPageAnimationSlider(animation sqlc.Animation, paths []string){
-    @AnimationSlider(Props{},
-        int(animation.Fps.Int32),
-    ){
-        @SliderBody(Props{}){
-            for _, path := range paths {
-                <img class="w-full" loading="lazy" src={path} />
-            }
-        }
-        @SliderControl(Props{}, true)
-    }
+templ SimpleAnimationSlider(animation sqlc.Animation, paths []string) {
+	@AnimationSlider(
+		Props{},
+		int(animation.Fps.Int32),
+	) {
+		@SliderBody(Props{}) {
+			for _, path := range paths {
+				<img class="h-full" loading="lazy" src={ path }/>
+			}
+		}
+		@SliderControl(Props{}, false)
+	}
+}
+
+templ FrontPageAnimationSlider(animation sqlc.Animation, paths []string) {
+	@AnimationSlider(Props{
+		Class: "h-min rounded-lg",
+	},
+		int(animation.Fps.Int32),
+	) {
+		@SliderBody(Props{
+			Class: "h-min",
+		}) {
+			for _, path := range paths {
+				<img class="w-full" loading="lazy" src={ path }/>
+			}
+		}
+		@SliderControl(Props{
+
+        }, false)
+	}
 }

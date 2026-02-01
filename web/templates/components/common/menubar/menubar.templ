@@ -1,15 +1,91 @@
 package menubar
 
+
+var NavScriptHandle = templ.NewOnceHandle();
+templ NavScript(){
+    @NavScriptHandle.Once() {
+        <script nonce={templ.GetNonce(ctx)}>
+            document.addEventListener('alpine:init', () => {
+                Alpine.data('navBar', () => ({
+                    leftPos: 0,
+                    rightPos: 0,
+                    clientWidth:0,
+                    init(){
+                        this.leftPos = this.$refs.leftBracket.getBoundingClientRect()
+                        this.rightPos = this.$refs.rightBracket.getBoundingClientRect()
+                        this.clientWidth = document.body.clientWidth;
+                    },
+                    setPos(){
+                        this.leftPos = this.$refs.leftBracket.getBoundingClientRect()
+                        this.rightPos = this.$refs.rightBracket.getBoundingClientRect()
+                        this.clientWidth = document.body.clientWidth;
+                    },
+                    moveBracket(){
+                        let thisPos = this.$el.getBoundingClientRect()
+
+                        translateLeftPos = Math.floor(thisPos.left - this.leftPos.left) - 6
+                        this.$refs.leftBracket.style.transform = "translate(" + translateLeftPos + "px, 0px)"
+
+                        translateRightPos = Math.floor(thisPos.right - this.rightPos.right) + 6
+                        this.$refs.rightBracket.style.transform = "translate(" + translateRightPos + "px, 0px)"
+                    },
+                    async reset(){
+                        this.$refs.leftBracket.style.transform = "translate(0px, 0px)"
+                        this.$refs.rightBracket.style.transform = "translate(0px, 0px)"
+                        if(this.clientWidth !== document.body.clientWidth){
+                            await new Promise(r => setTimeout(r, 300)); //need to account for transition animtion to get the accurate pos
+                            this.setPos()
+                        }
+                    }
+                }))
+            })
+        </script>
+    }
+}
+
 templ PageNav() {
-    <div Class="flex-row w-full gap-4 justify-evenly items-end p-3 h-[5vh] xl:flex hidden">
-        @NavLink("ANIMATIONS", "/")
-        @NavLink("CHARACTERS", "/characters")
-        @NavLink("ABOUT ME", "/about")
+    <div 
+        x-data="navBar" 
+        Class="flex-row w-full gap-4 justify-between items-end xl:flex hidden p-2 pb-1 font-comfortaa animate-fade-in"
+        x-resize.document="reset"
+    >
+        <div class="flex flex-row text-gray-700 w-[25vw] font-medium text-[1rem]">
+            <span class="rounded-xl bg-emerald-100 px-2 ml-2">
+                MAEL
+            </span>
+        </div>
+        <div class={`flex flex-row text-gray-700 w-fit justify-end items-center font-medium relative`}>
+            <div class="absolute h-2 w-4 left-[-0.4rem] top-[-0.25rem] border-t-[1px] border-l-[1px] border-gray-600 transition-transform duration-300" x-ref="leftBracket" ></div>
+            <div class="absolute h-2 w-4 right-[-0.4rem] bottom-[-0.1rem] border-b-[1px] border-r-[1px] border-gray-600 transition-transform duration-300" x-ref="rightBracket" ></div>
+            @NavLink("ANIMATIONS", "/animation/body", "/animation")
+            @seperater()
+            @NavLink("CHARACTERS", "/characters/body", "/characters")
+            @seperater()
+            @NavLink("ABOUT", "/about/body", "/about")
+        </div>
+    </div>
+    @NavScript()
+}
+
+templ NavLink(title string, toPath string, toURL string) {
+    <div 
+        class="text-[1rem] text-gray-700 group/nav relative" 
+        cursor-clickable="true" 
+        @mouseover="moveBracket" 
+        @mouseleave="reset"
+        hx-push-url={toURL}
+        hx-swap="transition:true" 
+        hx-target="#content"
+        hx-get={toPath}
+        hx-trigger="click"
+    >
+        <div class="z-20 relative">{title}</div>
+        <div class="bg-gray-700/30  w-0 group-hover/nav:w-full h-full absolute top-0 left-0 transition-all -skew-x-12 duration-300" ></div>
     </div>
 }
 
-templ NavLink(title string, toPath string) {
-    <div class="font-barlow text-[1.5rem]">
-        <a href={templ.URL(toPath)}>{title}</a>
+templ seperater(){
+    <div class="flex justify-center items-center w-24 pl-3 pr-3">
+        <div class="w-full h-[1px] border-0 border-b  border-gray-600"></div>
     </div>
 }

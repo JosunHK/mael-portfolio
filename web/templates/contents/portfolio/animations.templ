@@ -1,4 +1,4 @@
-package dummyTemplates
+package portfolioTemplates
 
 import (
 	"mael/web/templates/components/animation"
@@ -7,8 +7,8 @@ import (
 	"database/sql"
 )
 
-templ Dummy() {
-    <div class="w-screen h-[90vh]">
+templ Animations() {
+    <div id="content" class="w-screen h-[90vh]">
         @animationComponent.FrontPageAnimationSlider(sqlc.Animation{
                 ID: 3,
                 Fps: sql.NullInt32{Valid:true, Int32: 12},
