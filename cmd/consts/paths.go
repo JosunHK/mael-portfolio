@@ -4,7 +4,7 @@ import (
 	"os"
 )
 
-var LocalAnimationPath = "./assets/uploads/animation"
+var LocalAnimationPath = GetUploadPath() + "/uploads/animation"
 var RequestAnimationPath = "/assets/uploads/animation"
 
 func GetUploadPath() string {
