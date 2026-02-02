@@ -70,7 +70,7 @@ templ AnimationSliderScript() {
                             return
                         }
                         this.isPlaying = true;
-                        if(e){ //only update when is triggered via event aka not by init()
+                        if(e && e.target != this.$refs.sliderControl ){ //only update when is triggered via event aka not by init()
                             document.body.dispatchEvent(new CustomEvent("animationCursorPlay"));
                         }
                         const frames = this.$refs.sliderBody.children
@@ -85,7 +85,7 @@ templ AnimationSliderScript() {
                         this.$refs.sliderControl.value = 0
                         this.$refs.sliderControl.dispatchEvent(new Event("input"));
                         this.stopPlaying(e)
-                        this.$refs.sliderBody.dispatchEvent(new Event("click"));
+                        this.$nextTick(async () => { this.play() })
                     },
                     stopPlaying(e){
                         this.isPlaying = false;
