@@ -6,12 +6,6 @@ import (
 	
 	)
 
-
-//Need to make a struct to hold the data i want to show
-//rmb the mvc format
-//this file should only be the View part of the mvc
-//Required: art animation; slider; play button for playing art animation
-
 templ Animation(fileName string){
 	{{Image := artFile.GetArtFile(fileName)}}
 	<div class=" h-screen w-screen">
