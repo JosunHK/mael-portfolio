@@ -1,7 +1,6 @@
 package productUtil
 
 import (
-	"mael/cmd/struct/product"
 	"time"
 )
 

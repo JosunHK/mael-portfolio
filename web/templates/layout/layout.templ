@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"os"
 	"mael/web/templates/components/common/menubar"
-	"mael/web/templates/components/common/artAnimation"
 	"mael/web/templates/components/common/cursor"
 )
 
@@ -61,15 +60,15 @@ templ header() {
 templ Layout(content templ.Component) {
 	@header() {
         @menubar.PageNav()
-	@artAnimation.Animation("Sixsix_MorningRoutine")
-//		@content
+	
+		@content
 	}
 }
 
 templ ErrorPage(content templ.Component) {
 	@header() {
         @menubar.PageNav()
-	@artAnimation.Animation("Sixsix_MorningRoutine")
-//		@content
+	
+		@content
 	}
 }

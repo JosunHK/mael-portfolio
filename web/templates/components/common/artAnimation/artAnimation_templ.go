@@ -8,11 +8,15 @@ package artAnimation
 import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
-import "fmt"
-import "os"
-import "log"
-import "path/filepath"
+import (
+	"fmt"
+	artFile "mael/cmd/util/artFile"
+)
 
+// Need to make a struct to hold the data i want to show
+// rmb the mvc format
+// this file should only be the View part of the mvc
+// Required: art animation; slider; play button for playing art animation
 func Animation(fileName string) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
@@ -34,48 +38,20 @@ func Animation(fileName string) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"\"><div class=\"flex flex-col\"><div class=\"relative h-50%\">")
+		Image := artFile.GetArtFile(fileName)
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\" h-screen w-screen\"><div class=\"h-90vh w-screen\"><div id=\"imageId\" class=\" grid w-screen border-4 border-black\">")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = images(fileName, Image.Length).Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</div><div class=\"w-full relative flex flex-col justify-center pl-4 pr-4 pt-2\"><input type=\"range\" id=\"rangeBar\" value=\"1\" class=\"w-full\"><h2 id=\"show1\" class=\"w-full text-right pr-4\"></h2></div></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		templ_7745c5c3_Err = ArtAnimationScript().Render(ctx, templ_7745c5c3_Buffer)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = movAnimation(fileName).Render(ctx, templ_7745c5c3_Buffer)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</div><div class=\"relative\"><input type=\"range\" id=\"rangeBar\" class=\"w-full\"></div></div></div>")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		return nil
-	})
-}
-
-func movAnimation(fileName string) templ.Component {
-	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
-		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
-		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
-			return templ_7745c5c3_CtxErr
-		}
-		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
-		if !templ_7745c5c3_IsBuffer {
-			defer func() {
-				templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
-				if templ_7745c5c3_Err == nil {
-					templ_7745c5c3_Err = templ_7745c5c3_BufErr
-				}
-			}()
-		}
-		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var2 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var2 == nil {
-			templ_7745c5c3_Var2 = templ.NopComponent
-		}
-		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = images(fileName, imageLength(fileName)).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -99,9 +75,9 @@ func images(path string, length int) templ.Component {
 			}()
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var3 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var3 == nil {
-			templ_7745c5c3_Var3 = templ.NopComponent
+		templ_7745c5c3_Var2 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var2 == nil {
+			templ_7745c5c3_Var2 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
 		paths := fmt.Sprint("/static/assets/", path, "/", path, "_")
@@ -114,12 +90,12 @@ func images(path string, length int) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				var templ_7745c5c3_Var4 string
-				templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(images)
+				var templ_7745c5c3_Var3 string
+				templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(images)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/common/artAnimation/artAnimation.templ`, Line: 39, Col: 19}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/common/artAnimation/artAnimation.templ`, Line: 45, Col: 19}
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -127,16 +103,16 @@ func images(path string, length int) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				var templ_7745c5c3_Var5 string
-				templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(i)
+				var templ_7745c5c3_Var4 string
+				templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(i)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/common/artAnimation/artAnimation.templ`, Line: 39, Col: 27}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/common/artAnimation/artAnimation.templ`, Line: 45, Col: 27}
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\" class=\"artAnimations opacity-1 absolute\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\" class=\"artAnimations opacity-0 col-start-1 row-start-1\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -145,12 +121,12 @@ func images(path string, length int) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				var templ_7745c5c3_Var6 string
-				templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(images)
+				var templ_7745c5c3_Var5 string
+				templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(images)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/common/artAnimation/artAnimation.templ`, Line: 41, Col: 19}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/common/artAnimation/artAnimation.templ`, Line: 47, Col: 19}
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -158,16 +134,16 @@ func images(path string, length int) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				var templ_7745c5c3_Var7 string
-				templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(i)
+				var templ_7745c5c3_Var6 string
+				templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(i)
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/common/artAnimation/artAnimation.templ`, Line: 41, Col: 27}
+					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/common/artAnimation/artAnimation.templ`, Line: 47, Col: 27}
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
+				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "\" class=\"artAnimations opacity-0 absolute\">")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "\" class=\"artAnimations opacity-0 col-start-1 row-start-1\">")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
@@ -195,12 +171,12 @@ func ArtAnimationScript() templ.Component {
 			}()
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var8 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var8 == nil {
-			templ_7745c5c3_Var8 = templ.NopComponent
+		templ_7745c5c3_Var7 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var7 == nil {
+			templ_7745c5c3_Var7 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Var9 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+		templ_7745c5c3_Var8 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 			templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 			templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
 			if !templ_7745c5c3_IsBuffer {
@@ -216,38 +192,27 @@ func ArtAnimationScript() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var10 string
-			templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(templ.GetNonce(ctx))
+			var templ_7745c5c3_Var9 string
+			templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(templ.GetNonce(ctx))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/common/artAnimation/artAnimation.templ`, Line: 49, Col: 36}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/common/artAnimation/artAnimation.templ`, Line: 56, Col: 36}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "\">\n\t\tconst imgs = document.getElementsByClassName(\"artAnimations\");\n\t\tdocument.addEventListener(\"mousemove\", function(event) {\n\t\t\tconst mouse = event.clientX;\n\t\t\tconst currVal = Math.trunc((imgs.length)*(mouse/window.innerWidth));\n\t\t\tfor (let i = 0; i < imgs.length; i++){\n\t\t\t\tif (i == currVal){\n\t\t\t\t\timgs[i].style.opacity = \"1\";\n\t\t\t\t} else {\n\t\t\t\t\timgs[i].style.opacity = \"0\";\n\t\t\t\t}\n\t\t\t}\n\t\t});\n\t\tdocument.dispatchEvent(new Event(\"mousemove\"));\n\t\t\n\t</script>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "\">\n\t\n\t\t//range bar\n\t\tconst rangeBar = document.getElementById(\"rangeBar\");\n\t\trangeBar.addEventListener(\"input\", function(){\t\t\n\t\tconst imgs = document.getElementsByClassName(\"artAnimations\");\n\t\tconst imageNum = imgs.length;\n\t\trangeBar.setAttribute(\"max\", imageNum);\n\t\trangeBar.setAttribute(\"min\", 1);\n\t\t\tconst currVal = rangeBar.value;\n\t\t\tdocument.getElementById(\"show1\").innerText = currVal + \" / \" + imageNum;\n\t\t\tfor (let i = 0; i < imageNum; i++){\n\t\t\t\tif (i == currVal - 1){\n\t\t\t\t\timgs[i].style.opacity = \"1\";\n\t\t\t\t} else {\n\t\t\t\t\timgs[i].style.opacity = \"0\";\n\t\t\t\t}\n\t\t\t}\n\t\t});\t\n\n\t\t//for not stopping during click the range bar\n\t\trangeBar.dispatchEvent(new Event(\"input\"));\n\t\tlet isPlaying = false;\n\t\trangeBar.addEventListener(\"mousedown\", function(){\n\t\t\tif(state == true){\n\t\t\t\tisPlaying = true;\n\t\t\t\tstate = false;\n\t\t\t\trangeBar.dispatchEvent(new Event(\"input\"));\n\t\t\t} else {\n\t\t\t\tisPlaying = false;\n\t\t\t}\n\t\t});\n\t\trangeBar.addEventListener(\"mouseup\", function(){\n\t\t\tif(isPlaying == true){\n\t\t\t\t\timageFrame.dispatchEvent(new Event(\"click\"));\n\t\t\t}else {\n\t\t\t\tisPlaying = false;\n\t\t\t}\n\t\t\t\t\t\n\t\t});\n\n\t\t//play button on image\n\t\tconst imageFrame = document.getElementById(\"imageId\");\t\t\n\t\tlet state = false;//true is play, false is pause\n\t\timageFrame.addEventListener(\"click\", async function(){\n\t\t\tconst rangeBar = document.getElementById(\"rangeBar\");\n\t\t\tstate = !state;\n\t\t\tif (state){\n\t\t\t\tfor (let i = parseInt(rangeBar.value); i <= rangeBar.max; i++){\t\t\t\t\t\n\t\t\t\t\t\tif(state == false){\n\t\t\t\t\t\t\tbreak;\n\t\t\t\t\t\t}\n\t\t\t\t\t\trangeBar.value = i ;\n\t\t\t\t\t\trangeBar.dispatchEvent(new Event(\"input\"));\n\t\t\t\t\t\t\n\t\t\t\t\t\tawait playCLick(50);\t\n\t\t\t\t\t\tif (i == rangeBar.max){\n\t\t\t\t\t\t\ti = 1;\n\t\t\t\t\t\t}\t\n\t\t\t\t}\n\t\t\t} else {\n\t\t\t\t\tstate = false;\t\n\t\t\t}\t\n\t\t});\n\t\tasync function playCLick(ms){\n\t\t\treturn new Promise(resolve => setTimeout(resolve, ms));\n\t\t}\n\n\t</script>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			return nil
 		})
-		templ_7745c5c3_Err = artAnimationHandle.Once().Render(templ.WithChildren(ctx, templ_7745c5c3_Var9), templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = artAnimationHandle.Once().Render(templ.WithChildren(ctx, templ_7745c5c3_Var8), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		return nil
 	})
-}
-
-func imageLength(fileName string) int {
-
-	fileP := filepath.Join("web/static/assets/", fileName, "/")
-	file, err := os.ReadDir(fileP)
-	if err != nil {
-		log.Fatalf("Failed to read directory: %v", err)
-	}
-	fileLen := len(file)
-	return fileLen
 }
 
 var _ = templruntime.GeneratedTemplate

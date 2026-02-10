@@ -16,10 +16,9 @@ import (
 	"mael/web/templates/components/ui/dropDownMenu"
 	"mael/web/templates/components/ui/input"
 	"mael/web/templates/components/ui/selectBox"
+	toggle "mael/web/templates/components/ui/switchToggle"
 	"mael/web/templates/components/ui/tabs"
 	"mael/web/templates/components/ui/toast"
-	//	"mael/web/templates/components/common/artAnimation"
-	toggle "mael/web/templates/components/ui/switchToggle"
 )
 
 func Scripts() templ.Component {
