@@ -14,117 +14,118 @@ type Props struct {
 }
 
 var animationSliderScriptHandle = templ.NewOnceHandle()
+
 templ AnimationSliderScript() {
 	@animationSliderScriptHandle.Once() {
 		<script nonce={ templ.GetNonce(ctx) }>
-            document.addEventListener('alpine:init', () => {
-                Alpine.data('animationSlider', () => ({
-                    isPlaying: false,
-                    currentPlaybackFrame: 0,
-                    init(){
-                        const frames = this.$refs.sliderBody.children
-                        this.$refs.sliderControl.value = 0;
-                        this.$refs.sliderControl.setAttribute("max", frames.length - 1)
-                        this.updateCurrentFrame();
-                        this.$nextTick(async () => { this.play() })
-                    },
-                    currentFrame(){
-                        this.$watch('currentPlaybackFrame', value =>{
-                            const frames = this.$refs.sliderBody.children
-                            this.$refs.framesDisplay.textContent = (value + 1) + " / " + frames.length
-                        })
-                    },
-                    updateToCursorPos(e){
-                        this.stopPlaying()
-                        const x = e.clientX
-                        const maxWidth = document.body.clientWidth;
-                        const frames = this.$refs.sliderBody.children
-                        this.$refs.sliderControl.value = Math.floor(x/(maxWidth/frames.length-1));
-                        this.$refs.sliderControl.dispatchEvent(new Event("input"));
-                    },
-                    updateCurrentFrame(){
-                        const currVal = this.$refs.sliderControl.value;
-                        const frames = this.$refs.sliderBody.children
-                        for (let i = 0; i < frames.length; i++) {
-                            if(i == currVal) {
-                                this.currentPlaybackFrame = i
-                                frames[i].style.opacity = "100%";
-                            } else {
-                                frames[i].style.opacity = "0%";
-                            }
-                        }
-                    },
-                    handleMouseEnter(){
-                        if(this.isPlaying){
-                            document.body.dispatchEvent(new CustomEvent("animationCursorPlay"));
-                        }else {
-                            document.body.dispatchEvent(new CustomEvent("animationCursorPause"));
-                        }
-                    },
-                    handleMouseLeave(){
-                        document.body.dispatchEvent(new CustomEvent("animationCursorLeave"));
-                    },
-                    async play(e){
-                        if(this.isPlaying){
-                            this.stopPlaying(e)
-                            return
-                        }
-                        this.isPlaying = true;
-                        if(e && e.target != this.$refs.sliderControl ){ //only update when is triggered via event aka not by init()
-                            document.body.dispatchEvent(new CustomEvent("animationCursorPlay"));
-                        }
-                        const frames = this.$refs.sliderBody.children
-                        const fps = this.$refs.sliderContainer.getAttribute("slider-fps")*1;
-                        for (let i = this.currentPlaybackFrame; i < frames.length; i++){
-                            if(this.isPlaying === false) return;
-                            if(!this.$refs.sliderControl) return;
-                            this.$refs.sliderControl.value = i
-                            this.$refs.sliderControl.dispatchEvent(new Event("input"));
-                            await new Promise(r => setTimeout(r, (1000/fps)));
-                        }
-                        this.$refs.sliderControl.value = 0
-                        this.$refs.sliderControl.dispatchEvent(new Event("input"));
-                        this.stopPlaying(e)
-                        this.$nextTick(async () => { this.play() })
-                    },
-                    stopPlaying(e){
-                        this.isPlaying = false;
-                        if(e && e.target !== this.$refs.sliderControl){ //only when triggered by body but no control
-                            document.body.dispatchEvent(new CustomEvent("animationCursorPause"));
-                        }
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('animationSlider', () => ({
+            isPlaying: false,
+            currentPlaybackFrame: 0,
+            init() {
+                const frames = this.$refs.sliderBody.children
+                this.$refs.sliderControl.value = 0;
+                this.$refs.sliderControl.setAttribute("max", frames.length - 1)
+                this.updateCurrentFrame();
+                this.$nextTick(async () => {this.play()})
+            },
+            currentFrame() {
+                this.$watch('currentPlaybackFrame', value => {
+                    const frames = this.$refs.sliderBody.children
+                    this.$refs.framesDisplay.textContent = (value + 1) + " / " + frames.length
+                })
+            },
+            updateToCursorPos(e) {
+                this.stopPlaying()
+                const x = e.clientX
+                const maxWidth = document.body.clientWidth;
+                const frames = this.$refs.sliderBody.children
+                this.$refs.sliderControl.value = Math.floor(x / (maxWidth / frames.length - 1));
+                this.$refs.sliderControl.dispatchEvent(new Event("input"));
+            },
+            updateCurrentFrame() {
+                const currVal = this.$refs.sliderControl.value;
+                const frames = this.$refs.sliderBody.children
+                for (let i = 0; i < frames.length; i++) {
+                    if (i == currVal) {
+                        this.currentPlaybackFrame = i
+                        frames[i].style.opacity = "100%";
+                    } else {
+                        frames[i].style.opacity = "0%";
                     }
-                }))
-            })
-        </script>
+                }
+            },
+            handleMouseEnter() {
+                if (this.isPlaying) {
+                    document.body.dispatchEvent(new CustomEvent("animationCursorPlay"));
+                } else {
+                    document.body.dispatchEvent(new CustomEvent("animationCursorPause"));
+                }
+            },
+            handleMouseLeave() {
+                document.body.dispatchEvent(new CustomEvent("animationCursorLeave"));
+            },
+            async play(e) {
+                if (this.isPlaying) {
+                    this.stopPlaying(e)
+                    return
+                }
+                this.isPlaying = true;
+                if (e && e.target != this.$refs.sliderControl) { //only update when is triggered via event aka not by init()
+                    document.body.dispatchEvent(new CustomEvent("animationCursorPlay"));
+                }
+                const frames = this.$refs.sliderBody.children
+                const fps = this.$refs.sliderContainer.getAttribute("slider-fps") * 1;
+                for (let i = this.currentPlaybackFrame; i < frames.length; i++) {
+                    if (this.isPlaying === false) return;
+                    if (!this.$refs.sliderControl) return;
+                    this.$refs.sliderControl.value = i
+                    this.$refs.sliderControl.dispatchEvent(new Event("input"));
+                    await new Promise(r => setTimeout(r, (1000 / fps)));
+                }
+                this.$refs.sliderControl.value = 0
+                this.$refs.sliderControl.dispatchEvent(new Event("input"));
+                this.stopPlaying()
+                this.$nextTick(async () => {this.play()})
+            },
+            stopPlaying(e) {
+                this.isPlaying = false;
+                if (e && e.target !== this.$refs.sliderControl) { //only when triggered by body but no control
+                    document.body.dispatchEvent(new CustomEvent("animationCursorPause"));
+                }
+            }
+        }))
+    })
+</script>
 	}
 }
 
 templ SliderControl(props Props, isTrackCursor bool) {
-    <div class="w-full relative flex justify-center items-center flex-col pt-2">
-        <div class="w-full h-[0.1rem] bg-black absolute"></div>
-        <input
-            class={ M("w-full thinRange absolute", props.Class) }
-            type="range"
-            min="0"
-            max="0"
-            value="0"
-            @input="updateCurrentFrame"
-            @mousedown="stopPlaying"
-            @mouseup="play"
-            if isTrackCursor {
-                @mousemove.window="updateToCursorPos"
-            }
-            x-ref="sliderControl"
-        />
-    </div>
+	<div class="w-full relative flex justify-center items-center flex-col pt-2">
+		<div class="w-full h-[0.1rem] bg-black absolute"></div>
+		<input
+			class={ M("w-full thinRange absolute", props.Class) }
+			type="range"
+			min="0"
+			max="0"
+			value="0"
+			@input="updateCurrentFrame"
+			@mousedown="stopPlaying"
+			@mouseup="play"
+			if isTrackCursor {
+				@mousemove.window="updateToCursorPos"
+			}
+			x-ref="sliderControl"
+		/>
+	</div>
 }
 
-templ FrameDisplay(props Props){
-    <div 
-        class={M("w-full text-end font-barlow text-[0.6rem]", props.Class)} 
-        x-ref="framesDisplay" 
-        x-init="currentFrame"
-    ></div>
+templ FrameDisplay(props Props) {
+	<div
+		class={ M("w-full text-end font-barlow text-[0.6rem] mt-2", props.Class) }
+		x-ref="framesDisplay"
+		x-init="currentFrame"
+	></div>
 }
 
 templ AnimationSlider(props Props, fps int) {
@@ -133,7 +134,8 @@ templ AnimationSlider(props Props, fps int) {
 		x-ref="sliderContainer"
 		class={ M("w-full h-full", props.Class) }
 		slider-fps={ fps }
-		{ props.Attrs... }
+		{ 
+    props.Attrs... }
 	>
 		{ children... }
 	</div>
@@ -143,11 +145,12 @@ templ SliderBody(props Props) {
 	<div
 		x-ref="sliderBody"
 		@click="play"
-        @mouseenter="handleMouseEnter"
-        @mouseleave="handleMouseLeave"
-        cursor-player="true"
-        :isPlaying="isPlaying"
-		class={ M("w-full h-full grid grid-rows-[100%] justify-center [&>img]:col-start-1 [&>img]:row-start-1 [&>img]:object-contain", props.Class) }
+		@mouseenter="handleMouseEnter"
+		@mouseleave="handleMouseLeave"
+		cursor-player="true"
+		:isPlaying="isPlaying"
+		class={ M(`w-full h-full grid grid-rows-[100%] justify-center [&>img]:col-start-1
+    [&>img]:row-start-1 [&>img]:object-contain`, props.Class) }
 		{ props.Attrs... }
 	>
 		{ children... }
@@ -165,11 +168,31 @@ templ SimpleAnimationSlider(animation sqlc.Animation, paths []string) {
 			}
 		}
 		@SliderControl(Props{
-            Class:"cursor-move",
-        }, false)
-        @FrameDisplay(Props{
-            Class: "text-cms-foreground",
-        })
+			Class: "cursor-move",
+		}, false)
+		@FrameDisplay(Props{
+			Class: "text-cms-foreground",
+		})
+	}
+}
+
+templ AnimationReelSlider(animation sqlc.Animation, paths []string) {
+	@AnimationSlider(Props{
+		Class: "h-full",
+	},
+		int(animation.Fps.Int32),
+	) {
+		@SliderBody(Props{
+			Class: "h-[90%] my-4",
+		}) {
+			for _, path := range paths {
+				<img class="h-full max-h-full" loading="lazy" src={ path }/>
+			}
+		}
+		<div>
+			@SliderControl(Props{}, false)
+			@FrameDisplay(Props{})
+		</div>
 	}
 }
 
@@ -187,6 +210,6 @@ templ FrontPageAnimationSlider(animation sqlc.Animation, paths []string) {
 			}
 		}
 		@SliderControl(Props{}, false)
-        @FrameDisplay(Props{})
+		@FrameDisplay(Props{})
 	}
 }

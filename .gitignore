@@ -10,3 +10,4 @@ tailwindcss
 /db/generated
 style.css
 style.min.css
+launch.sh

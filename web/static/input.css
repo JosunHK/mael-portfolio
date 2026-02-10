@@ -10,7 +10,7 @@
         --card-foreground: 240 10% 3.9%;
         --popover: 0 100% 98.43%;
         --popover-foreground: 240 10% 3.9%;
-        --primary : 172 31% 62%;
+        --primary: 172 31% 62%;
         --primary-foreground: 52 42% 91%;
         --secondary: 240 4.8% 95.9%;
         --secondary-foreground: 240 5.9% 10%;
@@ -36,7 +36,7 @@
         --eGreen: 83 34% 63%;
         --eBlue: 172 31% 62%;
         --eLavender: 231 97% 85%;
-        --ePurple : 238.1 25.1% 50.78%;
+        --ePurple: 238.1 25.1% 50.78%;
         --eBrown: 21 16% 58%;
 
         --cms-background: 0 1% 5%;
@@ -63,7 +63,7 @@
         --cms-chart-3: 30 80% 55%;
         --cms-chart-4: 280 65% 60%;
         --cms-chart-5: 340 75% 55%;
-        --bg-gradient: 21deg,rgba(2, 0, 36, 1) 0%, rgba(9, 80, 121, 1) 35%, rgba(0, 66, 79, 1) 100%;
+        --bg-gradient: 21deg, rgba(2, 0, 36, 1) 0%, rgba(9, 80, 121, 1) 35%, rgba(0, 66, 79, 1) 100%;
     }
 }
 
@@ -72,20 +72,21 @@
 }
 
 @media (min-width:1280px) {
-    .splide__arrow svg{
-        fill:black !important;
-        height:3rem !important;
-        width:3rem !important;
-        stroke:lightgray !important;
-        stroke-width:0.15rem !important;
-        stroke-linejoin:round !important;
+    .splide__arrow svg {
+        fill: black !important;
+        height: 3rem !important;
+        width: 3rem !important;
+        stroke: lightgray !important;
+        stroke-width: 0.15rem !important;
+        stroke-linejoin: round !important;
     }
 }
 
 @layer base {
-    .no-cursor{
+    .no-cursor {
         cursor: none;
-        & *{
+
+        & * {
             cursor: none;
         }
     }
@@ -95,8 +96,8 @@
         scrollbar-color: hsl(var(--cms-foreground)) hsl(var(--cms-background));
     }
 
-    .bg-dotted{
-        background: radial-gradient(circle at 1px 1px, rgba(0, 0, 0, 0.04) 1px, transparent 0) 0 0 / 14px 14px, linear-gradient(#faf7f2, #ffffff);
+    .bg-dotted {
+        background: radial-gradient(circle at 1px 1px, rgba(0, 0, 0, 0.04) 1px, transparent 0) 0 0 / 14px 14px, linear-gradient(#f9feff, #ffffff);
     }
 
     input[type="number"]::-webkit-inner-spin-button,
@@ -120,94 +121,129 @@
     }
 
     .scrollbar-hide::-webkit-scrollbar {
-        display: none;
+        display: none !important;
+    }
+
+    .scrollbar-hide {
+        scrollbar-width: none !important;
     }
 
     .hx-fade-out.htmx-swapping {
-      opacity: 0;
-      transition: opacity 150ms ease-out;
+        opacity: 0;
+        transition: opacity 150ms ease-out;
     }
 
     .hx-fade-in.htmx-added {
-      opacity: 0;
+        opacity: 0;
     }
 
-    .htmx-indicator{
-        display:none;
+    .htmx-indicator {
+        display: none;
     }
 
-    .htmx-request .htmx-indicator{
-        display:inline;
+    .htmx-request .htmx-indicator {
+        display: inline;
     }
 
-    .htmx-request.htmx-indicator{
-        display:inline;
+    .htmx-request.htmx-indicator {
+        display: inline;
     }
 
-    .hx-fade-in{
-      opacity: 1;
-      transition: opacity 150ms ease-out;
+    .hx-fade-in {
+        opacity: 1;
+        transition: opacity 150ms ease-out;
     }
 
-    .cursor-stroke-vertical-transform{
-      transform: rotate(35deg) translateY(-2px);
+    .cursor-stroke-vertical-transform {
+        transform: rotate(35deg) translateY(-2px);
     }
+
     /*********** Baseline, reset styles ***********/
     .thinRange {
-      -webkit-appearance: none;
-      appearance: none;
-      background: transparent;
-      cursor: none;
-      width: 25rem;
+        -webkit-appearance: none;
+        appearance: none;
+        background: transparent;
+        cursor: none;
+        width: 25rem;
     }
 
     /* Removes default focus */
     .thinRange:focus {
-      outline: none;
+        outline: none;
     }
 
     /******** Chrome, Safari, Opera and Edge Chromium styles ********/
     /* slider track */
     .thinRange::-webkit-slider-runnable-track {
-      background-color: transparent;
-      border-radius: 0rem;
-      height: 1rem;
+        background-color: transparent;
+        border-radius: 0rem;
+        height: 1rem;
     }
 
     /* slider thumb */
     .thinRange::-webkit-slider-thumb {
-      -webkit-appearance: none; /* Override default look */
-      appearance: none;
-      margin-top: 4px; /* Centers thumb on the track */
-      border: 1px solid black; 
-      background-color: #faf7f2;
-      border-radius: 0.5rem;
-      height: 0.5rem;
-      width: 2rem;
+        -webkit-appearance: none;
+        /* Override default look */
+        appearance: none;
+        margin-top: 4px;
+        /* Centers thumb on the track */
+        border: 1px solid black;
+        background-color: #faf7f2;
+        border-radius: 0.5rem;
+        height: 0.5rem;
+        width: 2rem;
     }
 
     .thinRange:focus::-webkit-slider-thumb {
-      outline: 0px;
+        outline: 0px;
     }
 
     /*********** Firefox styles ***********/
     /* slider track */
     .thinRange::-moz-range-track {
-      background-color: transparent;
-      border-radius: 0rem;
-      height: 1rem;
+        background-color: transparent;
+        border-radius: 0rem;
+        height: 1rem;
     }
 
     /* slider thumb */
     .thinRange::-moz-range-thumb {
-      background-color: #faf7f2;
-      border: 1px solid black; /*Removes extra border that FF applies*/
-      border-radius: 0.5rem;
-      height: 0.5rem;
-      width: 2rem;
+        background-color: #faf7f2;
+        border: 1px solid black;
+        /*Removes extra border that FF applies*/
+        border-radius: 0.5rem;
+        height: 0.5rem;
+        width: 2rem;
     }
 
-    .thinRange:focus::-moz-range-thumb{
-      outline: 0px;
+    .thinRange:focus::-moz-range-thumb {
+        outline: 0px;
     }
-} 
+
+    .animate-background-blur {
+        animation: background-blur linear forwards;
+        animation-timeline: view();
+        animation-range-start: 90vh;
+    }
+
+    @keyframes background-blur {
+        to {
+            opacity: 1;
+        }
+    }
+
+    *::selection {
+        background: hsl(var(--eYellow));
+        color: hsl(var(--foreground));
+    }
+
+    *::-moz-selection {
+        background: hsl(var(--eYellow));
+        color: hsl(var(--foreground));
+    }
+
+    *::-webkit-selection {
+        background: hsl(var(--eYellow));
+        color: hsl(var(--foreground));
+    }
+}

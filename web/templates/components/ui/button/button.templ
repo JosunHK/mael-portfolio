@@ -1,4 +1,4 @@
-package button  
+package button
 
 import (
 	twmerge "github.com/Oudwins/tailwind-merge-go/pkg/twmerge"
@@ -8,7 +8,9 @@ import (
 var M = twmerge.Merge
 
 var cva = gocva.CVA{
-	Base: "inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
+	Base: `inline-flex items-center justify-center whitespace-nowrap rounded-md text-sm font-medium transition-colors
+focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:pointer-events-none
+disabled:opacity-50`,
 	Variants: gocva.Variants{
 		"variant": {
 			"default":     "bg-eGreen text-background hover:bg-eGreen/80",
@@ -16,19 +18,20 @@ var cva = gocva.CVA{
 			"outline":     "border border-input bg-background hover:bg-accent hover:text-accent-foreground",
 			"secondary":   "bg-eYellow text-background hover:bg-eYellow/80 ring-eYellow focus-visible:border-eYellow",
 			"ghost":       "hover:bg-accent hover:text-accent-foreground",
+			"glass":       "border border-black/80 bg-black/5 backdrop-blur-md shadow-sm",
 			"link":        "text-primary hover:underline",
 			"purple":      "bg-ePurple text-background hover:bg-ePurple/100",
 		},
 		"size": {
-			"default": "h-10 px-4 py-2",
-			"sm":      "h-9 rounded-md px-3",
-			"nav":     "h-3 w-10",
-			"lg":      "h-11 rounded-md px-8",
+			"default":  "h-10 px-4 py-2",
+			"sm":       "h-9 rounded-md px-3",
+			"nav":      "h-3 w-10",
+			"lg":       "h-11 rounded-md px-8",
 			"readmore": "h-11 rounded-xs px-24 py-8 text-md",
-			"icon":    "h-10 w-10",
-			"iconlg":  "h-12 w-12",
-			"iconsm":  "h-8 w-8",
-			"iconxs":  "h-7 w-7",
+			"icon":     "h-10 w-10",
+			"iconlg":   "h-12 w-12",
+			"iconsm":   "h-8 w-8",
+			"iconxs":   "h-7 w-7",
 		},
 	},
 	DefaultVariants: gocva.Variant{
@@ -44,10 +47,7 @@ type Props struct {
 }
 
 templ Button(props Props) {
-	<button
-		class={ M(cva.Render(props.Variant), props.Class) }
-		{ props.Attrs... }
-	>
+	<button class={ M(cva.Render(props.Variant), props.Class) } { props.Attrs... }>
 		{ children... }
 	</button>
 }
