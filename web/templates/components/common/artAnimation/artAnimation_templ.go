@@ -9,7 +9,6 @@ import "github.com/a-h/templ"
 import templruntime "github.com/a-h/templ/runtime"
 
 import (
-	"fmt"
 	artFile "mael/cmd/util/artFile"
 )
 
@@ -35,15 +34,15 @@ func Animation(fileName string) templ.Component {
 		}
 		ctx = templ.ClearChildren(ctx)
 		Image := artFile.GetArtFile(fileName)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\" h-screen w-screen\"><div class=\"h-90vh w-screen\"><div id=\"imageId\" class=\" grid w-screen border-4 border-black\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\" h-screen w-screen\"><div class=\"h-90vh w-screen animation-player\"><div class=\"animation-body grid w-screen border-4 border-black\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = images(fileName, Image.Length).Render(ctx, templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = images(Image.Path, Image.Length).Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</div><div class=\"w-full relative flex flex-col justify-center pl-4 pr-4 pt-2\"><input type=\"range\" id=\"rangeBar\" value=\"1\" class=\"w-full\"><h2 id=\"show1\" class=\"w-full text-right pr-4\"></h2></div></div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</div><div class=\"w-full relative flex flex-col justify-center pl-4 pr-4 pt-2\"><input type=\"range\" value=\"1\" class=\"range-bar w-full\"><h2 id=\"show1\" class=\"w-full text-right pr-4\"></h2></div></div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -55,7 +54,7 @@ func Animation(fileName string) templ.Component {
 	})
 }
 
-func images(path string, length int) templ.Component {
+func images(path []string, length int) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -76,73 +75,36 @@ func images(path string, length int) templ.Component {
 			templ_7745c5c3_Var2 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		paths := fmt.Sprint("/static/assets/", path, "/", path, "_")
 		for i := range length {
-			num := fmt.Sprint("0000", i+1)
-			str := num[len(num)-4:]
-			images := fmt.Sprint(paths, str, ".jpeg")
-			if i == 0 {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<img src=\"")
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-				var templ_7745c5c3_Var3 string
-				templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(images)
-				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/common/artAnimation/artAnimation.templ`, Line: 39, Col: 19}
-				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\" alt=\"")
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-				var templ_7745c5c3_Var4 string
-				templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(i)
-				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/common/artAnimation/artAnimation.templ`, Line: 39, Col: 27}
-				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\" class=\"artAnimations opacity-0 col-start-1 row-start-1\">")
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-			} else {
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "<img src=\"")
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-				var templ_7745c5c3_Var5 string
-				templ_7745c5c3_Var5, templ_7745c5c3_Err = templ.JoinStringErrs(images)
-				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/common/artAnimation/artAnimation.templ`, Line: 41, Col: 19}
-				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var5))
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "\" alt=\"")
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-				var templ_7745c5c3_Var6 string
-				templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(i)
-				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/common/artAnimation/artAnimation.templ`, Line: 41, Col: 27}
-				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
-				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "\" class=\"artAnimations opacity-0 col-start-1 row-start-1\">")
-				if templ_7745c5c3_Err != nil {
-					return templ_7745c5c3_Err
-				}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<img src=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var3 string
+			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(path[i])
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/common/artAnimation/artAnimation.templ`, Line: 30, Col: 19}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\" alt=\"")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var4 string
+			templ_7745c5c3_Var4, templ_7745c5c3_Err = templ.JoinStringErrs(i + 1)
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/common/artAnimation/artAnimation.templ`, Line: 30, Col: 29}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var4))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\" class=\"artAnimations opacity-0 col-start-1 row-start-1\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
 			}
 		}
 		return nil
@@ -167,12 +129,12 @@ func ArtAnimationScript() templ.Component {
 			}()
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var7 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var7 == nil {
-			templ_7745c5c3_Var7 = templ.NopComponent
+		templ_7745c5c3_Var5 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var5 == nil {
+			templ_7745c5c3_Var5 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Var8 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+		templ_7745c5c3_Var6 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 			templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 			templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
 			if !templ_7745c5c3_IsBuffer {
@@ -184,26 +146,26 @@ func ArtAnimationScript() templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "<script nonce=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "<script nonce=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var9 string
-			templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(templ.GetNonce(ctx))
+			var templ_7745c5c3_Var7 string
+			templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(templ.GetNonce(ctx))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/common/artAnimation/artAnimation.templ`, Line: 50, Col: 36}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/common/artAnimation/artAnimation.templ`, Line: 38, Col: 36}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "\">\n\t\n\t\t//range bar\n\t\tconst rangeBar = document.getElementById(\"rangeBar\");\n\t\trangeBar.addEventListener(\"input\", function(){\t\t\n\t\tconst imgs = document.getElementsByClassName(\"artAnimations\");\n\t\tconst imageNum = imgs.length;\n\t\trangeBar.setAttribute(\"max\", imageNum);\n\t\trangeBar.setAttribute(\"min\", 1);\n\t\t\tconst currVal = rangeBar.value;\n\t\t\tdocument.getElementById(\"show1\").innerText = currVal + \" / \" + imageNum;\n\t\t\tfor (let i = 0; i < imageNum; i++){\n\t\t\t\tif (i == currVal - 1){\n\t\t\t\t\timgs[i].style.opacity = \"1\";\n\t\t\t\t} else {\n\t\t\t\t\timgs[i].style.opacity = \"0\";\n\t\t\t\t}\n\t\t\t}\n\t\t});\t\n\n\t\t//for not stopping during click the range bar\n\t\trangeBar.dispatchEvent(new Event(\"input\"));\n\t\tlet isPlaying = false;\n\t\trangeBar.addEventListener(\"mousedown\", function(){\n\t\t\tif(state == true){\n\t\t\t\tisPlaying = true;\n\t\t\t\tstate = false;\n\t\t\t\trangeBar.dispatchEvent(new Event(\"input\"));\n\t\t\t} else {\n\t\t\t\tisPlaying = false;\n\t\t\t}\n\t\t});\n\t\trangeBar.addEventListener(\"mouseup\", function(){\n\t\t\tif(isPlaying == true){\n\t\t\t\t\timageFrame.dispatchEvent(new Event(\"click\"));\n\t\t\t}else {\n\t\t\t\tisPlaying = false;\n\t\t\t}\n\t\t\t\t\t\n\t\t});\n\n\t\t//play button on image\n\t\tconst imageFrame = document.getElementById(\"imageId\");\t\t\n\t\tlet state = false;//true is play, false is pause\n\t\timageFrame.addEventListener(\"click\", async function(){\n\t\t\tconst rangeBar = document.getElementById(\"rangeBar\");\n\t\t\tstate = !state;\n\t\t\tif (state){\n\t\t\t\tfor (let i = parseInt(rangeBar.value); i <= rangeBar.max; i++){\t\t\t\t\t\n\t\t\t\t\t\tif(state == false){\n\t\t\t\t\t\t\tbreak;\n\t\t\t\t\t\t}\n\t\t\t\t\t\trangeBar.value = i ;\n\t\t\t\t\t\trangeBar.dispatchEvent(new Event(\"input\"));\n\t\t\t\t\t\t\n\t\t\t\t\t\tawait playCLick(50);\t\n\t\t\t\t\t\tif (i == rangeBar.max){\n\t\t\t\t\t\t\ti = 1;\n\t\t\t\t\t\t}\t\n\t\t\t\t}\n\t\t\t} else {\n\t\t\t\t\tstate = false;\t\n\t\t\t}\t\n\t\t});\n\t\tasync function playCLick(ms){\n\t\t\treturn new Promise(resolve => setTimeout(resolve, ms));\n\t\t}\n\n\t</script>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "\">\n\t\n\t\t// //range bar\n\t\t// let rangeBar = document.querySelector('.range-bar');\n\t\t// rangeBar.addEventListener(\"input\", function(){\t\t\n\t\t// const imgs = document.getElementsByClassName(\"artAnimations\");\n\t\t// const imageNum = imgs.length;\n\t\t// rangeBar.setAttribute(\"max\", imageNum);\n\t\t// rangeBar.setAttribute(\"min\", 1);\n\t\t// \tconst currVal = rangeBar.value;\n\t\t// \tdocument.getElementById(\"show1\").innerText = currVal + \" / \" + imageNum;\n\t\t// \tfor (let i = 0; i < imageNum; i++){\n\t\t// \t\tif (i == currVal - 1){\n\t\t// \t\t\timgs[i].style.opacity = \"1\";\n\t\t// \t\t} else {\n\t\t// \t\t\timgs[i].style.opacity = \"0\";\n\t\t// \t\t}\n\t\t// \t}\n\t\t// });\t\n\n\t\t// //for not stopping during click the range bar\n\t\t// rangeBar.dispatchEvent(new Event(\"input\"));\n\t\t// let isPlaying = false;\n\t\t// rangeBar.addEventListener(\"mousedown\", function(){\n\t\t// \tif(state == true){\n\t\t// \t\tisPlaying = true;\n\t\t// \t\tstate = false;\n\t\t// \t\trangeBar.dispatchEvent(new Event(\"input\"));\n\t\t// \t} else {\n\t\t// \t\tisPlaying = false;\n\t\t// \t}\n\t\t// });\n\t\t// rangeBar.addEventListener(\"mouseup\", function(){\n\t\t// \tif(isPlaying == true){\n\t\t// \t\t\timageFrame.dispatchEvent(new Event(\"click\"));\n\t\t// \t}else {\n\t\t// \t\tisPlaying = false;\n\t\t// \t}\n\t\t\t\t\t\n\t\t// });\n\n\t\t// //play button on image\n\t\t// const imageFrame = document.querySelector('.animation-body');\t\t\n\t\t// let state = false;//true is play, false is pause\n\t\t// imageFrame.addEventListener(\"click\", async function(){\n\t\t// \tconst rangeBar = document.querySelector('.range-bar');\n\t\t// \tstate = !state;\n\t\t// \tif (state){\n\t\t// \t\tfor (let i = parseInt(rangeBar.value); i <= rangeBar.max; i++){\t\t\t\t\t\n\t\t// \t\t\t\tif(state == false){\n\t\t// \t\t\t\t\tbreak;\n\t\t// \t\t\t\t}\n\t\t// \t\t\t\trangeBar.value = i ;\n\t\t// \t\t\t\trangeBar.dispatchEvent(new Event(\"input\"));\n\t\t\t\t\t\t\n\t\t// \t\t\t\tawait playCLick(50);\t\n\t\t// \t\t\t\tif (i == rangeBar.max){\n\t\t// \t\t\t\t\ti = 1;\n\t\t// \t\t\t\t}\t\n\t\t// \t\t}\n\t\t// \t} else {\n\t\t// \t\t\tplayerState = false;\t\n\t\t// \t}\t\n\t\t// });\n\t\t\n\n\t\t// let animationPlayer = document.querySelectorAll('.animation-player');\n\t\t// animationPlayer.forEach(player => {\n\n\t\t// \tlet animationBody = player.querySelector('.animation-body');\n\t\t// \tlet playerState = false;\n\t\t// \tanimationBody.addEventListener(\"click\", async function(){\n\t\t// \t\tlet rangeBar = document.querySelector('.range-bar');\n\t\t// \t\tplayerState = !playerState;\n\t\t// \t\tif (!playerState){\n\t\t// \t\t\tplayerState = false;\t\n\t\t// \t\t\treturn;\n\t\t// \t\t} else {\n\t\t// \t\t\t\tfor (let i = parseInt(rangeBar.value); i <= rangeBar.max; i++){\t\t\t\t\t\n\t\t// \t\t\t\t\tif(!playerState){\n\t\t// \t\t\t\t\t\tbreak;\n\t\t// \t\t\t\t\t}\n\t\t// \t\t\t\t\trangeBar.value = i ;\n\t\t// \t\t\t\t\trangeBar.dispatchEvent(new Event(\"input\"));\n\t\t// \t\t\t\t\tawait playCLick(50);\t\n\t\t// \t\t\t\t\tif (i == rangeBar.max){\n\t\t// \t\t\t\t\t\ti = 1;\n\t\t// \t\t\t\t\t}\t\n\t\t// \t\t\t}\n\t\t// \t\t}\t\n\t\t// \t});\n\n\t\t// \tlet rangeBar = player.querySelector('.range-bar');\n\t\t// \trangeBar.addEventListener(\"input\", function(){\n\t\t\t\t\t\n\t\t// \t\tconst imgs = document.getElementsByClassName(\"artAnimations\");\n\t\t// \t\tconst imageNum = imgs.length;\n\t\t// \t\trangeBar.setAttribute(\"max\", imageNum);\n\t\t// \t\trangeBar.setAttribute(\"min\", 1);\n\t\t// \t\tconst currVal = rangeBar.value;\n\t\t// \t\tdocument.getElementById(\"show1\").innerText = currVal + \" / \" + imageNum;\n\t\t// \t\tfor (let i = 0; i < imageNum; i++){\n\t\t// \t\t\tif (i == currVal - 1){\n\t\t// \t\t\t\timgs[i].style.opacity = \"1\";\n\t\t// \t\t\t} else {\n\t\t// \t\t\t\timgs[i].style.opacity = \"0\";\n\t\t// \t\t\t}\n\t\t// \t\t}\n\t\t// \t});rangeBar.dispatchEvent(new Event(\"input\"));\n\n\t\t// \t//for not stopping during click the range bar\n\t\t// \trangeBar.dispatchEvent(new Event(\"input\"));\n\t\t// \tlet isPlaying = false;\n\t\t// \trangeBar.addEventListener(\"mousedown\", function(){\n\t\t// \t\tif(playerState){\n\t\t// \t\t\tisPlaying = true;\n\t\t// \t\t\tplayerState = false;\n\t\t// \t\t\trangeBar.dispatchEvent(new Event(\"input\"));\n\t\t// \t\t} else {\n\t\t// \t\t\tisPlaying = false;\n\t\t// \t\t}\n\t\t// \t});\n\t\t// \trangeBar.addEventListener(\"mouseup\", function(){\n\t\t// \t\tif(isPlaying){\n\t\t// \t\t\t\tanimationBody.dispatchEvent(new Event(\"click\"));\n\t\t// \t\t}else {\n\t\t// \t\t\tisPlaying = false;\n\t\t// \t\t}\n\t\t// \t});\n\t\t// });\n\t\t// async function playCLick(ms){\n\t\t// \treturn new Promise(resolve => setTimeout(resolve, ms));\n\t\t// }\n\t\tclass AnimationPlayer{\n\t\t\t//let clsName;\n\t\t\tconstructor(className){\n\t\t\t\t\tthis.className = className;\n\t\t\t}\n\t\t\tmount(){\n\t\t\t\tlet animationPlayer = document.querySelectorAll(this.className);\n\t\t\t\tanimationPlayer.forEach(player => {\n\n\t\t\t\t\tlet animationBody = player.querySelector('.animation-body');\n\t\t\t\t\tlet playerState = false;\n\t\t\t\t\tanimationBody.addEventListener(\"click\", async function(){\n\t\t\t\t\t\tlet rangeBar = document.querySelector('.range-bar');\n\t\t\t\t\t\tplayerState = !playerState;\n\t\t\t\t\t\tif (!playerState){\n\t\t\t\t\t\t\tplayerState = false;\t\n\t\t\t\t\t\t\treturn;\n\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\t\tfor (let i = parseInt(rangeBar.value); i <= rangeBar.max; i++){\t\t\t\t\t\n\t\t\t\t\t\t\t\t\tif(!playerState){\n\t\t\t\t\t\t\t\t\t\tbreak;\n\t\t\t\t\t\t\t\t\t}\n\t\t\t\t\t\t\t\t\trangeBar.value = i ;\n\t\t\t\t\t\t\t\t\trangeBar.dispatchEvent(new Event(\"input\"));\n\t\t\t\t\t\t\t\t\tawait playCLick(50);\t\n\t\t\t\t\t\t\t\t\tif (i == rangeBar.max){\n\t\t\t\t\t\t\t\t\t\ti = 1;\n\t\t\t\t\t\t\t\t\t}\t\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\t\n\t\t\t\t\t});\n\n\t\t\t\t\tlet rangeBar = player.querySelector('.range-bar');\n\t\t\t\t\trangeBar.addEventListener(\"input\", function(){\n\t\t\t\t\t\t\t\n\t\t\t\t\t\tconst imgs = document.getElementsByClassName(\"artAnimations\");\n\t\t\t\t\t\tconst imageNum = imgs.length;\n\t\t\t\t\t\trangeBar.setAttribute(\"max\", imageNum);\n\t\t\t\t\t\trangeBar.setAttribute(\"min\", 1);\n\t\t\t\t\t\tconst currVal = rangeBar.value;\n\t\t\t\t\t\tdocument.getElementById(\"show1\").innerText = currVal + \" / \" + imageNum;\n\t\t\t\t\t\tfor (let i = 0; i < imageNum; i++){\n\t\t\t\t\t\t\tif (i == currVal - 1){\n\t\t\t\t\t\t\t\timgs[i].style.opacity = \"1\";\n\t\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\t\timgs[i].style.opacity = \"0\";\n\t\t\t\t\t\t\t}\n\t\t\t\t\t\t}\n\t\t\t\t\t});rangeBar.dispatchEvent(new Event(\"input\"));\n\n\t\t\t\t\t//for not stopping during click the range bar\n\t\t\t\t\trangeBar.dispatchEvent(new Event(\"input\"));\n\t\t\t\t\tlet isPlaying = false;\n\t\t\t\t\trangeBar.addEventListener(\"mousedown\", function(){\n\t\t\t\t\t\tif(playerState){\n\t\t\t\t\t\t\tisPlaying = true;\n\t\t\t\t\t\t\tplayerState = false;\n\t\t\t\t\t\t\trangeBar.dispatchEvent(new Event(\"input\"));\n\t\t\t\t\t\t} else {\n\t\t\t\t\t\t\tisPlaying = false;\n\t\t\t\t\t\t}\n\t\t\t\t\t});\n\t\t\t\t\trangeBar.addEventListener(\"mouseup\", function(){\n\t\t\t\t\t\tif(isPlaying){\n\t\t\t\t\t\t\t\tanimationBody.dispatchEvent(new Event(\"click\"));\n\t\t\t\t\t\t}else {\n\t\t\t\t\t\t\tisPlaying = false;\n\t\t\t\t\t\t}\n\t\t\t\t\t});\n\t\t\t\t});\n\t\t\t\tasync function playCLick(ms){\n\t\t\t\t\treturn new Promise(resolve => setTimeout(resolve, ms));\n\t\t\t\t}\n\t\t\t}\n\t\t}\n\n\t\tlet fontPagePlayer = new AnimationPlayer(\".animation-player\");\n\t\tfontPagePlayer.mount();\n\n\t</script>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			return nil
 		})
-		templ_7745c5c3_Err = artAnimationHandle.Once().Render(templ.WithChildren(ctx, templ_7745c5c3_Var8), templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = artAnimationHandle.Once().Render(templ.WithChildren(ctx, templ_7745c5c3_Var6), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

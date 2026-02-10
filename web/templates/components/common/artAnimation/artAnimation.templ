@@ -1,7 +1,7 @@
 package artAnimation
 
 import (
-	"fmt"
+	
 	artFile "mael/cmd/util/artFile"
 	
 	)
@@ -9,12 +9,12 @@ import (
 templ Animation(fileName string){
 	{{Image := artFile.GetArtFile(fileName)}}
 	<div class=" h-screen w-screen">
-		<div class="h-90vh w-screen">
-			<div id="imageId" class=" grid w-screen border-4 border-black">			
-				@images(fileName, Image.Length)
+		<div class="h-90vh w-screen animation-player">
+			<div class="animation-body grid w-screen border-4 border-black">			
+				@images(Image.Path, Image.Length)
 			</div>
 			<div class="w-full relative flex flex-col justify-center pl-4 pr-4 pt-2">
-				<input type="range" id="rangeBar" value="1" class="w-full" />
+				<input type="range" value="1" class="range-bar w-full" />
 				<h2 id="show1" class="w-full text-right pr-4"></h2>
 			</div>
 		</div>
@@ -25,21 +25,9 @@ templ Animation(fileName string){
 }
 
 
-templ images(path string, length int){
-	{{
-		paths := fmt.Sprint("/static/assets/", path, "/" ,path, "_")
-	
-	}}
-	for i:= range length{
-		{{
-		num := fmt.Sprint("0000",i+1)
-                str := num[len(num)-4:]
-		images := fmt.Sprint(paths, str, ".jpeg")}}
-		if (i == 0){ 
-			<img src={images} alt={i} class="artAnimations opacity-0 col-start-1 row-start-1"/> 
-		} else {
-			<img src={images} alt={i} class="artAnimations opacity-0 col-start-1 row-start-1"/>
-		}
+templ images(path []string, length int){	
+	for i:= range (length){
+		<img src={path[i]} alt={i+1} class="artAnimations opacity-0 col-start-1 row-start-1"/> 	
 	}
 		
 }
@@ -49,71 +37,215 @@ templ ArtAnimationScript(){
 	@artAnimationHandle.Once() {
 	<script nonce={ templ.GetNonce(ctx) }>
 	
-		//range bar
-		const rangeBar = document.getElementById("rangeBar");
-		rangeBar.addEventListener("input", function(){		
-		const imgs = document.getElementsByClassName("artAnimations");
-		const imageNum = imgs.length;
-		rangeBar.setAttribute("max", imageNum);
-		rangeBar.setAttribute("min", 1);
-			const currVal = rangeBar.value;
-			document.getElementById("show1").innerText = currVal + " / " + imageNum;
-			for (let i = 0; i < imageNum; i++){
-				if (i == currVal - 1){
-					imgs[i].style.opacity = "1";
-				} else {
-					imgs[i].style.opacity = "0";
-				}
-			}
-		});	
+		// //range bar
+		// let rangeBar = document.querySelector('.range-bar');
+		// rangeBar.addEventListener("input", function(){		
+		// const imgs = document.getElementsByClassName("artAnimations");
+		// const imageNum = imgs.length;
+		// rangeBar.setAttribute("max", imageNum);
+		// rangeBar.setAttribute("min", 1);
+		// 	const currVal = rangeBar.value;
+		// 	document.getElementById("show1").innerText = currVal + " / " + imageNum;
+		// 	for (let i = 0; i < imageNum; i++){
+		// 		if (i == currVal - 1){
+		// 			imgs[i].style.opacity = "1";
+		// 		} else {
+		// 			imgs[i].style.opacity = "0";
+		// 		}
+		// 	}
+		// });	
 
-		//for not stopping during click the range bar
-		rangeBar.dispatchEvent(new Event("input"));
-		let isPlaying = false;
-		rangeBar.addEventListener("mousedown", function(){
-			if(state == true){
-				isPlaying = true;
-				state = false;
-				rangeBar.dispatchEvent(new Event("input"));
-			} else {
-				isPlaying = false;
-			}
-		});
-		rangeBar.addEventListener("mouseup", function(){
-			if(isPlaying == true){
-					imageFrame.dispatchEvent(new Event("click"));
-			}else {
-				isPlaying = false;
-			}
+		// //for not stopping during click the range bar
+		// rangeBar.dispatchEvent(new Event("input"));
+		// let isPlaying = false;
+		// rangeBar.addEventListener("mousedown", function(){
+		// 	if(state == true){
+		// 		isPlaying = true;
+		// 		state = false;
+		// 		rangeBar.dispatchEvent(new Event("input"));
+		// 	} else {
+		// 		isPlaying = false;
+		// 	}
+		// });
+		// rangeBar.addEventListener("mouseup", function(){
+		// 	if(isPlaying == true){
+		// 			imageFrame.dispatchEvent(new Event("click"));
+		// 	}else {
+		// 		isPlaying = false;
+		// 	}
 					
-		});
+		// });
 
-		//play button on image
-		const imageFrame = document.getElementById("imageId");		
-		let state = false;//true is play, false is pause
-		imageFrame.addEventListener("click", async function(){
-			const rangeBar = document.getElementById("rangeBar");
-			state = !state;
-			if (state){
-				for (let i = parseInt(rangeBar.value); i <= rangeBar.max; i++){					
-						if(state == false){
-							break;
-						}
-						rangeBar.value = i ;
-						rangeBar.dispatchEvent(new Event("input"));
+		// //play button on image
+		// const imageFrame = document.querySelector('.animation-body');		
+		// let state = false;//true is play, false is pause
+		// imageFrame.addEventListener("click", async function(){
+		// 	const rangeBar = document.querySelector('.range-bar');
+		// 	state = !state;
+		// 	if (state){
+		// 		for (let i = parseInt(rangeBar.value); i <= rangeBar.max; i++){					
+		// 				if(state == false){
+		// 					break;
+		// 				}
+		// 				rangeBar.value = i ;
+		// 				rangeBar.dispatchEvent(new Event("input"));
 						
-						await playCLick(50);	
-						if (i == rangeBar.max){
-							i = 1;
+		// 				await playCLick(50);	
+		// 				if (i == rangeBar.max){
+		// 					i = 1;
+		// 				}	
+		// 		}
+		// 	} else {
+		// 			playerState = false;	
+		// 	}	
+		// });
+		
+
+		// let animationPlayer = document.querySelectorAll('.animation-player');
+		// animationPlayer.forEach(player => {
+
+		// 	let animationBody = player.querySelector('.animation-body');
+		// 	let playerState = false;
+		// 	animationBody.addEventListener("click", async function(){
+		// 		let rangeBar = document.querySelector('.range-bar');
+		// 		playerState = !playerState;
+		// 		if (!playerState){
+		// 			playerState = false;	
+		// 			return;
+		// 		} else {
+		// 				for (let i = parseInt(rangeBar.value); i <= rangeBar.max; i++){					
+		// 					if(!playerState){
+		// 						break;
+		// 					}
+		// 					rangeBar.value = i ;
+		// 					rangeBar.dispatchEvent(new Event("input"));
+		// 					await playCLick(50);	
+		// 					if (i == rangeBar.max){
+		// 						i = 1;
+		// 					}	
+		// 			}
+		// 		}	
+		// 	});
+
+		// 	let rangeBar = player.querySelector('.range-bar');
+		// 	rangeBar.addEventListener("input", function(){
+					
+		// 		const imgs = document.getElementsByClassName("artAnimations");
+		// 		const imageNum = imgs.length;
+		// 		rangeBar.setAttribute("max", imageNum);
+		// 		rangeBar.setAttribute("min", 1);
+		// 		const currVal = rangeBar.value;
+		// 		document.getElementById("show1").innerText = currVal + " / " + imageNum;
+		// 		for (let i = 0; i < imageNum; i++){
+		// 			if (i == currVal - 1){
+		// 				imgs[i].style.opacity = "1";
+		// 			} else {
+		// 				imgs[i].style.opacity = "0";
+		// 			}
+		// 		}
+		// 	});rangeBar.dispatchEvent(new Event("input"));
+
+		// 	//for not stopping during click the range bar
+		// 	rangeBar.dispatchEvent(new Event("input"));
+		// 	let isPlaying = false;
+		// 	rangeBar.addEventListener("mousedown", function(){
+		// 		if(playerState){
+		// 			isPlaying = true;
+		// 			playerState = false;
+		// 			rangeBar.dispatchEvent(new Event("input"));
+		// 		} else {
+		// 			isPlaying = false;
+		// 		}
+		// 	});
+		// 	rangeBar.addEventListener("mouseup", function(){
+		// 		if(isPlaying){
+		// 				animationBody.dispatchEvent(new Event("click"));
+		// 		}else {
+		// 			isPlaying = false;
+		// 		}
+		// 	});
+		// });
+		// async function playCLick(ms){
+		// 	return new Promise(resolve => setTimeout(resolve, ms));
+		// }
+		class AnimationPlayer{
+			//let clsName;
+			constructor(className){
+					this.className = className;
+			}
+			mount(){
+				let animationPlayer = document.querySelectorAll(this.className);
+				animationPlayer.forEach(player => {
+
+					let animationBody = player.querySelector('.animation-body');
+					let playerState = false;
+					animationBody.addEventListener("click", async function(){
+						let rangeBar = document.querySelector('.range-bar');
+						playerState = !playerState;
+						if (!playerState){
+							playerState = false;	
+							return;
+						} else {
+								for (let i = parseInt(rangeBar.value); i <= rangeBar.max; i++){					
+									if(!playerState){
+										break;
+									}
+									rangeBar.value = i ;
+									rangeBar.dispatchEvent(new Event("input"));
+									await playCLick(50);	
+									if (i == rangeBar.max){
+										i = 1;
+									}	
+							}
 						}	
+					});
+
+					let rangeBar = player.querySelector('.range-bar');
+					rangeBar.addEventListener("input", function(){
+							
+						const imgs = document.getElementsByClassName("artAnimations");
+						const imageNum = imgs.length;
+						rangeBar.setAttribute("max", imageNum);
+						rangeBar.setAttribute("min", 1);
+						const currVal = rangeBar.value;
+						document.getElementById("show1").innerText = currVal + " / " + imageNum;
+						for (let i = 0; i < imageNum; i++){
+							if (i == currVal - 1){
+								imgs[i].style.opacity = "1";
+							} else {
+								imgs[i].style.opacity = "0";
+							}
+						}
+					});rangeBar.dispatchEvent(new Event("input"));
+
+					//for not stopping during click the range bar
+					rangeBar.dispatchEvent(new Event("input"));
+					let isPlaying = false;
+					rangeBar.addEventListener("mousedown", function(){
+						if(playerState){
+							isPlaying = true;
+							playerState = false;
+							rangeBar.dispatchEvent(new Event("input"));
+						} else {
+							isPlaying = false;
+						}
+					});
+					rangeBar.addEventListener("mouseup", function(){
+						if(isPlaying){
+								animationBody.dispatchEvent(new Event("click"));
+						}else {
+							isPlaying = false;
+						}
+					});
+				});
+				async function playCLick(ms){
+					return new Promise(resolve => setTimeout(resolve, ms));
 				}
-			} else {
-					state = false;	
-			}	
-		});
-		async function playCLick(ms){
-			return new Promise(resolve => setTimeout(resolve, ms));
+			}
 		}
+
+		let fontPagePlayer = new AnimationPlayer(".animation-player");
+		fontPagePlayer.mount();
 
 	</script>
 	}
