@@ -19,7 +19,7 @@ type AnimationPatch func(echo.Context) *resError.Error
 type AnimationPatchResBody func(echo.Context) (templ.Component, *resError.Error)
 type AnimationPatchResFunc func(echo.Context, templ.Component, *resError.Error) error
 
-func GetAnimtions(c echo.Context) (templ.Component, *resError.Error) {
+func GetAnimations(c echo.Context) (templ.Component, *resError.Error) {
 	queries := sqlc.New(database.DB)
 	res, err := queries.GetAnimations(c.Request().Context())
 	if err != nil {

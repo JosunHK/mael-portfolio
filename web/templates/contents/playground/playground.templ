@@ -6,7 +6,6 @@ import (
 	cmp "mael/web/templates/components/common/dropDownMenu"
 	"mael/web/templates/components/ui/accordion"
 	"mael/web/templates/components/ui/alert"
-	"mael/web/templates/components/ui/toast"
 	"mael/web/templates/components/ui/button"
 	"mael/web/templates/components/ui/card"
 	"mael/web/templates/components/ui/datepicker"
@@ -14,8 +13,10 @@ import (
 	"mael/web/templates/components/ui/icon"
 	"mael/web/templates/components/ui/input"
 	"mael/web/templates/components/ui/selectBox"
-	"mael/web/templates/components/ui/tabs"
 	toggle "mael/web/templates/components/ui/switchToggle"
+	"mael/web/templates/components/ui/tabs"
+	"mael/web/templates/components/ui/toast"
+	t "mael/web/templates/components/ui/toggle"
 )
 
 var addresses = []sqlc.MenuItem{
@@ -29,11 +30,11 @@ var addresses = []sqlc.MenuItem{
 templ Playground() {
 	<div class="w-full h-full flex flex-col justify-center items-center gap-1 mt-8">
 		@Select()
-        @toast.AlertToast("Hi!")
+		@toast.AlertToast("Hi!")
 		@Alert()
 		@Accordion()
 		@Button()
-        @toggle.Toggle(toggle.Props{}, false)
+		@toggle.Toggle(toggle.Props{}, false)
 		@card.LoginCard(card.DemoProps{Title: "Login"})
 		@datepicker.DatePicker()
 		@cmp.DemoDropDown()
@@ -44,6 +45,7 @@ templ Playground() {
 		)
 		@Tabs()
 		@Dialog()
+		@t.Toggle(t.Props{}, true)
 	</div>
 }
 

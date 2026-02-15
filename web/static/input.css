@@ -83,6 +83,10 @@
 }
 
 @layer base {
+    html {
+        scroll-behavior: smooth;
+    }
+
     .no-cursor {
         cursor: none;
 

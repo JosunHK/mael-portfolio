@@ -111,7 +111,9 @@ templ SliderControl(props Props, isTrackCursor bool) {
 			value="0"
 			@input="updateCurrentFrame"
 			@mousedown="stopPlaying"
+			@touchstart="stopPlaying"
 			@mouseup="play"
+			@touchend="play"
 			if isTrackCursor {
 				@mousemove.window="updateToCursorPos"
 			}

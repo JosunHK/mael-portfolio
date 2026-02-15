@@ -18,10 +18,10 @@ import (
 type nothingHandler func() error
 type requestHandler func(echo.Context) error
 type redirectHandler func(echo.Context) (string, error)
-type pageHandler func(echo.Context, templ.Component) error
+type staticPageHandler func(echo.Context, templ.Component) error
 type errorHandler func(echo.Context, templ.Component, error) error
 type serviceHandler func(echo.Context) (err error, statusCode int, resObj any)
-type PageHandler func(echo.Context) templ.Component
+type pageHandler func(echo.Context) templ.Component
 type FileHandler func(echo.Context) (err error, fileType string, resObj []byte)
 
 func WithCSP(next echo.HandlerFunc) echo.HandlerFunc {
@@ -79,21 +79,27 @@ func Logger(next echo.HandlerFunc) echo.HandlerFunc {
 	}
 }
 
-func StaticPages(next pageHandler, content templ.Component) echo.HandlerFunc {
+func StaticPages(next staticPageHandler, content templ.Component) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		return next(c, content)
 	}
 }
 
-func Pages(next pageHandler, p PageHandler) echo.HandlerFunc {
+func Pages(next staticPageHandler, p pageHandler) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		return next(c, p(c))
 	}
 }
 
-func HTMX(component templ.Component) echo.HandlerFunc {
+func StaticHTMX(component templ.Component) echo.HandlerFunc {
 	return func(c echo.Context) error {
 		return responseUtil.HTML(c, component)
+	}
+}
+
+func HTMX(p pageHandler) echo.HandlerFunc {
+	return func(c echo.Context) error {
+		return responseUtil.HTML(c, p(c))
 	}
 }
 

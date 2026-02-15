@@ -5,7 +5,7 @@ tmp_dir = "tmp"
 [build]
 args_bin = []
 entrypoint = ["./tmp/main"]
-cmd = "templ generate && sqlc generate && go build -o tmp/main ./cmd"
+cmd = "templ generate && go build -o tmp/main ./cmd"
 delay = 0
 exclude_dir = ["assets", "tmp", "vendor", "testdata", 'db']
 exclude_file = []
@@ -35,7 +35,7 @@ watcher = "cyan"
 
 [log]
 main_only = false
-time = false
+time = true
 
 [misc]
 clean_on_exit = false

@@ -1,0 +1,124 @@
+package menubar
+
+import (
+	gocva "github.com/gungun974/gocva"
+	button "mael/web/templates/components/ui/button"
+	icon "mael/web/templates/components/ui/icon"
+)
+
+var SideMenuScriptHandle = templ.NewOnceHandle()
+
+templ SideMenuScript() {
+	@SideMenuScriptHandle.Once() {
+		<script nonce={ templ.GetNonce(ctx) }>
+            document.addEventListener('alpine:init', () => {
+                Alpine.data('sideMenu', () => ({
+                    open: false,
+                    setOpen(){
+                        this.open = true
+                    },
+                    setClose(){
+                        this.open = false
+                    },
+                    getAnimation(){
+                        return this.open?'animate-slide-in-mobile':'animate-slide-out-mobile'
+                    },
+
+                }))
+            })
+        </script>
+	}
+}
+
+templ MobileNav() {
+	@SideMenu() {
+		@SideMenuContent()
+	}
+	@SideMenuScript()
+}
+
+templ NavLinkMobile(title string, toPath string, toURL string) {
+	<div class="relative font-comfortaa text-[1.25rem] text-zinc-800 border border-zinc-900/80 rounded-xl w-[90%] mx-auto shadow-xl bg-zinc-500/25 pt-2 pl-6">
+		<div
+			hx-push-url={ toURL }
+			hx-swap="transition:true"
+			hx-target="#content"
+			hx-get={ toPath }
+			hx-trigger="click"
+			@click="setClose"
+		>
+			<span
+				class="h-2 w-4 border-b-[1px] border-r-[1px] border-zinc-900 inline-block mr-4"
+				x-ref="rightBracket"
+			></span>
+			<span>{ title }</span>
+		</div>
+	</div>
+}
+
+templ SideMenu() {
+	<span class="fixed top-2 left-2 rounded-xl bg-emerald-100 px-2 mr-8 block lg:hidden z-[60] text-md shadow-xs border border-gray-600">
+		MAEL
+	</span>
+	<div
+		class="fixed top-2 right-2 block lg:hidden z-[60]"
+		x-data="sideMenu"
+	>
+		@button.Button(button.Props{
+			Attrs: templ.Attributes{
+				"@click": "setOpen",
+			},
+			Variant: gocva.Variant{
+				"variant": "glass",
+				"size":    "iconlg",
+			},
+			Class: "",
+		}) {
+			@icon.Wrapper(icon.Props{
+				Class: "m-1 h-6 w-6 mx-2",
+			}) {
+				@icon.Menu()
+			}
+		}
+		<template x-teleport="body">
+			<div
+				x-show="open"
+				x-transition.opacity.duration.100ms
+				:class="getAnimation"
+				class="z-[60] bg-zinc-400/25 backdrop-blur-lg border-2 border-black/20
+                       text-black shadow-md fixed rounded-xl
+                       overflow-y-auto h-fit right-1 w-[70dvw] top-1 pb-8"
+				x-on:mousedown.outside="setClose"
+			>
+				{ children... }
+			</div>
+		</template>
+	</div>
+}
+
+templ SideMenuContent() {
+	<div class="h-[4rem]">
+		@button.Button(button.Props{
+			Class: "absolute right-1 top-1 border-cms-border border-2 text-black",
+			Attrs: templ.Attributes{
+				"@click": "setClose",
+			},
+			Variant: gocva.Variant{
+				"variant": "ghost",
+				"size":    "iconlg",
+			},
+		}) {
+			@icon.Wrapper(icon.Props{
+				Class: "m-1 h-6 w-6 mx-2",
+			}) {
+				@icon.X()
+			}
+		}
+	</div>
+	<div Class="pt-1 flex-col items-center w-full gap-3 rounded-none border-none flex backdrop:blur-xl ">
+		@NavLinkMobile("ANIMATIONS", "/animation/body", "/animation")
+		@NavLinkMobile("CHARACTERS", "/characters/body", "/characters")
+		@NavLinkMobile("STORYBOARD", "/storyboard/body", "storyboard")
+		@NavLinkMobile("ABOUT ME", "/about/body", "about")
+	</div>
+}
