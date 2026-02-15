@@ -62,7 +62,7 @@ func SideMenuScript() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\">\n            document.addEventListener('alpine:init', () => {\n                Alpine.data('sideMenu', () => ({\n                    open: false,\n                    setOpen(){\n                        this.open = true\n                    },\n                    setClose(){\n                        this.open = false\n                    },\n                    getAnimation(){\n                        return this.open?'animate-slide-in-mobile':'animate-slide-out-mobile'\n                    },\n\n                }))\n            })\n        </script>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\">\n            document.addEventListener('alpine:init', () => {\n                Alpine.data('sideMenu', () => ({\n                    open: false,\n                    setOpen(){\n                        this.open = true\n                    },\n                    setClose(){\n                        this.open = false\n                        window.location=\"#top\"\n                    },\n                    getAnimation(){\n                        return this.open?'animate-slide-in-mobile':'animate-slide-out-mobile'\n                    },\n\n                }))\n            })\n        </script>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -148,14 +148,14 @@ func NavLinkMobile(title string, toPath string, toURL string) templ.Component {
 			templ_7745c5c3_Var6 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<div class=\"relative font-comfortaa text-[1.25rem] text-zinc-800 border border-zinc-900/80 rounded-xl w-[90%] mx-auto shadow-xl bg-zinc-500/25 pt-2 pl-6\"><div hx-push-url=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<div class=\"relative font-barlow text-[1.25rem] text-zinc-800 border border-zinc-900/80 rounded-xl w-[90%] mx-auto shadow-xl bg-zinc-500/25 pt-2 pl-6\"><div hx-push-url=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var7 string
 		templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs(toURL)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/common/menubar/mobileNav.templ`, Line: 43, Col: 22}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/common/menubar/mobileNav.templ`, Line: 44, Col: 22}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
 		if templ_7745c5c3_Err != nil {
@@ -168,20 +168,20 @@ func NavLinkMobile(title string, toPath string, toURL string) templ.Component {
 		var templ_7745c5c3_Var8 string
 		templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(toPath)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/common/menubar/mobileNav.templ`, Line: 46, Col: 18}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/common/menubar/mobileNav.templ`, Line: 47, Col: 18}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\" hx-trigger=\"click\" @click=\"setClose\"><span class=\"h-2 w-4 border-b-[1px] border-r-[1px] border-zinc-900 inline-block mr-4\" x-ref=\"rightBracket\"></span> <span>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "\" hx-trigger=\"click\" @click=\"setClose\"><span class=\"h-2 w-4 border-b-[1px] border-r-[1px] border-zinc-900 inline-block mr-8\" x-ref=\"rightBracket\"></span> <span>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		var templ_7745c5c3_Var9 string
 		templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs(title)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/common/menubar/mobileNav.templ`, Line: 54, Col: 16}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/common/menubar/mobileNav.templ`, Line: 55, Col: 16}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
 		if templ_7745c5c3_Err != nil {

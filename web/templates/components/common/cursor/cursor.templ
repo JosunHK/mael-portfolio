@@ -98,7 +98,9 @@ templ CursorScript() {
 
         //determinds if mouse is in viewport or not
         document.body.addEventListener('mouseenter', function () {
-            isMouseInViewport = true;
+            if (!('maxTouchPoints' in navigator) || navigator.maxTouchPoints === 0) {
+                isMouseInViewport = true;
+            }
         });
 
         document.body.addEventListener('mouseleave', function (e) {

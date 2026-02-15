@@ -182,7 +182,7 @@ func AnimationsShowcase(animations []sqlc.Animation) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "</div><div class=\"flex flex-row justify-center items-center md:justify-start w-[90vw] gap-4\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "</div><div class=\"flex flex-row justify-center items-center md:items-start md:justify-start w-[90vw] gap-4\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -205,7 +205,7 @@ func AnimationsShowcase(animations []sqlc.Animation) templ.Component {
 				return nil
 			})
 			templ_7745c5c3_Err = card.Card(card.Props{
-				Class: `md:ml-8 flex justify-center items-center h-[80vh] w-[80vw] bg-black/5 p-4 border-black/80 shadow-sm py-2 flex-col justify-start items-start`,
+				Class: `md:ml-8 flex justify-center items-center h-[80vh] w-[77vw] bg-black/5 p-4 border-black/80 shadow-sm py-2 flex-col justify-start items-start`,
 			}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var8), templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
@@ -370,7 +370,7 @@ func AnimationShowcaseButtons(animationCount int) templ.Component {
 			return nil
 		})
 		templ_7745c5c3_Err = button.Button(button.Props{
-			Class: "pointer-events-auto data-[isshow=false]:opacity-0 data-[isshow=false]:scale-10 md:block hidden",
+			Class: "pointer-events-auto data-[isshow=false]:opacity-0 data-[isshow=false]:scale-10 md:flex hidden",
 			Attrs: templ.Attributes{
 				"@click":           "toPrev",
 				":data-isShow":     "getIsShowPrev",
@@ -423,7 +423,7 @@ func AnimationShowcaseButtons(animationCount int) templ.Component {
 			return nil
 		})
 		templ_7745c5c3_Err = button.Button(button.Props{
-			Class: "pointer-events-auto data-[isshow=false]:opacity-0 data-[isshow=false]:scale-10 opacity-1 md:block hidden",
+			Class: "pointer-events-auto data-[isshow=false]:opacity-0 data-[isshow=false]:scale-10 opacity-1 md:flex hidden",
 			Attrs: templ.Attributes{
 				"@click":           "toNext",
 				":data-isShow":     "getIsShowNext",
