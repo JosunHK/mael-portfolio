@@ -30,14 +30,14 @@ templ Animations(animations []sqlc.Animation) {
 }
 
 templ AnimationsShowcase(animations []sqlc.Animation) {
-	<div class="h-[90dvh] relative max-md:mb-4 min-h-[400px]">
+	<div id="animation-slide-container" class="h-[90dvh] relative max-md:mb-4 min-h-[400px]">
 		@AnimationShowcaseButtons(len(animations))
 		<div
 			class="h-full flex flex-row max-w-screen w-screen overflow-scroll px-[4.5dvw] gap-[4.5dvw] mb-4 scrollbar-hide snap-x scroll-smooth relative"
 		>
 			for i, animation := range animations {
 				<div
-					id={ fmt.Sprintf("animationSlide-%d", i) }
+					id={ fmt.Sprintf("animation-slide-%d", i) }
 					class="w-[82dvw] md:w-[92dvw] h-full bg-slate-300/25 backdrop-blur-lg border-2 border-black/20 z-20 relative rounded-xl p-2 font-barlow shadow-md text-gray-700 snap-center md:block flex flex-col items-center"
 				>
 					<div class="px-8 mt-2 mb-4 h-min flex flex-row justify-between w-full">
@@ -147,20 +147,20 @@ templ ShowcaseSliderScript(animationCount int) {
                     init(){
                         const hash = window.location.hash;
                         if(!hash) return;
-                        if(hash.includes("#animationSlide-")){
-                            this.currentSlide = hash.split("#animationSlide-")[1]*1;
+                        if(hash.includes("#animation-slide-")){
+                            this.currentSlide = hash.split("#animation-slide-")[1]*1;
                             this.handleButtonShow()
                         }
                     },
                     focusCurrent(){
-                        window.location = "#animationSlide-"+this.currentSlide;
+                        window.location = "#animation-slide-"+this.currentSlide;
                     },
                     focusTop(){
                         window.location = "#top"
                     },
                     handleClick(){
                         if(this.isShowUp){
-                            window.location = "#animationSlide-"+this.currentSlide;
+                           $("#animation-slide-container").scrollIntoView({ behavior: 'smooth', block: 'start' });
                         }else{
                             window.location = "#top"
                         }
@@ -191,12 +191,12 @@ templ ShowcaseSliderScript(animationCount int) {
                     toNext(){
                         this.currentSlide = Math.min(this.currentSlide+1, this.maxSlideIndex);
                         this.handleButtonShow()
-                        window.location = "#animationSlide-"+this.currentSlide;
+                        window.location = "#animation-slide-"+this.currentSlide;
                     },
                     toPrev(){
                         this.currentSlide = Math.max(this.currentSlide-1, 0);
                         this.handleButtonShow()
-                        window.location = "#animationSlide-"+this.currentSlide;
+                        window.location = "#animation-slide-"+this.currentSlide;
                     },
                     getScrollPercent() {
                         let h = document.documentElement, 
