@@ -5,7 +5,7 @@ templ Cursor() {
 		id="custom-cursor"
 		class="cursors rotate-[55deg] origin-left w-min fixed opacity-0 pointer-events-none transition-transform z-50"
 	>
-		<div id="cursor-stroke-horizontal" class="bg-black w-[22px] h-[2px] transition-transform duration-300"></div>
+        <div id="cursor-stroke-horizontal" class="bg-black w-[22px] h-[2px] transition-transform duration-300"></div>
 		<div
 			id="cursor-stroke-vertical"
 			class="bg-black w-[20px] h-[2px]  transition-transform duration-300 cursor-stroke-vertical-transform origin-left"
@@ -30,70 +30,55 @@ templ CursorScript() {
         for (let i = 0; i < clickables.length; i++) {
             const clickable = clickables[i];
             clickable.addEventListener('mouseover', function () {
-                const cursors = $$(".cursors");
-                for (let j = 0; j < cursors.length; j++) {
-                    const cursor = cursors[j];
-                    cursor.children[0].style.transform = "rotate(-55deg) translateX(-6px) translateY(-6px)"
-                    cursor.children[1].style.transform = "rotate(215deg) translateX(-12px) translateY(1px)"
-                }
+                const cursor = $("#custom-cursor");
+                cursor.children[0].style.transform = "rotate(-55deg) translateX(-6px) translateY(-6px)"
+                cursor.children[1].style.transform = "rotate(215deg) translateX(-12px) translateY(1px)"
             });
             clickable.addEventListener('mouseout', function () {
-                const cursors = $$(".cursors");
-                for (let j = 0; j < cursors.length; j++) {
-                    const cursor = cursors[j];
-                    cursor.children[0].style.transform = "rotate(0deg) translateX(0) translateY(0)"
-                    cursor.children[1].style.transform = "rotate(35deg) translateX(0) translateY(-2px)"
-                }
+                const cursor = $("#custom-cursor");
+                cursor.children[0].style.transform = "rotate(0deg) translateX(0) translateY(0)"
+                cursor.children[1].style.transform = "rotate(35deg) translateX(0) translateY(-2px)"
             });
         };
 
         document.body.addEventListener('animationCursorPlay', function (e) {
-            const cursors = $$(".cursors");
-            for (let j = 0; j < cursors.length; j++) {
-                const cursor = cursors[j];
-                cursor.style.transform = "rotate(55deg)"
-                cursor.children[0].style.transform = "rotate(35deg) translateX(3px) translateY(-5px)"
-                cursor.children[0].style.width = "22px"
+            const cursor = $("#custom-cursor");
+            cursor.style.transform = "rotate(55deg)"
+            cursor.children[0].style.transform = "rotate(35deg) translateX(3px) translateY(-5px)"
+            cursor.children[0].style.width = "22px"
 
-                cursor.children[1].style.width = "22px"
+            cursor.children[1].style.width = "22px"
 
-                cursor.children[2].style.height = "0px"
-                cursor.children[2].style.width = "0px"
-            }
-        })
+            cursor.children[2].style.height = "0px"
+            cursor.children[2].style.width = "0px"
+       })
 
         document.body.addEventListener('animationCursorPause', function (e) {
-            const cursors = $$(".cursors");
-            for (let j = 0; j < cursors.length; j++) {
-                const cursor = cursors[j];
-                cursor.style.transform = "rotate(170deg)"
-                cursor.children[0].style.width = "22px"
-                cursor.children[0].style.transform = "rotate(165deg) translateX(-1px) translateY(2px)"
+            const cursor = $("#custom-cursor");
+            cursor.style.transform = "rotate(170deg)"
+            cursor.children[0].style.width = "22px"
+            cursor.children[0].style.transform = "rotate(165deg) translateX(-1px) translateY(2px)"
 
-                cursor.children[1].style.width = "22px"
-                cursor.children[1].style.transform = "rotate(35deg) translateX(0) translateY(-2px)"
+            cursor.children[1].style.width = "22px"
+            cursor.children[1].style.transform = "rotate(35deg) translateX(0) translateY(-2px)"
 
-                cursor.children[2].style.height = "2px"
-                cursor.children[2].style.width = "19px"
-                cursor.children[2].style.transform = "rotate(100deg) translateX(-13px) translateY(-20px)"
-            }
+            cursor.children[2].style.height = "2px"
+            cursor.children[2].style.width = "19px"
+            cursor.children[2].style.transform = "rotate(100deg) translateX(-13px) translateY(-20px)"
         });
 
         document.body.addEventListener('animationCursorLeave', function () {
-            const cursors = $$(".cursors");
-            for (let j = 0; j < cursors.length; j++) {
-                const cursor = cursors[j];
-                cursor.style.transform = "rotate(55deg)"
-                cursor.children[0].style.transform = "rotate(0deg) translateX(0) translateY(0)"
-                cursor.children[1].style.transform = "rotate(35deg) translateX(0) translateY(-2px)"
-                cursor.children[2].style.transform = "rotate(0deg) translateX(0) translateY(0)"
-                cursor.children[0].style.width = "22px"
-                cursor.children[0].style.height = "2px"
-                cursor.children[1].style.width = "20px"
-                cursor.children[1].style.height = "2px"
-                cursor.children[2].style.width = "0px"
-                cursor.children[2].style.height = "0px"
-            }
+            const cursor = $("#custom-cursor");
+            cursor.style.transform = "rotate(55deg)"
+            cursor.children[0].style.transform = "rotate(0deg) translateX(0) translateY(0)"
+            cursor.children[1].style.transform = "rotate(35deg) translateX(0) translateY(-2px)"
+            cursor.children[2].style.transform = "rotate(0deg) translateX(0) translateY(0)"
+            cursor.children[0].style.width = "22px"
+            cursor.children[0].style.height = "2px"
+            cursor.children[1].style.width = "20px"
+            cursor.children[1].style.height = "2px"
+            cursor.children[2].style.width = "0px"
+            cursor.children[2].style.height = "0px"
         });
 
         //determinds if mouse is in viewport or not

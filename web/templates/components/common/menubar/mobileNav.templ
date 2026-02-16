@@ -87,7 +87,7 @@ templ SideMenu() {
 				x-show="open"
 				x-transition.opacity.duration.300ms
 				:class="getAnimation"
-				class="z-[60] bg-zinc-400/25 backdrop-blur-lg border-2 border-black/20
+				class="z-[60] bg-zinc-400/25 backdrop-blur-sm border-2 border-black/20
                        text-black shadow-md fixed rounded-xl
                        overflow-y-auto h-fit right-1 w-[45dvw] top-1 pb-8"
 				x-on:mousedown.outside="setClose"
@@ -117,7 +117,7 @@ templ SideMenuContent() {
 			}
 		}
 	</div>
-	<div Class="pt-1 flex-col items-center w-full gap-3 rounded-none border-none flex backdrop:blur-xl ">
+	<div Class="pt-1 flex-col items-center w-full gap-3 rounded-none border-none flex">
 		@NavLinkMobile("ANIMATIONS", "/animation/body", "/animation")
 		@NavLinkMobile("CHARACTERS", "/characters/body", "/characters")
 		@NavLinkMobile("STORYBOARD", "/storyboard/body", "storyboard")

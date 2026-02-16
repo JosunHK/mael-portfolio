@@ -15,7 +15,7 @@ import (
 templ Animations(animations []sqlc.Animation) {
 	<div id="content" class="relative scrollbar-hide">
 		<div
-			class="pointer-events-none fixed top-0 left-0 h-dvh w-screen z-10 backdrop-blur-[2.5px] animate-background-blur opacity-0 bg-black/35"
+			class="pointer-events-none fixed top-0 left-0 h-dvh w-screen z-10 animate-background-blur opacity-0 bg-black/55"
 		></div>
 		<div class="w-screen sticky top-0 md:hidden block">
 			@animationComponent.FrontPageAnimationSlider(animations[0], animationUtil.GetAnimationPaths(1)) {
@@ -38,7 +38,7 @@ templ AnimationsShowcase(animations []sqlc.Animation) {
 			for i, animation := range animations {
 				<div
 					id={ fmt.Sprintf("animation-slide-%d", i) }
-					class="w-[82dvw] md:w-[92dvw] h-full bg-slate-300/25 backdrop-blur-lg border-2 border-black/20 z-20 relative rounded-xl p-2 font-barlow shadow-md text-gray-700 snap-center md:block flex flex-col items-center"
+					class="w-[82dvw] md:w-[92dvw] h-full bg-zinc-300/45 backdrop-blur-sm translate-z-0 border-2 border-black/20 z-20 relative rounded-xl p-2 font-barlow text-gray-700 snap-center md:block flex flex-col items-center"
 				>
 					<div class="px-8 mt-2 mb-4 h-min flex flex-row justify-between w-full">
 						@label.Label(label.Props{
@@ -50,7 +50,7 @@ templ AnimationsShowcase(animations []sqlc.Animation) {
 					</div>
 					<div class="flex flex-row justify-center items-center md:items-start md:justify-start w-[90dvw] gap-4">
 						@card.Card(card.Props{
-							Class: `md:ml-8 flex justify-center items-center h-[80dvh] w-[77dvw] bg-black/5 p-4 border-black/80 shadow-sm py-2 flex-col justify-start items-start`,
+							Class: `md:ml-8 flex justify-center items-center h-[80dvh] w-[77dvw] bg-black/5 p-4 border-black/80 py-2 flex-col justify-start items-start`,
 						}) {
 							@animationComponent.AnimationReelSlider(animation, animationUtil.GetAnimationPaths(animation.ID))
 						}

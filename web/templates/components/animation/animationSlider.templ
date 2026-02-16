@@ -28,7 +28,9 @@ templ AnimationSliderScript() {
                 this.$refs.sliderControl.value = 0;
                 this.$refs.sliderControl.setAttribute("max", frames.length - 1)
                 this.updateCurrentFrame();
-                this.$nextTick(async () => {this.play()})
+                if(this.$refs.sliderContainer.getAttribute("is-auto-play") === "true"){
+                    this.$nextTick(async () => {this.play()})
+                }
             },
             currentFrame() {
                 this.$watch('currentPlaybackFrame', value => {
@@ -164,7 +166,11 @@ templ SliderBody(props Props) {
 
 templ SimpleAnimationSlider(animation sqlc.Animation, paths []string) {
 	@AnimationSlider(
-		Props{},
+		Props{
+            Attrs:templ.Attributes{
+                "is-auto-play":"true",
+            },
+        },
 		int(animation.Fps.Int32),
 	) {
 		@SliderBody(Props{}) {
@@ -210,6 +216,9 @@ templ AnimationReelSlider(animation sqlc.Animation, paths []string) {
 templ FrontPageAnimationSlider(animation sqlc.Animation, paths []string) {
 	@AnimationSlider(Props{
 		Class: "h-min rounded-lg",
+        Attrs:templ.Attributes{
+            "is-auto-play":"true",
+        },
 	},
 		int(animation.Fps.Int32),
 	) {
