@@ -161,17 +161,13 @@ templ ShowcaseSliderScript(animationCount int) {
                     handleClick(){
                         if(this.isShowUp){
                             window.location = "#animationSlide-"+this.currentSlide;
-                            this.isShowUp = false
-                            this.isShowDown = true
                         }else{
                             window.location = "#top"
-                            this.isShowUp = true
-                            this.isShowDown = false 
                         }
                     },
                     handleScroll(e){
                         let precentage = this.getScrollPercent();
-                        if(precentage > 90) {
+                        if(precentage > 80) {
                             this.isShowUp = false
                             this.isShowDown = true
                         }else{
