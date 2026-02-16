@@ -101,7 +101,7 @@
     }
 
     .bg-dotted {
-        background: radial-gradient(circle at 1px 1px, rgba(0, 0, 0, 0.04) 1px, transparent 0) 0 0 / 14px 14px, linear-gradient(#f9feff, #ffffff);
+        background: radial-gradient(circle at 1px 1px, rgba(0, 0, 0, 0.04) 1px, transparent 0) 0 0 / 14px 14px, linear-gradient(#f9f9f9, #ffffff);
     }
 
     input[type="number"]::-webkit-inner-spin-button,
