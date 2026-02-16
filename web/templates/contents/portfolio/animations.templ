@@ -17,11 +17,11 @@ templ Animations(animations []sqlc.Animation) {
 		<div
 			class="pointer-events-none fixed top-0 left-0 h-dvh w-screen z-10 backdrop-blur-[2.5px] animate-background-blur opacity-0 bg-black/35"
 		></div>
-		<div class="w-screen h-[90vh] sticky top-0 xl:hidden block">
+		<div class="w-screen h-dvh sticky top-0 xl:hidden block">
 			@animationComponent.FrontPageAnimationSlider(animations[0], animationUtil.GetAnimationPaths(1)) {
 			}
 		</div>
-		<div class="w-screen xl:block hidden h-[90dvh] sticky top-0 md:top-[2.3rem]">
+		<div class="w-screen xl:block hidden sticky top-0 md:top-[2.3rem]">
 			@animationComponent.FrontPageAnimationSlider(animations[1], animationUtil.GetAnimationPaths(3)) {
 			}
 		</div>
@@ -30,15 +30,15 @@ templ Animations(animations []sqlc.Animation) {
 }
 
 templ AnimationsShowcase(animations []sqlc.Animation) {
-	<div class="h-[90vh] relative max-md:mb-4">
+	<div class="h-[90dvh] relative max-md:mb-4">
 		@AnimationShowcaseButtons(len(animations))
 		<div
-			class="h-full flex flex-row max-w-screen w-screen overflow-scroll px-[4.5vw] gap-[4.5vw] mb-4 scrollbar-hide snap-x scroll-smooth relative"
+			class="h-full flex flex-row max-w-screen w-screen overflow-scroll px-[4.5dvw] gap-[4.5dvw] mb-4 scrollbar-hide snap-x scroll-smooth relative"
 		>
 			for i, animation := range animations {
 				<div
 					id={ fmt.Sprintf("animationSlide-%d", i) }
-					class="w-[82vw] md:w-[92vw] h-full bg-slate-300/25 backdrop-blur-lg border-2 border-black/20 z-20 relative rounded-xl p-2 font-barlow shadow-md text-gray-700 snap-center md:block flex flex-col items-center"
+					class="w-[82dvw] md:w-[92dvw] h-full bg-slate-300/25 backdrop-blur-lg border-2 border-black/20 z-20 relative rounded-xl p-2 font-barlow shadow-md text-gray-700 snap-center md:block flex flex-col items-center"
 				>
 					<div class="px-8 mt-2 mb-4 h-min flex flex-row justify-between w-full">
 						@label.Label(label.Props{
@@ -48,9 +48,9 @@ templ AnimationsShowcase(animations []sqlc.Animation) {
 							{ animation.Label }
 						}
 					</div>
-					<div class="flex flex-row justify-center items-center md:items-start md:justify-start w-[90vw] gap-4">
+					<div class="flex flex-row justify-center items-center md:items-start md:justify-start w-[90dvw] gap-4">
 						@card.Card(card.Props{
-							Class: `md:ml-8 flex justify-center items-center h-[80vh] w-[77vw] bg-black/5 p-4 border-black/80 shadow-sm py-2 flex-col justify-start items-start`,
+							Class: `md:ml-8 flex justify-center items-center h-[80dvh] w-[77dvw] bg-black/5 p-4 border-black/80 shadow-sm py-2 flex-col justify-start items-start`,
 						}) {
 							@animationComponent.AnimationReelSlider(animation, animationUtil.GetAnimationPaths(animation.ID))
 						}

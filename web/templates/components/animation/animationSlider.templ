@@ -44,7 +44,10 @@ templ AnimationSliderScript() {
                 this.$refs.sliderControl.value = Math.floor(x / (maxWidth / frames.length - 1));
                 this.$refs.sliderControl.dispatchEvent(new Event("input"));
             },
-            updateCurrentFrame() {
+            updateCurrentFrame(e) {
+                if(e){
+                    e.stopPropagation()
+                }
                 const currVal = this.$refs.sliderControl.value;
                 const frames = this.$refs.sliderBody.children
                 for (let i = 0; i < frames.length; i++) {
