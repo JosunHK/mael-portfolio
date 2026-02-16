@@ -227,7 +227,7 @@
     .animate-background-blur {
         animation: background-blur linear forwards;
         animation-timeline: view();
-        animation-range-start: 90vh;
+        animation-range-start: 90dvh;
     }
 
     @keyframes background-blur {

@@ -160,9 +160,13 @@ templ ShowcaseSliderScript(animationCount int) {
                     },
                     handleClick(){
                         if(this.isShowUp){
-                            $("#animationSlide-"+this.currentSlide).scrollIntoView({ block: 'end', behavior: 'smooth' });
+                            window.location = "#animationSlide-"+this.currentSlide;
+                            this.isShowUp = false
+                            this.isShowDown = true
                         }else{
                             window.location = "#top"
+                            this.isShowUp = true
+                            this.isShowDown = false 
                         }
                     },
                     handleScroll(e){
