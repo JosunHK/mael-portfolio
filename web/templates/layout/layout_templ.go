@@ -370,7 +370,7 @@ func Layout(content templ.Component) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 27, "<body hx-ext=\"safe-nonce\" class=\"bg-background bg-dotted bg-gr flex flex-col overflow-y-auto scrollbar-hide min-h-lvh no-cursor\"><div class=\"w-full max-w-full relative scrollbar-hide\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 27, "<body hx-ext=\"safe-nonce\" class=\"bg-background bg-dotted flex flex-col overflow-y-auto scrollbar-hide min-h-svh no-cursor\"><div class=\"w-full max-w-full relative scrollbar-hide min-h-svh\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

@@ -17,11 +17,11 @@ templ Animations(animations []sqlc.Animation) {
 		<div
 			class="pointer-events-none fixed top-0 left-0 h-dvh w-screen z-10 backdrop-blur-[2.5px] animate-background-blur opacity-0 bg-black/35"
 		></div>
-		<div class="w-screen h-dvh sticky top-0 xl:hidden block">
+		<div class="w-screen h-dvh sticky top-0 md:hidden block">
 			@animationComponent.FrontPageAnimationSlider(animations[0], animationUtil.GetAnimationPaths(1)) {
 			}
 		</div>
-		<div class="w-screen xl:block hidden sticky top-0 md:top-[2.3rem]">
+		<div class="w-screen md:block hidden sticky top-0 xl:top-[2.3rem]">
 			@animationComponent.FrontPageAnimationSlider(animations[1], animationUtil.GetAnimationPaths(3)) {
 			}
 		</div>
@@ -30,7 +30,7 @@ templ Animations(animations []sqlc.Animation) {
 }
 
 templ AnimationsShowcase(animations []sqlc.Animation) {
-	<div class="h-[90dvh] relative max-md:mb-4">
+	<div class="h-[90dvh] relative max-md:mb-4 min-h-[400px]">
 		@AnimationShowcaseButtons(len(animations))
 		<div
 			class="h-full flex flex-row max-w-screen w-screen overflow-scroll px-[4.5dvw] gap-[4.5dvw] mb-4 scrollbar-hide snap-x scroll-smooth relative"

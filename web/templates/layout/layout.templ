@@ -69,9 +69,9 @@ templ Layout(content templ.Component) {
 	@header() {
 		<body
 			hx-ext="safe-nonce"
-			class="bg-background bg-dotted bg-gr flex flex-col overflow-y-auto scrollbar-hide min-h-lvh no-cursor"
+			class="bg-background bg-dotted flex flex-col overflow-y-auto scrollbar-hide min-h-svh no-cursor"
 		>
-			<div class="w-full max-w-full relative scrollbar-hide">
+			<div class="w-full max-w-full relative scrollbar-hide min-h-svh">
 				@menubar.PageNav()
 				@menubar.MobileNav()
 				@content
