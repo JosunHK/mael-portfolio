@@ -41,7 +41,7 @@ func Animations(animations []sqlc.Animation) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div id=\"content\" class=\"relative scrollbar-hide\"><div class=\"pointer-events-none fixed top-0 left-0 h-dvh w-screen z-10 backdrop-blur-[2.5px] animate-background-blur opacity-0 bg-black/35\"></div><div class=\"w-screen h-dvh sticky top-0 md:hidden block\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div id=\"content\" class=\"relative scrollbar-hide\"><div class=\"pointer-events-none fixed top-0 left-0 h-dvh w-screen z-10 backdrop-blur-[2.5px] animate-background-blur opacity-0 bg-black/35\"></div><div class=\"w-screen sticky top-0 md:hidden block\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

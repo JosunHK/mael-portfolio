@@ -17,7 +17,7 @@ templ Animations(animations []sqlc.Animation) {
 		<div
 			class="pointer-events-none fixed top-0 left-0 h-dvh w-screen z-10 backdrop-blur-[2.5px] animate-background-blur opacity-0 bg-black/35"
 		></div>
-		<div class="w-screen h-dvh sticky top-0 md:hidden block">
+		<div class="w-screen sticky top-0 md:hidden block">
 			@animationComponent.FrontPageAnimationSlider(animations[0], animationUtil.GetAnimationPaths(1)) {
 			}
 		</div>
