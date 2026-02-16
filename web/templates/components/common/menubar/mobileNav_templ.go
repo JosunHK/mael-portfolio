@@ -148,7 +148,7 @@ func NavLinkMobile(title string, toPath string, toURL string) templ.Component {
 			templ_7745c5c3_Var6 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<div class=\"relative font-barlow text-[1.25rem] text-zinc-800 border border-zinc-900/80 rounded-xl w-[90%] mx-auto shadow-xl bg-zinc-500/25 pl-10\"><div hx-push-url=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<div class=\"relative font-barlow text-[1.25rem] text-zinc-800 border border-zinc-900/80 rounded-xl w-[90%] mx-auto shadow-xl bg-zinc-500/25 \"><div hx-push-url=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -299,7 +299,7 @@ func SideMenu() templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "<template x-teleport=\"body\"><div x-show=\"open\" x-transition.opacity.duration.300ms :class=\"getAnimation\" class=\"z-[60] bg-zinc-400/25 backdrop-blur-lg border-2 border-black/20\n                       text-black shadow-md fixed rounded-xl\n                       overflow-y-auto h-fit right-1 w-[70dvw] top-1 pb-8\" x-on:mousedown.outside=\"setClose\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "<template x-teleport=\"body\"><div x-show=\"open\" x-transition.opacity.duration.300ms :class=\"getAnimation\" class=\"z-[60] bg-zinc-400/25 backdrop-blur-lg border-2 border-black/20\n                       text-black shadow-md fixed rounded-xl\n                       overflow-y-auto h-fit right-1 w-[45dvw] top-1 pb-8\" x-on:mousedown.outside=\"setClose\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
