@@ -38,7 +38,7 @@ templ AnimationsShowcase(animations []sqlc.Animation) {
 			for i, animation := range animations {
 				<div
 					id={ fmt.Sprintf("animation-slide-%d", i) }
-					class="w-[82dvw] md:w-[92dvw] h-full bg-zinc-300/45 backdrop-blur-sm translate-z-0 border-2 border-black/20 z-20 relative rounded-xl p-2 font-barlow text-gray-700 snap-center md:block flex flex-col items-center"
+					class="w-[82dvw] md:w-[92dvw] h-full bg-zinc-300/45 backdrop-blur-lg translate-z-0 border-2 border-black/20 z-20 relative rounded-xl p-2 font-barlow text-gray-700 snap-center md:block flex flex-col items-center"
 				>
 					<div class="px-8 mt-2 mb-4 h-min flex flex-row justify-between w-full">
 						@label.Label(label.Props{
