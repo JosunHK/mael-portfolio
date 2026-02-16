@@ -1,26 +1,27 @@
 package cmsTemplates
 
 import (
-    "fmt"
-    "mael/db/generated"
-    "mael/cmd/util/templ"
-    "mael/cmd/util/cms"
-	"mael/web/templates/components/ui/card"
-	icon "mael/web/templates/components/ui/icon"
-	button "mael/web/templates/components/ui/button"
+	"fmt"
 	gocva "github.com/gungun974/gocva"
-	label "mael/web/templates/components/ui/label"
-	"mael/web/templates/components/ui/dropZone"
-	"mael/web/templates/components/ui/table"
-	"mael/web/templates/components/ui/input"
-	cmsComp "mael/web/templates/components/cms"
+	"mael/cmd/util/animation"
+	"mael/cmd/util/templ"
+	"mael/db/generated"
 	"mael/web/templates/components/animation"
+	cmsComp "mael/web/templates/components/cms"
+	button "mael/web/templates/components/ui/button"
+	"mael/web/templates/components/ui/card"
+	"mael/web/templates/components/ui/dropZone"
+	icon "mael/web/templates/components/ui/icon"
+	"mael/web/templates/components/ui/input"
+	label "mael/web/templates/components/ui/label"
+	"mael/web/templates/components/ui/table"
 )
 
-var animationDetailScriptHandle = templ.NewOnceHandle();
-templ animationDetailScript(){
-    @animationDetailScriptHandle.Once() {
-        <script nonce={templ.GetNonce(ctx)}>
+var animationDetailScriptHandle = templ.NewOnceHandle()
+
+templ animationDetailScript() {
+	@animationDetailScriptHandle.Once() {
+		<script nonce={ templ.GetNonce(ctx) }>
             document.addEventListener('alpine:init', () => {
                 Alpine.data('animationDetail', () => ({
                     show: true,
@@ -36,191 +37,193 @@ templ animationDetailScript(){
                 }))
             })
         </script>
-    }
+	}
 }
 
 templ AnimationDetail(animation sqlc.Animation) {
 	<div id="animation-detail" class="flex w-full flex-row items-center justify-center gap-12 font-barlow mt-48">
-        @animationDetailScript()
-        <form 
-            x-data="animationDetail"
-            @htmx:before-request="hideContent"
-            @htmx:after-request="showContent"
-            enctype='multipart/form-data'
-            hx-patch={fmt.Sprintf("/cms/animation/%v", animation.ID)}
-            hx-swap="outerHTML transition:true"
-            hx-target="#animation-detail"
-        >
-            <input type="hidden" name="action" value="modifyDetail">
-            @card.Card(card.Props{
-                Class: "scrollbar-hide text-cms-foreground h-[60vh] w-[60vw] bg-cms-background shadow-xl border-cms-border border",
-            }) {
-                @card.Header(card.Props{}){
-                    <div class="flex flex-row justify-between items-center">
-                        @card.Title(card.Props{}){
-                            {animation.Label}
-                        }
-                        <div class="flex flex-row justify-between gap-2 items-center">
-                            <a href="/cms/animation">
-                                @cmsComp.Button(button.Props{
-                                        Attrs: templ.Attributes{
-                                            "type": "button",
-                                            "x-data": "",
-                                            "x-tooltip.raw": "Go Back",
-                                        },
-                                        Variant: gocva.Variant{"variant": "ghost", "size": "icon"},
-                                        Class: "border-cms-border border-2",
-                                    }){
-                                    @label.Label(
-                                        label.Props{
-                                            Variant: gocva.Variant{"variant": "title"},
-                                        },
-                                    ) {
-                                        @icon.Wrapper(icon.Props{
-                                            Class: "h-6 w-6",
-                                        }) {
-                                            @icon.Undo()
-                                        }
-                                    }
-                                }
-                            </a>
-                            @cmsComp.Button(button.Props{
-                                    Attrs: templ.Attributes{
-                                        "type": "submit",
-                                        "x-data": "",
-                                        "x-tooltip.raw": "Submit Changes",
-                                    },
-                                    Variant: gocva.Variant{"variant": "ghost", "size": "icon"},
-                                    Class: "border-cms-border border-2",
-                                }){
-                                @label.Label(
-                                    label.Props{
-                                        Variant: gocva.Variant{"variant": "title"},
-                                    },
-                                ) {
-                                    @icon.Wrapper(icon.Props{
-                                        Class: "h-6 w-6",
-                                    }) {
-                                        @icon.Save()
-                                    }
-                                }
-                            }
-                        </div>
-                    </div>
-                }
-                @card.Content(card.Props{
-                    Attrs: templ.Attributes{
-                        "x-show":"show",
-                    },
-                }){
-                    @AnimationDetailForm(animation)
-                    @dropZone.DropZoneDefault("Uploading will remove all previously saved images.")
-                }
-                @card.Content(card.Props{
-                    Class: "w-full h-full",
-                    Attrs: templ.Attributes{
-                        "x-show":"isShowLoading",
-                    },
-                }){
-                    <div class="flex w-full h-full justify-center items-center text-lg font-bold animate-pulse">
-                        Loading...
-                    </div>
-                }
-            }
-        </form>
-        @card.Card(card.Props{
-            Class: "scrollbar-hide text-cms-foreground h-[35vh] w-[35vw] bg-cms-background shadow-xl border-cms-border border p-8 ",
-        }) {
-            @card.Card(card.Props{
-                Class: "border-2 border-dashed border-cms-border w-full h-full bg-cms-background flex justify-center items-center",
-            }) { 
-                if animation.FramesCount.Valid {
-                    @animationComponent.SimpleAnimationSlider(animation, cmsUtil.GetAnimationPaths(animation.ID))
-                } else {
-                    @label.Label(
-                        label.Props{
-                            Variant: gocva.Variant{"variant": "title"},
-                            Class: "text-cms-muted font-barlow italic",
-                        },
-                    ) { No frames uploaded yet! }
-                }
-            }
-        }
+		@animationDetailScript()
+		<form
+			x-data="animationDetail"
+			@htmx:before-request="hideContent"
+			@htmx:after-request="showContent"
+			enctype="multipart/form-data"
+			hx-patch={ fmt.Sprintf("/cms/animation/%v", animation.ID) }
+			hx-swap="outerHTML transition:true"
+			hx-target="#animation-detail"
+		>
+			<input type="hidden" name="action" value="modifyDetail"/>
+			@card.Card(card.Props{
+				Class: "scrollbar-hide text-cms-foreground h-[60vh] w-[60vw] bg-cms-background shadow-xl border-cms-border border",
+			}) {
+				@card.Header(card.Props{}) {
+					<div class="flex flex-row justify-between items-center">
+						@card.Title(card.Props{}) {
+							{ animation.Label }
+						}
+						<div class="flex flex-row justify-between gap-2 items-center">
+							<a href="/cms/animation">
+								@cmsComp.Button(button.Props{
+									Attrs: templ.Attributes{
+										"type":          "button",
+										"x-data":        "",
+										"x-tooltip.raw": "Go Back",
+									},
+									Variant: gocva.Variant{"variant": "ghost", "size": "icon"},
+									Class:   "border-cms-border border-2",
+								}) {
+									@label.Label(
+										label.Props{
+											Variant: gocva.Variant{"variant": "title"},
+										},
+									) {
+										@icon.Wrapper(icon.Props{
+											Class: "h-6 w-6",
+										}) {
+											@icon.Undo()
+										}
+									}
+								}
+							</a>
+							@cmsComp.Button(button.Props{
+								Attrs: templ.Attributes{
+									"type":          "submit",
+									"x-data":        "",
+									"x-tooltip.raw": "Submit Changes",
+								},
+								Variant: gocva.Variant{"variant": "ghost", "size": "icon"},
+								Class:   "border-cms-border border-2",
+							}) {
+								@label.Label(
+									label.Props{
+										Variant: gocva.Variant{"variant": "title"},
+									},
+								) {
+									@icon.Wrapper(icon.Props{
+										Class: "h-6 w-6",
+									}) {
+										@icon.Save()
+									}
+								}
+							}
+						</div>
+					</div>
+				}
+				@card.Content(card.Props{
+					Attrs: templ.Attributes{
+						"x-show": "show",
+					},
+				}) {
+					@AnimationDetailForm(animation)
+					@dropZone.DropZoneDefault("Uploading will remove all previously saved images.")
+				}
+				@card.Content(card.Props{
+					Class: "w-full h-full",
+					Attrs: templ.Attributes{
+						"x-show": "isShowLoading",
+					},
+				}) {
+					<div class="flex w-full h-full justify-center items-center text-lg font-bold animate-pulse">
+						Loading...
+					</div>
+				}
+			}
+		</form>
+		@card.Card(card.Props{
+			Class: "scrollbar-hide text-cms-foreground h-[35vh] w-[35vw] bg-cms-background shadow-xl border-cms-border border p-8 ",
+		}) {
+			@card.Card(card.Props{
+				Class: "border-2 border-dashed border-cms-border w-full h-full bg-cms-background flex justify-center items-center",
+			}) {
+				if animation.FramesCount.Valid {
+					@animationComponent.SimpleAnimationSlider(animation, animationUtil.GetAnimationPaths(animation.ID))
+				} else {
+					@label.Label(
+						label.Props{
+							Variant: gocva.Variant{"variant": "title"},
+							Class:   "text-cms-muted font-barlow italic",
+						},
+					) {
+						No frames uploaded yet! 
+					}
+				}
+			}
+		}
 	</div>
 }
 
-templ AnimationDetailForm(animation sqlc.Animation){
-        @table.Table(table.Props{
-            Class: "text-base font-medium",
-        }) {
-            @table.Body(table.Props{
-                Attrs: templ.Attributes{ },
-            }){
-                @table.Row(table.Props{
-                        Class: "border-cms-border border-b-1 hover:bg-cms-background",
-                    }){
-                    @table.Cell(table.Props{}){
-                        Title:
-                    }
-                    @table.Cell(table.Props{}){
-                        @cmsComp.Input(
-                            input.Props{
-                                Name:  "label",
-                                Value: animation.Label,
-                            },
-                        )
-                    }
-                    @table.Cell(table.Props{}){
-                        Playback:
-                    }
-                    @table.Cell(table.Props{}){
-                        <div class="flex flex-row justify-center items-center gap-4">
-                            @cmsComp.Input(
-                                input.Props{
-                                    Name:  "framesCount",
-                                    Type: "number",
-                                    Class: "w-12",
-                                    Value: templUtil.ExtractInt32(animation.FramesCount),
-                                    Attrs: templ.Attributes{"disabled":"disabled"},
-                                },
-                            )
-                            @label.Label(label.Props{}) {
-                                Frames @
-                            }
-                            @cmsComp.Input(
-                                input.Props{
-                                    Name:  "fps",
-                                    Type: "number",
-                                    Class: "w-12",
-                                    Value: templUtil.ExtractInt32(animation.Fps),
-                                },
-                            )
-                            @label.Label(label.Props{}) {
-                                fps
-                            }
-                        </div>
-                    }
-                }
-                @table.Row(table.Props{
-                    Class: "border-cms-border border-b-1 hover:bg-cms-background",
-                }){
-                    @table.Cell(table.Props{}){
-                        Decription:
-                    }
-                    @table.Cell(table.Props{
-                        Attrs: templ.Attributes{
-                            "colspan": "3",
-                        },
-                    }){
-                        @cmsComp.Input(
-                            input.Props{
-                                Name:  "desc",
-                                Type: "textarea",
-                                Value: animation.AnimationDesc,
-                            },
-                        )
-                    }
-                }
-            }
-        }
+templ AnimationDetailForm(animation sqlc.Animation) {
+	@table.Table(table.Props{
+		Class: "text-base font-medium",
+	}) {
+		@table.Body(table.Props{
+			Attrs: templ.Attributes{},
+		}) {
+			@table.Row(table.Props{
+				Class: "border-cms-border border-b-1 hover:bg-cms-background",
+			}) {
+				@table.Cell(table.Props{}) {
+					Title:
+				}
+				@table.Cell(table.Props{}) {
+					@cmsComp.Input(
+						input.Props{
+							Name:  "label",
+							Value: animation.Label,
+						},
+					)
+				}
+				@table.Cell(table.Props{}) {
+					Playback:
+				}
+				@table.Cell(table.Props{}) {
+					<div class="flex flex-row justify-center items-center gap-4">
+						@cmsComp.Input(
+							input.Props{
+								Name:  "framesCount",
+								Type:  "number",
+								Class: "w-12",
+								Value: templUtil.ExtractInt32(animation.FramesCount),
+								Attrs: templ.Attributes{"disabled": "disabled"},
+							},
+						)
+						@label.Label(label.Props{}) {
+							Frames @
+						}
+						@cmsComp.Input(
+							input.Props{
+								Name:  "fps",
+								Type:  "number",
+								Class: "w-12",
+								Value: templUtil.ExtractInt32(animation.Fps),
+							},
+						)
+						@label.Label(label.Props{}) {
+							fps
+						}
+					</div>
+				}
+			}
+			@table.Row(table.Props{
+				Class: "border-cms-border border-b-1 hover:bg-cms-background",
+			}) {
+				@table.Cell(table.Props{}) {
+					Decription:
+				}
+				@table.Cell(table.Props{
+					Attrs: templ.Attributes{
+						"colspan": "3",
+					},
+				}) {
+					@cmsComp.Input(
+						input.Props{
+							Name:  "desc",
+							Type:  "textarea",
+							Value: animation.AnimationDesc,
+						},
+					)
+				}
+			}
+		}
+	}
 }

@@ -8,10 +8,8 @@ import (
 	"mael/web/templates/components/ui/alert"
 	"mael/web/templates/components/ui/button"
 	"mael/web/templates/components/ui/card"
-	"mael/web/templates/components/ui/datepicker"
 	"mael/web/templates/components/ui/dialog"
 	"mael/web/templates/components/ui/icon"
-	"mael/web/templates/components/ui/input"
 	"mael/web/templates/components/ui/selectBox"
 	toggle "mael/web/templates/components/ui/switchToggle"
 	"mael/web/templates/components/ui/tabs"
@@ -36,12 +34,12 @@ templ Playground() {
 		@Button()
 		@toggle.Toggle(toggle.Props{}, false)
 		@card.LoginCard(card.DemoProps{Title: "Login"})
-		@datepicker.DatePicker()
+		//@datepicker.DatePicker()
 		@cmp.DemoDropDown()
-		@input.Digits(input.DigitsProps{
-			Name: "roomNo",
-		},
-			4,
+		//@input.Digits(input.DigitsProps{
+		//	Name: "roomNo",
+		//},
+		4,
 		)
 		@Tabs()
 		@Dialog()

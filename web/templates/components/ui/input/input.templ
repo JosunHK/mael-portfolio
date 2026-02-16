@@ -5,11 +5,11 @@ import twmerge "github.com/Oudwins/tailwind-merge-go/pkg/twmerge"
 var M = twmerge.Merge
 
 type Props struct {
-	Name  string
-	Class string
-	Attrs templ.Attributes
-	Type  string
-	Value string
+	Name        string
+	Class       string
+	Attrs       templ.Attributes
+	Type        string
+	Value       string
 	Placeholder string
 }
 
@@ -18,7 +18,7 @@ templ InputRaw(props Props) {
 		type={ props.Type }
 		name={ props.Name }
 		value={ props.Value }
-		placeholder ={ props.Placeholder}
+		placeholder={ props.Placeholder }
 		class={ M(
             `flex h-10 w-full rounded-md border ring-primary bg-background
             px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent
@@ -26,7 +26,7 @@ templ InputRaw(props Props) {
             focus-visible:ring-2 focus-visible:border-ring 
             disabled:cursor-not-allowed disabled:opacity-50`,
             props.Class,
-        )}
+        ) }
 		{ props.Attrs... }
 	/>
 }
@@ -37,10 +37,10 @@ templ Input(props Props) {
 		type={ props.Type }
 		name={ props.Name }
 		value={ props.Value }
-		placeholder={ props.Placeholder}
-        x-data="input"
-        @input="inputOverrides"
-        @keydown="keyDownOverrides"
+		placeholder={ props.Placeholder }
+		x-data="input"
+		@input="inputOverrides"
+		@keydown="keyDownOverrides"
 		class={ M(
             `flex h-10 w-full rounded-md border ring-primary bg-background
             px-3 py-2 text-sm ring-offset-background file:border-0 file:bg-transparent
@@ -48,15 +48,16 @@ templ Input(props Props) {
             focus-visible:ring-2 focus-visible:border-ring 
             disabled:cursor-not-allowed disabled:opacity-50`,
             props.Class,
-        )}
+        ) }
 		{ props.Attrs... }
 	/>
 }
 
-var InputScriptHandle = templ.NewOnceHandle();
-templ InputScript(){
-    @InputScriptHandle.Once() {
-        <script nonce={templ.GetNonce(ctx)}>
+var InputScriptHandle = templ.NewOnceHandle()
+
+templ InputScript() {
+	@InputScriptHandle.Once() {
+		<script nonce={ templ.GetNonce(ctx) }>
             document.addEventListener('alpine:init', () => {
                 Alpine.data('input', () => ({
                     inputOverrides(){
@@ -77,5 +78,5 @@ templ InputScript(){
                 }))
             })
         </script>
-    }
+	}
 }

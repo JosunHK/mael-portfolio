@@ -3,7 +3,7 @@ package portfolioTemplates
 import (
 	"fmt"
 	"github.com/gungun974/gocva"
-	"mael/cmd/util/cms"
+	"mael/cmd/util/animation"
 	"mael/db/generated"
 	"mael/web/templates/components/animation"
 	"mael/web/templates/components/ui/button"
@@ -15,14 +15,14 @@ import (
 templ Animations(animations []sqlc.Animation) {
 	<div id="content" class="relative scrollbar-hide">
 		<div
-			class="pointer-events-none fixed top-0 left-0 h-screen w-screen z-10 backdrop-blur-[2.5px] animate-background-blur opacity-0 bg-black/35"
+			class="pointer-events-none fixed top-0 left-0 h-dvh w-screen z-10 backdrop-blur-[2.5px] animate-background-blur opacity-0 bg-black/35"
 		></div>
-		<div class="w-screen h-[90vh] sticky top-0 lg:hidden block">
-			@animationComponent.FrontPageAnimationSlider(animations[0], cmsUtil.GetAnimationPaths(1)) {
+		<div class="w-screen h-[90vh] sticky top-0 xl:hidden block">
+			@animationComponent.FrontPageAnimationSlider(animations[0], animationUtil.GetAnimationPaths(1)) {
 			}
 		</div>
-		<div class="w-screen lg:block hidden h-[90vh] sticky top-0 md:top-[2.3rem]">
-			@animationComponent.FrontPageAnimationSlider(animations[1], cmsUtil.GetAnimationPaths(3)) {
+		<div class="w-screen xl:block hidden h-[90dvh] sticky top-0 md:top-[2.3rem]">
+			@animationComponent.FrontPageAnimationSlider(animations[1], animationUtil.GetAnimationPaths(3)) {
 			}
 		</div>
 		@AnimationsShowcase(animations)
@@ -30,7 +30,7 @@ templ Animations(animations []sqlc.Animation) {
 }
 
 templ AnimationsShowcase(animations []sqlc.Animation) {
-	<div class="h-[90vh] relative">
+	<div class="h-[90vh] relative max-md:mb-4">
 		@AnimationShowcaseButtons(len(animations))
 		<div
 			class="h-full flex flex-row max-w-screen w-screen overflow-scroll px-[4.5vw] gap-[4.5vw] mb-4 scrollbar-hide snap-x scroll-smooth relative"
@@ -52,7 +52,7 @@ templ AnimationsShowcase(animations []sqlc.Animation) {
 						@card.Card(card.Props{
 							Class: `md:ml-8 flex justify-center items-center h-[80vh] w-[77vw] bg-black/5 p-4 border-black/80 shadow-sm py-2 flex-col justify-start items-start`,
 						}) {
-							@animationComponent.AnimationReelSlider(animation, cmsUtil.GetAnimationPaths(animation.ID))
+							@animationComponent.AnimationReelSlider(animation, animationUtil.GetAnimationPaths(animation.ID))
 						}
 						<div class="md:block hidden">
 							<span class="text-xs">{ animation.AnimationDesc } </span>
@@ -149,7 +149,7 @@ templ ShowcaseSliderScript(animationCount int) {
                         if(!hash) return;
                         if(hash.includes("#animationSlide-")){
                             this.currentSlide = hash.split("#animationSlide-")[1]*1;
-                            handleButtonShow()
+                            this.handleButtonShow()
                         }
                     },
                     focusCurrent(){

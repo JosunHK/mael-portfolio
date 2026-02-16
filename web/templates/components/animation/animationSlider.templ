@@ -2,6 +2,7 @@ package animationComponent
 
 import (
 	twmerge "github.com/Oudwins/tailwind-merge-go/pkg/twmerge"
+	"mael/cmd/util/animation"
 	"mael/db/generated"
 )
 
@@ -136,8 +137,7 @@ templ AnimationSlider(props Props, fps int) {
 		x-ref="sliderContainer"
 		class={ M("w-full h-full", props.Class) }
 		slider-fps={ fps }
-		{ 
-    props.Attrs... }
+		{ props.Attrs... }
 	>
 		{ children... }
 	</div>
@@ -180,12 +180,18 @@ templ SimpleAnimationSlider(animation sqlc.Animation, paths []string) {
 
 templ AnimationReelSlider(animation sqlc.Animation, paths []string) {
 	@AnimationSlider(Props{
-		Class: "h-full",
+		Class: "h-full overflow-hidden",
 	},
 		int(animation.Fps.Int32),
 	) {
+		{{
+			classStr := "h-[90%] my-4"
+			if animationUtil.IsLandscape(animation) {
+				classStr += " max-md:rotate-90 max-md:scale-[2] "
+			}
+		}}
 		@SliderBody(Props{
-			Class: "h-[90%] my-4",
+			Class: classStr,
 		}) {
 			for _, path := range paths {
 				<img class="h-full max-h-full" loading="lazy" src={ path }/>
