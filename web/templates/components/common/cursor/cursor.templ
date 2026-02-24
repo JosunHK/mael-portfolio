@@ -5,7 +5,7 @@ templ Cursor() {
 		id="custom-cursor"
 		class="cursors rotate-[55deg] origin-left w-min fixed opacity-0 pointer-events-none transition-transform z-50"
 	>
-        <div id="cursor-stroke-horizontal" class="bg-black w-[22px] h-[2px] transition-transform duration-300"></div>
+		<div id="cursor-stroke-horizontal" class="bg-black w-[22px] h-[2px] transition-transform duration-300"></div>
 		<div
 			id="cursor-stroke-vertical"
 			class="bg-black w-[20px] h-[2px]  transition-transform duration-300 cursor-stroke-vertical-transform origin-left"
@@ -81,14 +81,28 @@ templ CursorScript() {
             cursor.children[2].style.height = "0px"
         });
 
-        //determinds if mouse is in viewport or not
-        document.body.addEventListener('mouseenter', function () {
-            if (!('maxTouchPoints' in navigator) || navigator.maxTouchPoints === 0) {
+
+        document.body.addEventListener('click', function (e) {
+            console.log(e.pointerType)
+            if(e.pointerType === "mouse"){
                 isMouseInViewport = true;
+                const cursor = $("#custom-cursor");
+                if (!cursor) return;
+                cursor.style.opacity = "1";
+            } else {
+                isMouseInViewport = false;
+                const cursor = $("#custom-cursor");
+                if (!cursor) return;
+                cursor.style.opacity = "0";
             }
         });
 
-        document.body.addEventListener('mouseleave', function (e) {
+        //determinds if mouse is in viewport or not
+        document.body.addEventListener('mouseenter', function () {
+            isMouseInViewport = true;
+        });
+
+        document.body.addEventListener('mouseleave', function () {
             isMouseInViewport = false;
             const cursor = $("#custom-cursor");
             if (!cursor) return;
