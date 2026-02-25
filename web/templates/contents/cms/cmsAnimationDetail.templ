@@ -15,6 +15,9 @@ import (
 	"mael/web/templates/components/ui/input"
 	cmsComp "mael/web/templates/components/cms"
 	"mael/web/templates/components/animation"
+    thumbBtn "mael/web/templates/components/cms/thumbModeBtn"
+    
+	
 )
 
 var animationDetailScriptHandle = templ.NewOnceHandle();
@@ -39,7 +42,8 @@ templ animationDetailScript(){
     }
 }
 
-templ AnimationDetail(animation sqlc.Animation) {
+templ AnimationDetail(animation sqlc.Animation, thumbMode sqlc.ThumbMode) {
+    
 	<div id="animation-detail" class="flex w-full flex-row items-center justify-center gap-12 font-barlow mt-48">
         @animationDetailScript()
         <form 
@@ -48,18 +52,22 @@ templ AnimationDetail(animation sqlc.Animation) {
             @htmx:after-request="showContent"
             enctype='multipart/form-data'
             hx-patch={fmt.Sprintf("/cms/animation/%v", animation.ID)}
-            hx-swap="outerHTML transition:true"
+            hx-swap="innerHTML transition:true"
             hx-target="#animation-detail"
+            
         >
-            <input type="hidden" name="action" value="modifyDetail">
+            //<input type="hidden" name="action" value="modifyDetail">
             @card.Card(card.Props{
                 Class: "scrollbar-hide text-cms-foreground h-[60vh] w-[60vw] bg-cms-background shadow-xl border-cms-border border",
             }) {
                 @card.Header(card.Props{}){
                     <div class="flex flex-row justify-between items-center">
                         @card.Title(card.Props{}){
-                            {animation.Label}
-                        }
+                                {animation.Label}
+                                
+                                
+                                
+                            }
                         <div class="flex flex-row justify-between gap-2 items-center">
                             <a href="/cms/animation">
                                 @cmsComp.Button(button.Props{
@@ -89,6 +97,8 @@ templ AnimationDetail(animation sqlc.Animation) {
                                         "type": "submit",
                                         "x-data": "",
                                         "x-tooltip.raw": "Submit Changes",
+                                        "name": "action",
+                                        "value": "modifyDetail",
                                     },
                                     Variant: gocva.Variant{"variant": "ghost", "size": "icon"},
                                     Class: "border-cms-border border-2",
@@ -113,7 +123,7 @@ templ AnimationDetail(animation sqlc.Animation) {
                         "x-show":"show",
                     },
                 }){
-                    @AnimationDetailForm(animation)
+                    @AnimationDetailForm(animation, thumbMode)
                     @dropZone.DropZoneDefault("Uploading will remove all previously saved images.")
                 }
                 @card.Content(card.Props{
@@ -149,7 +159,7 @@ templ AnimationDetail(animation sqlc.Animation) {
 	</div>
 }
 
-templ AnimationDetailForm(animation sqlc.Animation){
+templ AnimationDetailForm(animation sqlc.Animation, thumbMode sqlc.ThumbMode){
         @table.Table(table.Props{
             Class: "text-base font-medium",
         }) {
@@ -199,6 +209,10 @@ templ AnimationDetailForm(animation sqlc.Animation){
                                 fps
                             }
                         </div>
+                    }
+                    @table.Cell(table.Props{}){
+                        @thumbBtn.ThumbModeButtonRow(int(animation.ID), "#animation-detail", thumbMode)
+                            
                     }
                 }
                 @table.Row(table.Props{

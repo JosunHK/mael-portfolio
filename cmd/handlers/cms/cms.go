@@ -2,9 +2,9 @@ package cms
 
 import (
 	"fmt"
-	"mael/cmd/struct/error"
+	resError "mael/cmd/struct/error"
 	responseUtil "mael/cmd/util/response"
-	"mael/web/templates/contents/errorAlert"
+	errorTemplate "mael/web/templates/contents/errorAlert"
 
 	"github.com/a-h/templ"
 	"github.com/labstack/echo/v4"
@@ -14,18 +14,30 @@ var animationActions = map[string]AnimationPatch{
 	"orderUp":      OrderUp,
 	"orderDown":    OrderDown,
 	"modifyDetail": ModifyDetail,
+	"modifyThumbMobiledetail": ModifyThumbMobile,
+	"modifyThumbDesktopdetail": ModifyThumbDesktop,
+	"modifyThumbMobiletable": ModifyThumbMobile,
+	"modifyThumbDesktoptable": ModifyThumbDesktop,
 }
 
 var animationActionsResBody = map[string]AnimationPatchResBody{
 	"orderUp":      GetAnimtions,
 	"orderDown":    GetAnimtions,
 	"modifyDetail": GetAnimtionDetail,
+	"modifyThumbMobiledetail": GetAnimtionDetail,
+	"modifyThumbDesktopdetail": GetAnimtionDetail,
+	"modifyThumbMobiletable": GetAnimtions,
+	"modifyThumbDesktoptable": GetAnimtions,
 }
 
 var animationActionsResFunc = map[string]AnimationPatchResFunc{
 	"orderUp":      responseUtil.HTMX,
 	"orderDown":    responseUtil.HTMX,
 	"modifyDetail": responseUtil.HTMXWithSuccess,
+	"modifyThumbMobiledetail": responseUtil.HTMX,
+	"modifyThumbDesktopdetail": responseUtil.HTMX,
+	"modifyThumbMobiletable": responseUtil.HTMX,
+	"modifyThumbDesktoptable": responseUtil.HTMX,
 }
 
 func GetAnimationRes(c echo.Context) error {
@@ -79,6 +91,24 @@ func PatchAnimation(c echo.Context) error {
 	return resFunc(c, resBody, resErr)
 }
 
+// func PatchThumb(c echo.Context)error{
+// 	 action := c.FormValue("action")
+// 	 actionFunc := animationActions[action]
+
+// 	 resErr := resError.New(fmt.Sprintf("Invalid Action : %v", action), "")
+// 	 if actionFunc != nil{
+// 		resErr = actionFunc(c)
+// 	 }
+
+// 	 resBody, err := GetAnimtions(c)
+// 	 if err != nil && resErr == nil{
+// 		resErr = err
+// 	 }
+
+// 	 return responseUtil.HTMX(c, resBody, resErr)
+	 
+// }
+
 func GetAnimationDetail(c echo.Context) templ.Component {
 	detail, err := GetAnimtionDetail(c)
 	if err != nil {
@@ -86,3 +116,5 @@ func GetAnimationDetail(c echo.Context) templ.Component {
 	}
 	return detail
 }
+
+

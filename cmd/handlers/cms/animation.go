@@ -4,10 +4,10 @@ import (
 	"database/sql"
 	"fmt"
 	"mael/cmd/database"
-	"mael/cmd/struct/cms"
-	"mael/cmd/struct/error"
-	"mael/db/generated"
-	"mael/web/templates/contents/cms"
+	cmsStruct "mael/cmd/struct/cms"
+	resError "mael/cmd/struct/error"
+	sqlc "mael/db/generated"
+	cmsTemplates "mael/web/templates/contents/cms"
 	"strconv"
 
 	"github.com/a-h/templ"
@@ -22,11 +22,18 @@ type AnimationPatchResFunc func(echo.Context, templ.Component, *resError.Error) 
 func GetAnimtions(c echo.Context) (templ.Component, *resError.Error) {
 	queries := sqlc.New(database.DB)
 	res, err := queries.GetAnimations(c.Request().Context())
+	resThumb, errThumb := queries.GetThumbMode(c.Request().Context())
 	if err != nil {
-		return cmsTemplates.AnimationsTable([]sqlc.Animation{}), resError.New("Failed to retrive Data ", err.Error())
+		return cmsTemplates.AnimationsTable([]sqlc.Animation{}, sqlc.ThumbMode{}), resError.New("Failed to retrive Data ", err.Error())
 	}
-	return cmsTemplates.AnimationsTable(res), nil
+	if errThumb != nil {
+		return cmsTemplates.AnimationsTable([]sqlc.Animation{}, sqlc.ThumbMode{}), resError.New("Failed to retrive Thumb Data ", errThumb.Error())
+	}
+
+	return cmsTemplates.AnimationsTable(res, resThumb), nil
 }
+
+
 
 func DeleteAnimation(c echo.Context) *resError.Error {
 	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
@@ -120,16 +127,19 @@ func OrderDown(c echo.Context) *resError.Error {
 func GetAnimtionDetail(c echo.Context) (templ.Component, *resError.Error) {
 	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
 	if err != nil {
-		return cmsTemplates.AnimationDetail(sqlc.Animation{}), resError.New("Invalid id ", err.Error())
+		return cmsTemplates.AnimationDetail(sqlc.Animation{}, sqlc.ThumbMode{}), resError.New("Invalid id ", err.Error())
 	}
 
 	queries := sqlc.New(database.DB)
 	res, err := queries.GetAnimationById(c.Request().Context(), id)
+	resThumb, errThumb := queries.GetThumbMode(c.Request().Context())
 	if err != nil {
-		return cmsTemplates.AnimationDetail(sqlc.Animation{}), resError.New("Failed to retrive Data ", err.Error())
+		return cmsTemplates.AnimationDetail(sqlc.Animation{}, sqlc.ThumbMode{}), resError.New("Failed to retrive Data ", err.Error())
 	}
-
-	return cmsTemplates.AnimationDetail(res), nil
+	if errThumb != nil {
+		return cmsTemplates.AnimationDetail(sqlc.Animation{}, sqlc.ThumbMode{}), resError.New("Failed to retrive Thumb Data ", errThumb.Error())
+	}
+	return cmsTemplates.AnimationDetail(res, resThumb), nil
 }
 
 func ModifyDetail(c echo.Context) *resError.Error {
@@ -162,6 +172,12 @@ func ModifyDetail(c echo.Context) *resError.Error {
 		Fps:           req.Fps,
 		ID:            id,
 	}
+
+	//do it in the same function of get or patch
+	// newThumb := sqlc.ModifyThumbModeParams{
+	// 	DesktopID: int32(id),
+	// 	MobileID: int32(id),
+	// }
 
 	count, err := savesAnimationReturnCount(c, id)
 	if err != nil {
@@ -208,3 +224,61 @@ func modifyAnimation(c echo.Context, params sqlc.ModifyAnimationParams) error {
 
 	return nil
 }
+
+func ModifyThumbMobile(c echo.Context) *resError.Error{
+	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
+	if err != nil {
+		return resError.New("Invalid id ", err.Error())
+	}
+
+	queries := sqlc.New(database.DB)
+	err = queries.ModifyThumbMobile(c.Request().Context(), int32(id))
+	if err != nil {
+		return resError.New("Failed to Reorder Record ", err.Error())
+	}
+	return nil
+}
+
+func ModifyThumbDesktop(c echo.Context) *resError.Error{
+	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
+	if err != nil {
+		return resError.New("Invalid id ", err.Error())
+	}
+	
+	queries := sqlc.New(database.DB)
+	err = queries.ModifyThumbDesktop(c.Request().Context(), int32(id))
+	if err != nil {
+		return resError.New("Failed to Reorder Record ", err.Error())
+	}
+	return nil
+}
+
+// func ModifyThumbMode(c echo.Context, params sqlc.ModifyThumbModeParams)error{
+// 	queries := sqlc.New(database.DB)
+// 	err := queries.ModifyThumbMode(c.Request().Context(), params)
+// 	if err != nil {
+// 		return err
+// 	}
+
+// 	return nil
+// }
+
+// func modifyThumb(c echo.Context) *resError.Error{
+// 	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
+// 	if err != nil {
+// 		return resError.New("Invalid id ", err.Error())
+// 	}
+// 	//var req = cmsStruct.ModifyThumbModeReq{}
+// 	newThumbMode := sqlc.ModifyThumbModeParams{
+// 		MobileID: int32(id),
+// 		DesktopID: int32(id),
+// 	}
+
+// 	if err = ModifyThumbMode(c, newThumbMode); err != nil {
+// 		log.Error(fmt.Errorf("Failed to update thumb mode %v", err))
+// 		return resError.New("Failed to update thumb mode ", err.Error())
+// 	}
+
+// 	return nil
+// }
+

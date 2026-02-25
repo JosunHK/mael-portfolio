@@ -9,6 +9,7 @@ import (
 	"mael/web/templates/components/ui/card"
 	"mael/web/templates/components/ui/label"
 	"strconv"
+	
 )
 
 var dummynAimationNameList = []string{
@@ -26,14 +27,18 @@ var dummyAnimation = sqlc.Animation{
 	FramesCount:   sql.NullInt32{Valid: true, Int32: 103},
 }
 
-templ Animations() {
+templ Animations(thumbDesktop sqlc.Animation, thumbMobile sqlc.Animation) {
 	<div id="content" class="relative scrollbar-hide">
 		<div
 			class="pointer-events-none fixed top-0 left-0 h-screen w-screen z-10 backdrop-blur-[2.5px] animate-background-blur opacity-0 bg-black/35"
 		></div>
-		<div class="w-screen h-[90vh] sticky top-[2.3rem]">
-			@animationComponent.FrontPageAnimationSlider(dummyAnimation, cmsUtil.GetAnimationPaths(3)) {
-			}
+		<div class="w-screen h-[90vh] sticky top-[2.3rem] md:block hidden" >			
+				@animationComponent.FrontPageAnimationSlider(thumbDesktop, cmsUtil.GetAnimationPaths(thumbDesktop.ID)) {
+				}
+		</div>
+		<div class="w-screen h-[90vh] sticky top-[2.3rem] md:hidden">			
+				@animationComponent.FrontPageAnimationSlider(thumbMobile, cmsUtil.GetAnimationPaths(thumbMobile.ID)) {
+				}
 		</div>
 		@AnimationsShowcase()
 	</div>
