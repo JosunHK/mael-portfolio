@@ -30,7 +30,7 @@ templ Animations(animations []sqlc.Animation) {
 }
 
 templ AnimationsShowcase(animations []sqlc.Animation) {
-	<div id="animation-slide-container" class="h-[90dvh] relative max-md:mb-4 min-h-[400px]">
+	<div id="animation-slide-container" class="h-[90dvh] relative max-md:mb-4 min-h-[400px] bottom-4">
 		@AnimationShowcaseButtons(len(animations))
 		<div
 			class="h-full flex flex-row max-w-screen w-screen overflow-scroll px-[4.5dvw] gap-[4.5dvw] mb-4 scrollbar-hide snap-x scroll-smooth relative"
@@ -38,26 +38,25 @@ templ AnimationsShowcase(animations []sqlc.Animation) {
 			for i, animation := range animations {
 				<div
 					id={ fmt.Sprintf("animation-slide-%d", i) }
-					class="w-[82dvw] md:w-[92dvw] h-full bg-zinc-300/45 backdrop-blur-lg translate-z-0 border-2 border-black/20 z-20 relative rounded-xl p-2 font-barlow text-gray-700 snap-center md:block flex flex-col items-center"
+					class="w-[82dvw] md:w-[92dvw] h-full bg-zinc-200 translate-z-0 z-20 relative rounded-xl p-2 font-comfortaa border border-black text-stone-700 snap-center md:block flex flex-col items-center"
 				>
-					<div class="px-8 mt-2 mb-4 h-min flex flex-row justify-between w-full">
+					<div class="hidden md:flex px-8 mt-2 mb-4 h-min flex-row justify-between w-full">
 						@label.Label(label.Props{
 							Variant: gocva.Variant{"variant": "title"},
-							Class:   "w-fit text-xl ",
+							Class:   "w-fit text-xl",
 						}) {
-							{ animation.Label }
+							{ "{ - "+animation.Label+" - }" }
 						}
 					</div>
-					<div class="flex flex-row justify-center items-center md:items-start md:justify-start w-[90dvw] gap-4">
+					<div class="flex flex-row justify-center items-center md:items-start md:justify-start w-[90dvw] gap-4 mt-8 md:mt-0">
 						@card.Card(card.Props{
-							Class: `md:ml-8 flex justify-center items-center h-[80dvh] w-[77dvw] bg-black/5 p-4 border-black/80 py-2 flex-col justify-start items-start`,
+							Class: `border border-zinc-800 md:ml-8 flex justify-center items-center h-[80dvh] w-[77dvw] p-4 bg-zinc-200 py-2 flex-col justify-start items-start`,
 						}) {
 							@animationComponent.AnimationReelSlider(animation, animationUtil.GetAnimationPaths(animation.ID))
 						}
 						<div class="md:block hidden">
-							<span class="text-xs">{ animation.AnimationDesc } </span>
-							<br/>
-							<span class="text-xs">{ fmt.Sprintf("%d @ %d fps", animation.FramesCount.Int32, animation.Fps.Int32) } </span>
+							<div class="text-xs mb-4">{ ""+animation.AnimationDesc } </div>
+							<div class="text-xs">{ fmt.Sprintf("%d @ %d fps", animation.FramesCount.Int32, animation.Fps.Int32) } </div>
 						</div>
 					</div>
 				</div>
@@ -81,7 +80,7 @@ templ AnimationShowcaseButtons(animationCount int) {
 					"cursor-clickable": "true",
 				},
 				Variant: gocva.Variant{
-					"variant": "glass",
+					"variant": "stone",
 					"size":    "icon",
 				},
 			}) {
@@ -100,7 +99,7 @@ templ AnimationShowcaseButtons(animationCount int) {
 				"cursor-clickable": "true",
 			},
 			Variant: gocva.Variant{
-				"variant": "glass",
+				"variant": "stone",
 				"size":    "icon",
 			},
 		}) {
@@ -118,7 +117,7 @@ templ AnimationShowcaseButtons(animationCount int) {
 				"cursor-clickable": "true",
 			},
 			Variant: gocva.Variant{
-				"variant": "glass",
+				"variant": "stone",
 				"size":    "icon",
 			},
 		}) {

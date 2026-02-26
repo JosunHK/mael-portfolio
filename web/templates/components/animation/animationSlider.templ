@@ -167,10 +167,10 @@ templ SliderBody(props Props) {
 templ SimpleAnimationSlider(animation sqlc.Animation, paths []string) {
 	@AnimationSlider(
 		Props{
-            Attrs:templ.Attributes{
-                "is-auto-play":"true",
-            },
-        },
+			Attrs: templ.Attributes{
+				"is-auto-play": "true",
+			},
+		},
 		int(animation.Fps.Int32),
 	) {
 		@SliderBody(Props{}) {
@@ -216,9 +216,9 @@ templ AnimationReelSlider(animation sqlc.Animation, paths []string) {
 templ FrontPageAnimationSlider(animation sqlc.Animation, paths []string) {
 	@AnimationSlider(Props{
 		Class: "h-min rounded-lg",
-        Attrs:templ.Attributes{
-            "is-auto-play":"true",
-        },
+		Attrs: templ.Attributes{
+			"is-auto-play": "true",
+		},
 	},
 		int(animation.Fps.Int32),
 	) {

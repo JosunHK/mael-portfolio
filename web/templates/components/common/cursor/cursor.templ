@@ -83,7 +83,6 @@ templ CursorScript() {
 
 
         document.body.addEventListener('click', function (e) {
-            console.log(e.pointerType)
             if(e.pointerType === "mouse"){
                 isMouseInViewport = true;
                 const cursor = $("#custom-cursor");

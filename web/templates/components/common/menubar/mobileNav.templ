@@ -14,12 +14,21 @@ templ SideMenuScript() {
             document.addEventListener('alpine:init', () => {
                 Alpine.data('sideMenu', () => ({
                     open: false,
+                    toggle(){
+                        this.open = !this.open
+                    },
                     setOpen(){
                         this.open = true
                     },
                     setClose(){
                         this.open = false
+                    },
+                    setCloseAndReset(){
+                        this.open = false
                         window.location="#top"
+                    },
+                    getIsClose(){
+                        return !this.open
                     },
                     getAnimation(){
                         return this.open?'animate-slide-in-mobile':'animate-slide-out-mobile'
@@ -39,14 +48,14 @@ templ MobileNav() {
 }
 
 templ NavLinkMobile(title string, toPath string, toURL string) {
-	<div class="relative font-barlow text-[1.25rem] text-zinc-800 border border-zinc-900/80 rounded-xl w-[90%] mx-auto shadow-xl bg-zinc-500/25 ">
+	<div class="relative font-comfortaa text-[1rem] text-zinc-800 border border-zinc-900/80 rounded-xl w-[40dvw] mx-auto shadow-2xl bg-zinc-300 pt-2">
 		<div
 			hx-push-url={ toURL }
 			hx-swap="transition:true"
 			hx-target="#content"
 			hx-get={ toPath }
 			hx-trigger="click"
-			@click="setClose"
+			@click="setCloseAndReset"
 		>
 			@icon.Wrapper(icon.Props{
 				Class: " h-4 w-4 mx-2 inline-block pt-[0.05rem]",
@@ -63,21 +72,35 @@ templ SideMenu() {
 		MAEL
 	</span>
 	<div
-		class="fixed top-2 right-2 block xl:hidden z-[60]"
+		class="fixed top-2 right-2 block xl:hidden z-[70] "
 		x-data="sideMenu"
 	>
 		@button.Button(button.Props{
 			Attrs: templ.Attributes{
-				"@click": "setOpen",
+				"@click":                 "toggle",
+				"x-on:mousedown.outside": "setClose",
 			},
 			Variant: gocva.Variant{
-				"variant": "glass",
-				"size":    "iconlg",
+				"variant": "stone",
+				"size":    "icon",
 			},
-			Class: "",
+			Class: "grid grid-rows-[100%] justify-center",
 		}) {
 			@icon.Wrapper(icon.Props{
-				Class: "m-1 h-6 w-6 mx-2",
+				Class: "h-5 w-5 col-start-1 row-start-1",
+				Attrs: templ.Attributes{
+					"x-show":                              "open",
+					"x-transition.opacity.duration.100ms": "",
+				},
+			}) {
+				@icon.X()
+			}
+			@icon.Wrapper(icon.Props{
+				Class: "h-5 w-5 col-start-1 row-start-1",
+				Attrs: templ.Attributes{
+					"x-show":                              "getIsClose",
+					"x-transition.opacity.duration.100ms": "",
+				},
 			}) {
 				@icon.Menu()
 			}
@@ -87,10 +110,7 @@ templ SideMenu() {
 				x-show="open"
 				x-transition.opacity.duration.300ms
 				:class="getAnimation"
-				class="z-[60] bg-zinc-400/25 backdrop-blur-lg border-2 border-black/20
-                       text-black shadow-md fixed rounded-xl
-                       overflow-y-auto h-fit right-1 w-[45dvw] top-1 pb-8"
-				x-on:mousedown.outside="setClose"
+				class="z-[60] text-black fixed w-[45dvw] right-1 top-1 bg-zinc-300/80 backdrop-blur-md h-fit border border-zinc-800 rounded-lg pb-8"
 			>
 				{ children... }
 			</div>
@@ -99,25 +119,7 @@ templ SideMenu() {
 }
 
 templ SideMenuContent() {
-	<div class="h-[4rem]">
-		@button.Button(button.Props{
-			Class: "absolute right-1 top-1 border-cms-border border-2 text-black",
-			Attrs: templ.Attributes{
-				"@click": "setClose",
-			},
-			Variant: gocva.Variant{
-				"variant": "ghost",
-				"size":    "iconlg",
-			},
-		}) {
-			@icon.Wrapper(icon.Props{
-				Class: "m-1 h-6 w-6 mx-2",
-			}) {
-				@icon.X()
-			}
-		}
-	</div>
-	<div Class="pt-1 flex-col items-center w-full gap-3 rounded-none border-none flex">
+	<div Class="flex-col items-center w-full gap-3 rounded-none border-none flex pt-14">
 		@NavLinkMobile("ANIMATIONS", "/animation/body", "/animation")
 		@NavLinkMobile("CHARACTERS", "/characters/body", "/characters")
 		@NavLinkMobile("STORYBOARD", "/storyboard/body", "storyboard")
