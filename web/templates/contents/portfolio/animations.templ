@@ -15,7 +15,7 @@ import (
 templ Animations(animations []sqlc.Animation) {
 	<div id="content" class="relative scrollbar-hide">
 		<div
-			class="pointer-events-none fixed top-0 left-0 h-dvh w-screen z-10 animate-background-blur opacity-0 bg-black/55"
+			class="pointer-events-none fixed top-0 left-0 h-dvh w-screen z-10 animate-background-blur opacity-0 bg-black/35 max-md:backdrop-blur-sm"
 		></div>
 		<div class="w-screen sticky top-0 md:hidden block">
 			@animationComponent.FrontPageAnimationSlider(animations[0], animationUtil.GetAnimationPaths(1)) {
@@ -30,34 +30,36 @@ templ Animations(animations []sqlc.Animation) {
 }
 
 templ AnimationsShowcase(animations []sqlc.Animation) {
-	<div id="animation-slide-container" class="h-[90dvh] relative max-md:mb-4 min-h-[400px] bottom-4">
+	<div id="animation-slide-container" class="relative max-md:mb-4 min-h-[400px] max-md:bottom-4">
 		@AnimationShowcaseButtons(len(animations))
 		<div
-			class="h-full flex flex-row max-w-screen w-screen overflow-scroll px-[4.5dvw] gap-[4.5dvw] mb-4 scrollbar-hide snap-x scroll-smooth relative"
+			class="h-[85dvh] md:h-screen max-w-screen w-screen overflow-scroll max-md:px-[4.5dvw] md:pl-[5dvw] gap-[4.5dvw] max-md:mb-4 scrollbar-hide snap-x scroll-smooth relative whitespace-nowrap md:block flex flex-row"
 		>
 			for i, animation := range animations {
 				<div
 					id={ fmt.Sprintf("animation-slide-%d", i) }
-					class="w-[82dvw] md:w-[92dvw] h-full bg-zinc-200 translate-z-0 z-20 relative rounded-xl p-2 font-comfortaa border border-black text-stone-700 snap-center md:block flex flex-col items-center"
+					class="max-md:w-screen h-full md:h-screen z-20 relative rounded-xl p-2 font-comfortaa text-stone-700 snap-center block md:inline-block md:w-screen mr-[4.5dvw] isolate "
 				>
-					<div class="hidden md:flex px-8 mt-2 mb-4 h-min flex-row justify-between w-full">
-						@label.Label(label.Props{
-							Variant: gocva.Variant{"variant": "title"},
-							Class:   "w-fit text-xl",
+					<div class="absolute top-0 left-0 hidden justify-center items-center w-full gap-4 mt-8 md:h-full md:mt-0 z-10 md:flex">
+						@card.Card(card.Props{
+							Class: `flex justify-center items-center h-[80%] w-[75%] p-4 py-2 flex-col justify-start items-start bg-gradient-to-br from-zinc-500 to-zinc-700 border-zinc-800 animate-scroll-sprial delay-200 duration-200`,
 						}) {
-							{ "{ - "+animation.Label+" - }" }
+							<div class="hidden md:flex mt-8 mb-4 h-min flex-row justify-between w-full absolute animate-scroll-anti-sprial origin-left delay-200 duration-200">
+								@label.Label(label.Props{
+									Variant: gocva.Variant{"variant": "title"},
+									Class:   "w-fit text-xl",
+								}) {
+									{ animation.Label }
+								}
+							</div>
 						}
 					</div>
-					<div class="flex flex-row justify-center items-center md:items-start md:justify-start w-[90dvw] gap-4 mt-8 md:mt-0">
+					<div class="flex justify-center items-center w-full gap-4 mt-8 md:h-full md:mt-0 z-20 relative">
 						@card.Card(card.Props{
-							Class: `border border-zinc-800 md:ml-8 flex justify-center items-center h-[80dvh] w-[77dvw] p-4 bg-zinc-200 py-2 flex-col justify-start items-start`,
+							Class: `border-0 flex justify-center items-center h-[80dvh] w-screen md:h-[85%] md:w-[85%] md:px-12 md:bg-gradient-to-br from-neutral-300 to-orange-50 py-2 flex-col max-md:pb-12 pt-12 md:mt-8 bg-transparent`,
 						}) {
 							@animationComponent.AnimationReelSlider(animation, animationUtil.GetAnimationPaths(animation.ID))
 						}
-						<div class="md:block hidden">
-							<div class="text-xs mb-4">{ ""+animation.AnimationDesc } </div>
-							<div class="text-xs">{ fmt.Sprintf("%d @ %d fps", animation.FramesCount.Int32, animation.Fps.Int32) } </div>
-						</div>
 					</div>
 				</div>
 			}
@@ -69,9 +71,9 @@ templ AnimationShowcaseButtons(animationCount int) {
 	<div
 		x-data="showcaseSlider"
 		@scroll.window="handleScroll"
-		class="h-full w-screen absolute bottom-0 flex flex-row justify-between items-center left-0 z-50 px-4 pointer-events-none"
+		class="h-full w-screen absolute bottom-6 md:bottom-0 flex flex-row justify-between items-end md:items-center left-0 z-50 px-4 pointer-events-none"
 	>
-		<div class="fixed bottom-4 right-4">
+		<div class="fixed bottom-4 right-4 flex flex-row ">
 			@button.Button(button.Props{
 				Class: "pointer-events-auto data-[isshow=false]:rotate-180",
 				Attrs: templ.Attributes{
@@ -92,7 +94,7 @@ templ AnimationShowcaseButtons(animationCount int) {
 			}
 		</div>
 		@button.Button(button.Props{
-			Class: "pointer-events-auto data-[isshow=false]:opacity-0 data-[isshow=false]:scale-10 md:flex hidden",
+			Class: "pointer-events-auto data-[isshow=false]:opacity-0 data-[isshow=false]:scale-10 md:flex ",
 			Attrs: templ.Attributes{
 				"@click":           "toPrev",
 				":data-isShow":     "getIsShowPrev",
@@ -110,7 +112,7 @@ templ AnimationShowcaseButtons(animationCount int) {
 			}
 		}
 		@button.Button(button.Props{
-			Class: "pointer-events-auto data-[isshow=false]:opacity-0 data-[isshow=false]:scale-10 opacity-1 md:flex hidden",
+			Class: "pointer-events-auto data-[isshow=false]:opacity-0 data-[isshow=false]:scale-10 opacity-1 md:flex ",
 			Attrs: templ.Attributes{
 				"@click":           "toNext",
 				":data-isShow":     "getIsShowNext",
@@ -150,9 +152,6 @@ templ ShowcaseSliderScript(animationCount int) {
                             this.currentSlide = hash.split("#animation-slide-")[1]*1;
                             this.handleButtonShow()
                         }
-                    },
-                    focusCurrent(){
-                        window.location = "#animation-slide-"+this.currentSlide;
                     },
                     focusTop(){
                         window.location = "#top"

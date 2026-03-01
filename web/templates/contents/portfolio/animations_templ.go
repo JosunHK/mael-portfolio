@@ -41,7 +41,7 @@ func Animations(animations []sqlc.Animation) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div id=\"content\" class=\"relative scrollbar-hide\"><div class=\"pointer-events-none fixed top-0 left-0 h-dvh w-screen z-10 animate-background-blur opacity-0 bg-black/55\"></div><div class=\"w-screen sticky top-0 md:hidden block\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div id=\"content\" class=\"relative scrollbar-hide\"><div class=\"pointer-events-none fixed top-0 left-0 h-dvh w-screen z-10 animate-background-blur opacity-0 bg-black/35 max-md:backdrop-blur-sm\"></div><div class=\"w-screen sticky top-0 md:hidden block\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -122,7 +122,7 @@ func AnimationsShowcase(animations []sqlc.Animation) templ.Component {
 			templ_7745c5c3_Var4 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "<div id=\"animation-slide-container\" class=\"h-[90dvh] relative max-md:mb-4 min-h-[400px] bottom-4\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "<div id=\"animation-slide-container\" class=\"relative max-md:mb-4 min-h-[400px] max-md:bottom-4\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -130,7 +130,7 @@ func AnimationsShowcase(animations []sqlc.Animation) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "<div class=\"h-full flex flex-row max-w-screen w-screen overflow-scroll px-[4.5dvw] gap-[4.5dvw] mb-4 scrollbar-hide snap-x scroll-smooth relative\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "<div class=\"h-[85dvh] md:h-screen max-w-screen w-screen overflow-scroll max-md:px-[4.5dvw] md:pl-[5dvw] gap-[4.5dvw] max-md:mb-4 scrollbar-hide snap-x scroll-smooth relative whitespace-nowrap md:block flex flex-row\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -148,7 +148,7 @@ func AnimationsShowcase(animations []sqlc.Animation) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "\" class=\"w-[82dvw] md:w-[92dvw] h-full bg-zinc-200 translate-z-0 z-20 relative rounded-xl p-2 font-comfortaa border border-black text-stone-700 snap-center md:block flex flex-col items-center\"><div class=\"hidden md:flex px-8 mt-2 mb-4 h-min flex-row justify-between w-full\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "\" class=\"max-md:w-screen h-full md:h-screen z-20 relative rounded-xl p-2 font-comfortaa text-stone-700 snap-center block md:inline-block md:w-screen mr-[4.5dvw] isolate \"><div class=\"absolute top-0 left-0 hidden justify-center items-center w-full gap-4 mt-8 md:h-full md:mt-0 z-10 md:flex\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -164,29 +164,57 @@ func AnimationsShowcase(animations []sqlc.Animation) templ.Component {
 					}()
 				}
 				ctx = templ.InitializeContext(ctx)
-				var templ_7745c5c3_Var7 string
-				templ_7745c5c3_Var7, templ_7745c5c3_Err = templ.JoinStringErrs("{ - " + animation.Label + " - }")
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "<div class=\"hidden md:flex mt-8 mb-4 h-min flex-row justify-between w-full absolute animate-scroll-anti-sprial origin-left delay-200 duration-200\">")
 				if templ_7745c5c3_Err != nil {
-					return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/contents/portfolio/animations.templ`, Line: 48, Col: 38}
+					return templ_7745c5c3_Err
 				}
-				_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var7))
+				templ_7745c5c3_Var7 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+					templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
+					templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
+					if !templ_7745c5c3_IsBuffer {
+						defer func() {
+							templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
+							if templ_7745c5c3_Err == nil {
+								templ_7745c5c3_Err = templ_7745c5c3_BufErr
+							}
+						}()
+					}
+					ctx = templ.InitializeContext(ctx)
+					var templ_7745c5c3_Var8 string
+					templ_7745c5c3_Var8, templ_7745c5c3_Err = templ.JoinStringErrs(animation.Label)
+					if templ_7745c5c3_Err != nil {
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/contents/portfolio/animations.templ`, Line: 52, Col: 26}
+					}
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var8))
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+					return nil
+				})
+				templ_7745c5c3_Err = label.Label(label.Props{
+					Variant: gocva.Variant{"variant": "title"},
+					Class:   "w-fit text-xl",
+				}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var7), templ_7745c5c3_Buffer)
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "</div>")
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
 				return nil
 			})
-			templ_7745c5c3_Err = label.Label(label.Props{
-				Variant: gocva.Variant{"variant": "title"},
-				Class:   "w-fit text-xl",
+			templ_7745c5c3_Err = card.Card(card.Props{
+				Class: `flex justify-center items-center h-[80%] w-[75%] p-4 py-2 flex-col justify-start items-start bg-gradient-to-br from-zinc-500 to-zinc-700 border-zinc-800 animate-scroll-sprial delay-200 duration-200`,
 			}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var6), templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "</div><div class=\"flex flex-row justify-center items-center md:items-start md:justify-start w-[90dvw] gap-4 mt-8 md:mt-0\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "</div><div class=\"flex justify-center items-center w-full gap-4 mt-8 md:h-full md:mt-0 z-20 relative\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Var8 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+			templ_7745c5c3_Var9 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 				templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 				templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
 				if !templ_7745c5c3_IsBuffer {
@@ -205,38 +233,12 @@ func AnimationsShowcase(animations []sqlc.Animation) templ.Component {
 				return nil
 			})
 			templ_7745c5c3_Err = card.Card(card.Props{
-				Class: `border border-zinc-800 md:ml-8 flex justify-center items-center h-[80dvh] w-[77dvw] p-4 bg-zinc-200 py-2 flex-col justify-start items-start`,
-			}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var8), templ_7745c5c3_Buffer)
+				Class: `border-0 flex justify-center items-center h-[80dvh] w-screen md:h-[85%] md:w-[85%] md:px-12 md:bg-gradient-to-br from-neutral-300 to-orange-50 py-2 flex-col max-md:pb-12 pt-12 md:mt-8 bg-transparent`,
+			}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var9), templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 10, "<div class=\"md:block hidden\"><div class=\"text-xs mb-4\">")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			var templ_7745c5c3_Var9 string
-			templ_7745c5c3_Var9, templ_7745c5c3_Err = templ.JoinStringErrs("" + animation.AnimationDesc)
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/contents/portfolio/animations.templ`, Line: 58, Col: 61}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var9))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "</div><div class=\"text-xs\">")
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			var templ_7745c5c3_Var10 string
-			templ_7745c5c3_Var10, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%d @ %d fps", animation.FramesCount.Int32, animation.Fps.Int32))
-			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/contents/portfolio/animations.templ`, Line: 59, Col: 106}
-			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var10))
-			if templ_7745c5c3_Err != nil {
-				return templ_7745c5c3_Err
-			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "</div></div></div></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 12, "</div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -265,16 +267,16 @@ func AnimationShowcaseButtons(animationCount int) templ.Component {
 			}()
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var11 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var11 == nil {
-			templ_7745c5c3_Var11 = templ.NopComponent
+		templ_7745c5c3_Var10 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var10 == nil {
+			templ_7745c5c3_Var10 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "<div x-data=\"showcaseSlider\" @scroll.window=\"handleScroll\" class=\"h-full w-screen absolute bottom-0 flex flex-row justify-between items-center left-0 z-50 px-4 pointer-events-none\"><div class=\"fixed bottom-4 right-4\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 14, "<div x-data=\"showcaseSlider\" @scroll.window=\"handleScroll\" class=\"h-full w-screen absolute bottom-6 md:bottom-0 flex flex-row justify-between items-end md:items-center left-0 z-50 px-4 pointer-events-none\"><div class=\"fixed bottom-4 right-4 flex flex-row \">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Var12 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+		templ_7745c5c3_Var11 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 			templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 			templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
 			if !templ_7745c5c3_IsBuffer {
@@ -286,7 +288,7 @@ func AnimationShowcaseButtons(animationCount int) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Var13 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+			templ_7745c5c3_Var12 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 				templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 				templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
 				if !templ_7745c5c3_IsBuffer {
@@ -306,7 +308,7 @@ func AnimationShowcaseButtons(animationCount int) templ.Component {
 			})
 			templ_7745c5c3_Err = icon.Wrapper(icon.Props{
 				Class: "[&>svg]:stroke-black/70 [&>svg]:stroke-[0.25rem]",
-			}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var13), templ_7745c5c3_Buffer)
+			}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var12), templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -323,7 +325,7 @@ func AnimationShowcaseButtons(animationCount int) templ.Component {
 				"variant": "stone",
 				"size":    "icon",
 			},
-		}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var12), templ_7745c5c3_Buffer)
+		}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var11), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -331,7 +333,7 @@ func AnimationShowcaseButtons(animationCount int) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Var14 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+		templ_7745c5c3_Var13 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 			templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 			templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
 			if !templ_7745c5c3_IsBuffer {
@@ -343,7 +345,7 @@ func AnimationShowcaseButtons(animationCount int) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Var15 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+			templ_7745c5c3_Var14 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 				templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 				templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
 				if !templ_7745c5c3_IsBuffer {
@@ -363,14 +365,14 @@ func AnimationShowcaseButtons(animationCount int) templ.Component {
 			})
 			templ_7745c5c3_Err = icon.Wrapper(icon.Props{
 				Class: "[&>svg]:stroke-black/70 [&>svg]:stroke-[0.25rem]",
-			}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var15), templ_7745c5c3_Buffer)
+			}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var14), templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			return nil
 		})
 		templ_7745c5c3_Err = button.Button(button.Props{
-			Class: "pointer-events-auto data-[isshow=false]:opacity-0 data-[isshow=false]:scale-10 md:flex hidden",
+			Class: "pointer-events-auto data-[isshow=false]:opacity-0 data-[isshow=false]:scale-10 md:flex ",
 			Attrs: templ.Attributes{
 				"@click":           "toPrev",
 				":data-isShow":     "getIsShowPrev",
@@ -380,11 +382,11 @@ func AnimationShowcaseButtons(animationCount int) templ.Component {
 				"variant": "stone",
 				"size":    "icon",
 			},
-		}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var14), templ_7745c5c3_Buffer)
+		}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var13), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Var16 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+		templ_7745c5c3_Var15 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 			templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 			templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
 			if !templ_7745c5c3_IsBuffer {
@@ -396,7 +398,7 @@ func AnimationShowcaseButtons(animationCount int) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Var17 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+			templ_7745c5c3_Var16 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 				templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 				templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
 				if !templ_7745c5c3_IsBuffer {
@@ -416,14 +418,14 @@ func AnimationShowcaseButtons(animationCount int) templ.Component {
 			})
 			templ_7745c5c3_Err = icon.Wrapper(icon.Props{
 				Class: "[&>svg]:stroke-black/70 [&>svg]:stroke-[0.25rem]",
-			}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var17), templ_7745c5c3_Buffer)
+			}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var16), templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			return nil
 		})
 		templ_7745c5c3_Err = button.Button(button.Props{
-			Class: "pointer-events-auto data-[isshow=false]:opacity-0 data-[isshow=false]:scale-10 opacity-1 md:flex hidden",
+			Class: "pointer-events-auto data-[isshow=false]:opacity-0 data-[isshow=false]:scale-10 opacity-1 md:flex ",
 			Attrs: templ.Attributes{
 				"@click":           "toNext",
 				":data-isShow":     "getIsShowNext",
@@ -433,7 +435,7 @@ func AnimationShowcaseButtons(animationCount int) templ.Component {
 				"variant": "stone",
 				"size":    "icon",
 			},
-		}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var16), templ_7745c5c3_Buffer)
+		}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var15), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -467,12 +469,12 @@ func ShowcaseSliderScript(animationCount int) templ.Component {
 			}()
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var18 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var18 == nil {
-			templ_7745c5c3_Var18 = templ.NopComponent
+		templ_7745c5c3_Var17 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var17 == nil {
+			templ_7745c5c3_Var17 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Var19 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+		templ_7745c5c3_Var18 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 			templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 			templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
 			if !templ_7745c5c3_IsBuffer {
@@ -488,12 +490,12 @@ func ShowcaseSliderScript(animationCount int) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var20 string
-			templ_7745c5c3_Var20, templ_7745c5c3_Err = templ.JoinStringErrs(templ.GetNonce(ctx))
+			var templ_7745c5c3_Var19 string
+			templ_7745c5c3_Var19, templ_7745c5c3_Err = templ.JoinStringErrs(templ.GetNonce(ctx))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/contents/portfolio/animations.templ`, Line: 138, Col: 37}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/contents/portfolio/animations.templ`, Line: 140, Col: 37}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var20))
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var19))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -501,21 +503,21 @@ func ShowcaseSliderScript(animationCount int) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Var21, templ_7745c5c3_Err := templruntime.ScriptContentOutsideStringLiteral(animationCount - 1)
+			templ_7745c5c3_Var20, templ_7745c5c3_Err := templruntime.ScriptContentOutsideStringLiteral(animationCount - 1)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/contents/portfolio/animations.templ`, Line: 142, Col: 54}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/contents/portfolio/animations.templ`, Line: 144, Col: 54}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var21)
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var20)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 19, ",\n                    isShowPrev: false,\n                    isShowNext: true,\n                    isShowUp: true,\n                    init(){\n                        const hash = window.location.hash;\n                        if(!hash) return;\n                        if(hash.includes(\"#animation-slide-\")){\n                            this.currentSlide = hash.split(\"#animation-slide-\")[1]*1;\n                            this.handleButtonShow()\n                        }\n                    },\n                    focusCurrent(){\n                        window.location = \"#animation-slide-\"+this.currentSlide;\n                    },\n                    focusTop(){\n                        window.location = \"#top\"\n                    },\n                    handleClick(){\n                        if(this.isShowUp){\n                           $(\"#animation-slide-container\").scrollIntoView({ behavior: 'smooth', block: 'start' });\n                        }else{\n                            window.location = \"#top\"\n                        }\n                    },\n                    handleScroll(e){\n                        let precentage = this.getScrollPercent();\n                        if(precentage > 80) {\n                            this.isShowUp = false\n                            this.isShowDown = true\n                        }else{\n                            this.isShowUp = true\n                            this.isShowDown = false \n                        }\n                    },\n                    handleButtonShow(){\n                        if(this.currentSlide === this.maxSlideIndex) {\n                            this.isShowPrev = true \n                            this.isShowNext = false\n                        } else if(this.currentSlide === 0) {\n                            this.isShowNext = true \n                            this.isShowPrev = false\n                        } else {\n                            this.isShowPrev = true \n                            this.isShowNext = true \n                        }\n\n                    },\n                    toNext(){\n                        this.currentSlide = Math.min(this.currentSlide+1, this.maxSlideIndex);\n                        this.handleButtonShow()\n                        window.location = \"#animation-slide-\"+this.currentSlide;\n                    },\n                    toPrev(){\n                        this.currentSlide = Math.max(this.currentSlide-1, 0);\n                        this.handleButtonShow()\n                        window.location = \"#animation-slide-\"+this.currentSlide;\n                    },\n                    getScrollPercent() {\n                        let h = document.documentElement, \n                            b = document.body,\n                            st = 'scrollTop',\n                            sh = 'scrollHeight';\n                        return (h[st]||b[st]) / ((h[sh]||b[sh]) - h.clientHeight) * 100;\n                    },\n                    getIsShowPrev(){\n                        return this.isShowPrev + \"\";\n                    },\n                    getIsShowNext(){\n                        return this.isShowNext+ \"\";\n                    },\n                    getIsShowUp(){\n                        return this.isShowUp+\"\";\n                    },\n                    getIsShowDown(){\n                        return this.isShowDown+\"\";\n                    },\n                }))\n            })\n        </script>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 19, ",\n                    isShowPrev: false,\n                    isShowNext: true,\n                    isShowUp: true,\n                    init(){\n                        const hash = window.location.hash;\n                        if(!hash) return;\n                        if(hash.includes(\"#animation-slide-\")){\n                            this.currentSlide = hash.split(\"#animation-slide-\")[1]*1;\n                            this.handleButtonShow()\n                        }\n                    },\n                    focusTop(){\n                        window.location = \"#top\"\n                    },\n                    handleClick(){\n                        if(this.isShowUp){\n                           $(\"#animation-slide-container\").scrollIntoView({ behavior: 'smooth', block: 'start' });\n                        }else{\n                            window.location = \"#top\"\n                        }\n                    },\n                    handleScroll(e){\n                        let precentage = this.getScrollPercent();\n                        if(precentage > 80) {\n                            this.isShowUp = false\n                            this.isShowDown = true\n                        }else{\n                            this.isShowUp = true\n                            this.isShowDown = false \n                        }\n                    },\n                    handleButtonShow(){\n                        if(this.currentSlide === this.maxSlideIndex) {\n                            this.isShowPrev = true \n                            this.isShowNext = false\n                        } else if(this.currentSlide === 0) {\n                            this.isShowNext = true \n                            this.isShowPrev = false\n                        } else {\n                            this.isShowPrev = true \n                            this.isShowNext = true \n                        }\n\n                    },\n                    toNext(){\n                        this.currentSlide = Math.min(this.currentSlide+1, this.maxSlideIndex);\n                        this.handleButtonShow()\n                        window.location = \"#animation-slide-\"+this.currentSlide;\n                    },\n                    toPrev(){\n                        this.currentSlide = Math.max(this.currentSlide-1, 0);\n                        this.handleButtonShow()\n                        window.location = \"#animation-slide-\"+this.currentSlide;\n                    },\n                    getScrollPercent() {\n                        let h = document.documentElement, \n                            b = document.body,\n                            st = 'scrollTop',\n                            sh = 'scrollHeight';\n                        return (h[st]||b[st]) / ((h[sh]||b[sh]) - h.clientHeight) * 100;\n                    },\n                    getIsShowPrev(){\n                        return this.isShowPrev + \"\";\n                    },\n                    getIsShowNext(){\n                        return this.isShowNext+ \"\";\n                    },\n                    getIsShowUp(){\n                        return this.isShowUp+\"\";\n                    },\n                    getIsShowDown(){\n                        return this.isShowDown+\"\";\n                    },\n                }))\n            })\n        </script>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			return nil
 		})
-		templ_7745c5c3_Err = ShowcaseSliderScriptHandle.Once().Render(templ.WithChildren(ctx, templ_7745c5c3_Var19), templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = ShowcaseSliderScriptHandle.Once().Render(templ.WithChildren(ctx, templ_7745c5c3_Var18), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

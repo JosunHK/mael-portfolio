@@ -224,10 +224,41 @@
         outline: 0px;
     }
 
+    /* i don't think we can do animatoin-timeline in tailwind, at least i dont think its supported in tailwind 3.0*/
     .animate-background-blur {
         animation: background-blur linear forwards;
         animation-timeline: view();
         animation-range-start: 90dvh;
+    }
+
+    .animate-scroll-sprial {
+        animation: scroll-sprial linear forwards;
+        animation-timeline: scroll(y root);
+    }
+
+    .animate-scroll-anti-sprial {
+        animation: scroll-anti-sprial linear forwards;
+        animation-timeline: scroll(y root);
+    }
+
+    @keyframes scroll-sprial {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(7deg);
+        }
+    }
+
+    @keyframes scroll-anti-sprial {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(-7deg);
+        }
     }
 
     @keyframes background-blur {

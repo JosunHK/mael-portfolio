@@ -2,7 +2,6 @@ package animationComponent
 
 import (
 	twmerge "github.com/Oudwins/tailwind-merge-go/pkg/twmerge"
-	"mael/cmd/util/animation"
 	"mael/db/generated"
 )
 
@@ -26,6 +25,7 @@ templ AnimationSliderScript() {
             init() {
                 const frames = this.$refs.sliderBody.children
                 this.$refs.sliderControl.value = 0;
+                this.$refs.framesDisplay.textContent = 1 + " / " + frames.length;
                 this.$refs.sliderControl.setAttribute("max", frames.length - 1)
                 this.updateCurrentFrame();
                 if(this.$refs.sliderContainer.getAttribute("is-auto-play") === "true"){
@@ -193,20 +193,14 @@ templ AnimationReelSlider(animation sqlc.Animation, paths []string) {
 	},
 		int(animation.Fps.Int32),
 	) {
-		{{
-			classStr := "h-[90%] my-4"
-			if animationUtil.IsLandscape(animation) {
-				classStr += " max-md:rotate-90 max-md:scale-[2] "
-			}
-		}}
 		@SliderBody(Props{
-			Class: classStr,
+			Class: "h-[80%] md:h-[80%] my-4 md:my-0 max-md:items-center",
 		}) {
 			for _, path := range paths {
-				<img class="h-full max-h-full" loading="lazy" src={ path }/>
+				<img class="h-fit max-h-full md:h-[calc(85dvh*0.7)] md:max-h-full rounded-lg shadow-lg border border-zinc-800/80" loading="lazy" src={ path }/>
 			}
 		}
-		<div>
+		<div class="p-2 border border-stone-900/20 md:border-stone-500/20 bg-stone-500/55 md:bg-stone-500/20 rounded-lg max-md:backdrop-blur-sm ">
 			@SliderControl(Props{}, false)
 			@FrameDisplay(Props{})
 		</div>

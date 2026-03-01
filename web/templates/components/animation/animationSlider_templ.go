@@ -10,7 +10,6 @@ import templruntime "github.com/a-h/templ/runtime"
 
 import (
 	twmerge "github.com/Oudwins/tailwind-merge-go/pkg/twmerge"
-	"mael/cmd/util/animation"
 	"mael/db/generated"
 )
 
@@ -64,13 +63,13 @@ func AnimationSliderScript() templ.Component {
 			var templ_7745c5c3_Var3 string
 			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(templ.GetNonce(ctx))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/animation/animationSlider.templ`, Line: 21, Col: 37}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/animation/animationSlider.templ`, Line: 20, Col: 37}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\">\n    document.addEventListener('alpine:init', () => {\n        Alpine.data('animationSlider', () => ({\n            isPlaying: false,\n            currentPlaybackFrame: 0,\n            init() {\n                const frames = this.$refs.sliderBody.children\n                this.$refs.sliderControl.value = 0;\n                this.$refs.sliderControl.setAttribute(\"max\", frames.length - 1)\n                this.updateCurrentFrame();\n                if(this.$refs.sliderContainer.getAttribute(\"is-auto-play\") === \"true\"){\n                    this.$nextTick(async () => {this.play()})\n                }\n            },\n            currentFrame() {\n                this.$watch('currentPlaybackFrame', value => {\n                    const frames = this.$refs.sliderBody.children\n                    this.$refs.framesDisplay.textContent = (value + 1) + \" / \" + frames.length\n                })\n            },\n            updateToCursorPos(e) {\n                this.stopPlaying()\n                const x = e.clientX\n                const maxWidth = document.body.clientWidth;\n                const frames = this.$refs.sliderBody.children\n                this.$refs.sliderControl.value = Math.floor(x / (maxWidth / frames.length - 1));\n                this.$refs.sliderControl.dispatchEvent(new Event(\"input\"));\n            },\n            updateCurrentFrame(e) {\n                if(e){\n                    e.stopPropagation()\n                }\n                const currVal = this.$refs.sliderControl.value;\n                const frames = this.$refs.sliderBody.children\n                for (let i = 0; i < frames.length; i++) {\n                    if (i == currVal) {\n                        this.currentPlaybackFrame = i\n                        frames[i].style.opacity = \"100%\";\n                    } else {\n                        frames[i].style.opacity = \"0%\";\n                    }\n                }\n            },\n            handleMouseEnter() {\n                if (this.isPlaying) {\n                    document.body.dispatchEvent(new CustomEvent(\"animationCursorPlay\"));\n                } else {\n                    document.body.dispatchEvent(new CustomEvent(\"animationCursorPause\"));\n                }\n            },\n            handleMouseLeave() {\n                document.body.dispatchEvent(new CustomEvent(\"animationCursorLeave\"));\n            },\n            async play(e) {\n                if (this.isPlaying) {\n                    this.stopPlaying(e)\n                    return\n                }\n                this.isPlaying = true;\n                if (e && e.target != this.$refs.sliderControl) { //only update when is triggered via event aka not by init()\n                    document.body.dispatchEvent(new CustomEvent(\"animationCursorPlay\"));\n                }\n                const frames = this.$refs.sliderBody.children\n                const fps = this.$refs.sliderContainer.getAttribute(\"slider-fps\") * 1;\n                for (let i = this.currentPlaybackFrame; i < frames.length; i++) {\n                    if (this.isPlaying === false) return;\n                    if (!this.$refs.sliderControl) return;\n                    this.$refs.sliderControl.value = i\n                    this.$refs.sliderControl.dispatchEvent(new Event(\"input\"));\n                    await new Promise(r => setTimeout(r, (1000 / fps)));\n                }\n                this.$refs.sliderControl.value = 0\n                this.$refs.sliderControl.dispatchEvent(new Event(\"input\"));\n                this.stopPlaying()\n                this.$nextTick(async () => {this.play()})\n            },\n            stopPlaying(e) {\n                this.isPlaying = false;\n                if (e && e.target !== this.$refs.sliderControl) { //only when triggered by body but no control\n                    document.body.dispatchEvent(new CustomEvent(\"animationCursorPause\"));\n                }\n            }\n        }))\n    })\n</script>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\">\n    document.addEventListener('alpine:init', () => {\n        Alpine.data('animationSlider', () => ({\n            isPlaying: false,\n            currentPlaybackFrame: 0,\n            init() {\n                const frames = this.$refs.sliderBody.children\n                this.$refs.sliderControl.value = 0;\n                this.$refs.framesDisplay.textContent = 1 + \" / \" + frames.length;\n                this.$refs.sliderControl.setAttribute(\"max\", frames.length - 1)\n                this.updateCurrentFrame();\n                if(this.$refs.sliderContainer.getAttribute(\"is-auto-play\") === \"true\"){\n                    this.$nextTick(async () => {this.play()})\n                }\n            },\n            currentFrame() {\n                this.$watch('currentPlaybackFrame', value => {\n                    const frames = this.$refs.sliderBody.children\n                    this.$refs.framesDisplay.textContent = (value + 1) + \" / \" + frames.length\n                })\n            },\n            updateToCursorPos(e) {\n                this.stopPlaying()\n                const x = e.clientX\n                const maxWidth = document.body.clientWidth;\n                const frames = this.$refs.sliderBody.children\n                this.$refs.sliderControl.value = Math.floor(x / (maxWidth / frames.length - 1));\n                this.$refs.sliderControl.dispatchEvent(new Event(\"input\"));\n            },\n            updateCurrentFrame(e) {\n                if(e){\n                    e.stopPropagation()\n                }\n                const currVal = this.$refs.sliderControl.value;\n                const frames = this.$refs.sliderBody.children\n                for (let i = 0; i < frames.length; i++) {\n                    if (i == currVal) {\n                        this.currentPlaybackFrame = i\n                        frames[i].style.opacity = \"100%\";\n                    } else {\n                        frames[i].style.opacity = \"0%\";\n                    }\n                }\n            },\n            handleMouseEnter() {\n                if (this.isPlaying) {\n                    document.body.dispatchEvent(new CustomEvent(\"animationCursorPlay\"));\n                } else {\n                    document.body.dispatchEvent(new CustomEvent(\"animationCursorPause\"));\n                }\n            },\n            handleMouseLeave() {\n                document.body.dispatchEvent(new CustomEvent(\"animationCursorLeave\"));\n            },\n            async play(e) {\n                if (this.isPlaying) {\n                    this.stopPlaying(e)\n                    return\n                }\n                this.isPlaying = true;\n                if (e && e.target != this.$refs.sliderControl) { //only update when is triggered via event aka not by init()\n                    document.body.dispatchEvent(new CustomEvent(\"animationCursorPlay\"));\n                }\n                const frames = this.$refs.sliderBody.children\n                const fps = this.$refs.sliderContainer.getAttribute(\"slider-fps\") * 1;\n                for (let i = this.currentPlaybackFrame; i < frames.length; i++) {\n                    if (this.isPlaying === false) return;\n                    if (!this.$refs.sliderControl) return;\n                    this.$refs.sliderControl.value = i\n                    this.$refs.sliderControl.dispatchEvent(new Event(\"input\"));\n                    await new Promise(r => setTimeout(r, (1000 / fps)));\n                }\n                this.$refs.sliderControl.value = 0\n                this.$refs.sliderControl.dispatchEvent(new Event(\"input\"));\n                this.stopPlaying()\n                this.$nextTick(async () => {this.play()})\n            },\n            stopPlaying(e) {\n                this.isPlaying = false;\n                if (e && e.target !== this.$refs.sliderControl) { //only when triggered by body but no control\n                    document.body.dispatchEvent(new CustomEvent(\"animationCursorPause\"));\n                }\n            }\n        }))\n    })\n</script>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -472,10 +471,6 @@ func AnimationReelSlider(animation sqlc.Animation, paths []string) templ.Compone
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			classStr := "h-[90%] my-4"
-			if animationUtil.IsLandscape(animation) {
-				classStr += " max-md:rotate-90 max-md:scale-[2] "
-			}
 			templ_7745c5c3_Var23 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 				templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 				templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
@@ -489,14 +484,14 @@ func AnimationReelSlider(animation sqlc.Animation, paths []string) templ.Compone
 				}
 				ctx = templ.InitializeContext(ctx)
 				for _, path := range paths {
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 23, "<img class=\"h-full max-h-full\" loading=\"lazy\" src=\"")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 23, "<img class=\"h-fit max-h-full md:h-[calc(85dvh*0.7)] md:max-h-full rounded-lg shadow-lg border border-zinc-800/80\" loading=\"lazy\" src=\"")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 					var templ_7745c5c3_Var24 string
 					templ_7745c5c3_Var24, templ_7745c5c3_Err = templ.JoinStringErrs(path)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/animation/animationSlider.templ`, Line: 206, Col: 60}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/animation/animationSlider.templ`, Line: 200, Col: 143}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var24))
 					if templ_7745c5c3_Err != nil {
@@ -510,12 +505,12 @@ func AnimationReelSlider(animation sqlc.Animation, paths []string) templ.Compone
 				return nil
 			})
 			templ_7745c5c3_Err = SliderBody(Props{
-				Class: classStr,
+				Class: "h-[80%] md:h-[80%] my-4 md:my-0 max-md:items-center",
 			}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var23), templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 25, " <div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 25, " <div class=\"p-2 border border-stone-900/20 md:border-stone-500/20 bg-stone-500/55 md:bg-stone-500/20 rounded-lg max-md:backdrop-blur-sm \">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -598,7 +593,7 @@ func FrontPageAnimationSlider(animation sqlc.Animation, paths []string) templ.Co
 					var templ_7745c5c3_Var28 string
 					templ_7745c5c3_Var28, templ_7745c5c3_Err = templ.JoinStringErrs(path)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/animation/animationSlider.templ`, Line: 229, Col: 49}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/animation/animationSlider.templ`, Line: 223, Col: 49}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var28))
 					if templ_7745c5c3_Err != nil {

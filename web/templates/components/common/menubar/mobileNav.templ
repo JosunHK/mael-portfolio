@@ -48,7 +48,7 @@ templ MobileNav() {
 }
 
 templ NavLinkMobile(title string, toPath string, toURL string) {
-	<div class="relative font-comfortaa text-[1rem] text-zinc-800 border border-zinc-900/80 rounded-xl w-[40dvw] mx-auto shadow-2xl bg-zinc-300 pt-2">
+	<div class="relative font-comfortaa text-[1rem] text-stone-800 border border-stone-900/80 rounded-xl w-[40dvw] mx-auto shadow-2xl bg-stone-300 pt-2">
 		<div
 			hx-push-url={ toURL }
 			hx-swap="transition:true"
@@ -110,7 +110,7 @@ templ SideMenu() {
 				x-show="open"
 				x-transition.opacity.duration.300ms
 				:class="getAnimation"
-				class="z-[60] text-black fixed w-[45dvw] right-1 top-1 bg-zinc-300/80 backdrop-blur-md h-fit border border-zinc-800 rounded-lg pb-8"
+				class="z-[60] text-black fixed w-[45dvw] right-1 top-1 bg-stone-300/80 backdrop-blur-md h-fit border border-stone-800 rounded-lg pb-8"
 			>
 				{ children... }
 			</div>
