@@ -110,13 +110,10 @@ templ AnimationsTable(animations []sqlc.Animation, thumbMode sqlc.ThumbMode) {
                 },
             }) {
                 { item.Label }
-                
-                
-                
-                
+                             
             }
             @table.Cell(table.Props{}){   
-                @thumbBtn.ThumbModeButtonRow(int(item.ID), "#animations-table", thumbMode)
+                @thumbBtn.ThumbModeButtonRow(int(item.ID), "#animations-table", "Table", thumbMode)
             }
 
             @table.Cell(table.Props{}) {

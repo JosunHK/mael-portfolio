@@ -7,29 +7,34 @@ import (
 	"github.com/gungun974/gocva"
     "fmt"
 	"mael/db/generated"
-    "strings"
 )
 
 var TmbScriptHandle = templ.NewOnceHandle();
 templ TmbScript(){
     @TmbScriptHandle.Once(){
-    <script defer nonce={templ.GetNonce(ctx)}>    
+    <script nonce={templ.GetNonce(ctx)}>    
         function registerThumbButton() {
             Alpine.data('thumbButton', () => ({              
                 mode: false,
                 init(){
-                    let id = this.$el.getAttribute('animId')
+                    let id = this.$el.getAttribute('animationId')
                     let thumbModeId = this.$el.getAttribute('thumbModeId')
                     if (id == thumbModeId) {
                         this.mode = true;
                     } else {
                         this.mode = false;
                     }
-                }
+                    if (this.mode) {
+                        this.$el.classList.add("bg-eGreen", "text-background", "hover:bg-eGreen/80");
+                        this.$el.classList.remove("hover:bg-accent", "hover:text-accent-foreground");
+                    } else {
+                        this.$el.classList.remove("bg-eGreen", "text-background", "hover:bg-eGreen/80");
+                        this.$el.classList.add("hover:bg-accent", "hover:text-accent-foreground");
+                    }
+                },
             }));
         }
         
-        //check type of alpine need init or not
         if (typeof Alpine !== "undefined") {
             registerThumbButton();
         } else {
@@ -42,20 +47,17 @@ templ TmbScript(){
     }
 }
 
-templ ThumbModeButtonRow(id int, target string, thumbMode sqlc.ThumbMode){    
+templ ThumbModeButtonRow(id int, target string, targetTag string, thumbMode sqlc.ThumbMode){    
         <div class="flex flex-row" id="testing">
-            @ThumbModeButton(id, int(thumbMode.MobileID), "Mobile Mode", target, icon.Smartphone)
-            @ThumbModeButton(id, int(thumbMode.DesktopID), "Desktop Mode", target, icon.MonitorSmartphone)        
+            @ThumbModeButton(id, int(thumbMode.MobileID.Int64), "Mobile", target, targetTag, icon.Smartphone)
+            @ThumbModeButton(id, int(thumbMode.DesktopID.Int64), "Desktop", target, targetTag, icon.MonitorSmartphone)        
         </div>
 
 }
 
-templ ThumbModeButton(id int, thumbModeId int, device string, target string, buttonIcon func() templ.Component){         
-        {{      words := strings.Split(device, " ")
-                word := words[0]
-                words2 := strings.Split(target, "-")
-                word2 := words2[1]
-                action := fmt.Sprint("modifyThumb", word, word2)
+templ ThumbModeButton(id int, thumbModeId int, device string, target string, targetTag string, buttonIcon func() templ.Component){         
+        {{     
+                action := fmt.Sprint("modifyThumb", device, targetTag)
         }}
             @cmsComp.Button(button.Props{
                 Attrs: templ.Attributes{
@@ -70,9 +72,8 @@ templ ThumbModeButton(id int, thumbModeId int, device string, target string, but
                     "x-init": "init",
                     "hx-trigger": "click",
             
-                    "animId": id,
+                    "animationId": id,
                     "thumbModeId": thumbModeId,  
-                    "x-bind:class": "{ 'bg-eGreen text-background hover:bg-eGreen/80': mode, 'hover:bg-accent hover:text-accent-foreground': !mode }",
                 },
                 Variant: gocva.Variant{"variant": "ghost", "size": "icon"},
                 Class: "border-cms-border border-2",

@@ -32,11 +32,11 @@ func GetAnimations(c echo.Context) (templ.Component, *resError.Error) {
 	if errD != nil || errM != nil {
 		return portfolioTemplates.Animations(sqlc.Animation{}, sqlc.Animation{}), resError.New("Failed to retrive Data ", errD.Error()+" "+errM.Error())
 	}
-	resD, err := queries.GetAnimationById(c.Request().Context(),int64(deskId))
+	resD, err := queries.GetAnimationById(c.Request().Context(), deskId.Int64)
 	if err != nil {
 		return portfolioTemplates.Animations(sqlc.Animation{}, sqlc.Animation{}), resError.New("Failed to retrive Data ", err.Error())
 	}
-	resM, err := queries.GetAnimationById(c.Request().Context(),int64(mobilId))
+	resM, err := queries.GetAnimationById(c.Request().Context(), mobilId.Int64)
 	if err != nil {
 		return portfolioTemplates.Animations(sqlc.Animation{}, sqlc.Animation{}), resError.New("Failed to retrive Data ", err.Error())
 	}

@@ -14,30 +14,30 @@ var animationActions = map[string]AnimationPatch{
 	"orderUp":      OrderUp,
 	"orderDown":    OrderDown,
 	"modifyDetail": ModifyDetail,
-	"modifyThumbMobiledetail": ModifyThumbMobile,
-	"modifyThumbDesktopdetail": ModifyThumbDesktop,
-	"modifyThumbMobiletable": ModifyThumbMobile,
-	"modifyThumbDesktoptable": ModifyThumbDesktop,
+	"modifyThumbMobileDetail": ModifyThumbMobile,
+	"modifyThumbDesktopDetail": ModifyThumbDesktop,
+	"modifyThumbMobileTable": ModifyThumbMobile,
+	"modifyThumbDesktopTable": ModifyThumbDesktop,
 }
 
 var animationActionsResBody = map[string]AnimationPatchResBody{
 	"orderUp":      GetAnimtions,
 	"orderDown":    GetAnimtions,
 	"modifyDetail": GetAnimtionDetail,
-	"modifyThumbMobiledetail": GetAnimtionDetail,
-	"modifyThumbDesktopdetail": GetAnimtionDetail,
-	"modifyThumbMobiletable": GetAnimtions,
-	"modifyThumbDesktoptable": GetAnimtions,
+	"modifyThumbMobileDetail": GetAnimtionDetail,
+	"modifyThumbDesktopDetail": GetAnimtionDetail,
+	"modifyThumbMobileTable": GetAnimtions,
+	"modifyThumbDesktopTable": GetAnimtions,
 }
 
 var animationActionsResFunc = map[string]AnimationPatchResFunc{
 	"orderUp":      responseUtil.HTMX,
 	"orderDown":    responseUtil.HTMX,
 	"modifyDetail": responseUtil.HTMXWithSuccess,
-	"modifyThumbMobiledetail": responseUtil.HTMX,
-	"modifyThumbDesktopdetail": responseUtil.HTMX,
-	"modifyThumbMobiletable": responseUtil.HTMX,
-	"modifyThumbDesktoptable": responseUtil.HTMX,
+	"modifyThumbMobileDetail": responseUtil.HTMX,
+	"modifyThumbDesktopDetail": responseUtil.HTMX,
+	"modifyThumbMobileTable": responseUtil.HTMX,
+	"modifyThumbDesktopTable": responseUtil.HTMX,
 }
 
 func GetAnimationRes(c echo.Context) error {
@@ -60,6 +60,7 @@ func DeleteAnimationRes(c echo.Context) error {
 	if err != nil && resErr == nil { //we pioritize the error of action
 		resErr = err
 	}
+
 	return responseUtil.HTMX(c, table, resErr)
 }
 
@@ -90,24 +91,6 @@ func PatchAnimation(c echo.Context) error {
 
 	return resFunc(c, resBody, resErr)
 }
-
-// func PatchThumb(c echo.Context)error{
-// 	 action := c.FormValue("action")
-// 	 actionFunc := animationActions[action]
-
-// 	 resErr := resError.New(fmt.Sprintf("Invalid Action : %v", action), "")
-// 	 if actionFunc != nil{
-// 		resErr = actionFunc(c)
-// 	 }
-
-// 	 resBody, err := GetAnimtions(c)
-// 	 if err != nil && resErr == nil{
-// 		resErr = err
-// 	 }
-
-// 	 return responseUtil.HTMX(c, resBody, resErr)
-	 
-// }
 
 func GetAnimationDetail(c echo.Context) templ.Component {
 	detail, err := GetAnimtionDetail(c)

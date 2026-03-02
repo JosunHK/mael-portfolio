@@ -211,7 +211,7 @@ templ AnimationDetailForm(animation sqlc.Animation, thumbMode sqlc.ThumbMode){
                         </div>
                     }
                     @table.Cell(table.Props{}){
-                        @thumbBtn.ThumbModeButtonRow(int(animation.ID), "#animation-detail", thumbMode)
+                        @thumbBtn.ThumbModeButtonRow(int(animation.ID), "#animation-detail", "Detail", thumbMode)
                             
                     }
                 }
