@@ -11,3 +11,8 @@ type ModifyAnimationReq struct {
 	Fps   sql.NullInt32 `schema:"fps"`
 	Desc  string        `schema:"desc"`
 }
+
+type ModifyThumbModeReq struct {
+	MobileId int	`schema:"mobileId"`
+	DesktopId int	`schema:"desktopId"`
+}

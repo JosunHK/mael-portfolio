@@ -1,10 +1,11 @@
 package cms
 
 import (
-	"github.com/labstack/echo/v4"
 	"mael/cmd/layout"
 	"mael/cmd/middleware"
-	"mael/web/templates/contents/cms"
+	cmsTemplates "mael/web/templates/contents/cms"
+
+	"github.com/labstack/echo/v4"
 )
 
 func RegisterRoutes(e *echo.Echo) {

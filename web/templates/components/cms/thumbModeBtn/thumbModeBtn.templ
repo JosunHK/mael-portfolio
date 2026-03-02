@@ -1,0 +1,91 @@
+package thumbModeBtn
+
+import (
+    button "mael/web/templates/components/ui/button"
+    cmsComp "mael/web/templates/components/cms"
+    icon "mael/web/templates/components/ui/icon"
+	"github.com/gungun974/gocva"
+    "fmt"
+	"mael/db/generated"
+)
+
+var TmbScriptHandle = templ.NewOnceHandle();
+templ TmbScript(){
+    @TmbScriptHandle.Once(){
+    <script nonce={templ.GetNonce(ctx)}>    
+        function registerThumbButton() {
+            Alpine.data('thumbButton', () => ({              
+                mode: false,
+                init(){
+                    let id = this.$el.getAttribute('animationId')
+                    let thumbModeId = this.$el.getAttribute('thumbModeId')
+                    if (id == thumbModeId) {
+                        this.mode = true;
+                    } else {
+                        this.mode = false;
+                    }
+                    if (this.mode) {
+                        this.$el.classList.add("bg-eGreen", "text-background", "hover:bg-eGreen/80");
+                        this.$el.classList.remove("hover:bg-accent", "hover:text-accent-foreground");
+                    } else {
+                        this.$el.classList.remove("bg-eGreen", "text-background", "hover:bg-eGreen/80");
+                        this.$el.classList.add("hover:bg-accent", "hover:text-accent-foreground");
+                    }
+                },
+            }));
+        }
+        
+        if (typeof Alpine !== "undefined") {
+            registerThumbButton();
+        } else {
+            document.addEventListener('alpine:init', () => {
+                registerThumbButton();
+            });
+        }  
+
+    </script>
+    }
+}
+
+templ ThumbModeButtonRow(id int, target string, targetTag string, thumbMode sqlc.ThumbMode){    
+        <div class="flex flex-row" id="testing">
+            @ThumbModeButton(id, int(thumbMode.MobileID.Int64), "Mobile", target, targetTag, icon.Smartphone)
+            @ThumbModeButton(id, int(thumbMode.DesktopID.Int64), "Desktop", target, targetTag, icon.MonitorSmartphone)        
+        </div>
+
+}
+
+templ ThumbModeButton(id int, thumbModeId int, device string, target string, targetTag string, buttonIcon func() templ.Component){         
+        {{     
+                action := fmt.Sprint("modifyThumb", device, targetTag)
+        }}
+            @cmsComp.Button(button.Props{
+                Attrs: templ.Attributes{
+                    "type": "button",
+                    "name": "action",
+                    "value": action,
+                    "hx-patch": fmt.Sprintf("/cms/animation/%v", id),
+                    "hx-swap": "innerHTML transition:true",
+                    "hx-target": target,
+                    "x-tooltip.raw": device,
+                    "x-data": "thumbButton",
+                    "x-init": "init",
+                    "hx-trigger": "click",
+            
+                    "animationId": id,
+                    "thumbModeId": thumbModeId,  
+                },
+                Variant: gocva.Variant{"variant": "ghost", "size": "icon"},
+                Class: "border-cms-border border-2",
+            }){
+                
+                @icon.Wrapper(icon.Props{
+                    Class: "h-6 w-6",
+                }) {
+                    @buttonIcon()
+                } 
+            }
+            @TmbScript()
+        
+}
+

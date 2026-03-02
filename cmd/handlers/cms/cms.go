@@ -2,9 +2,9 @@ package cms
 
 import (
 	"fmt"
-	"mael/cmd/struct/error"
+	resError "mael/cmd/struct/error"
 	responseUtil "mael/cmd/util/response"
-	"mael/web/templates/contents/errorAlert"
+	errorTemplate "mael/web/templates/contents/errorAlert"
 
 	"github.com/a-h/templ"
 	"github.com/labstack/echo/v4"
@@ -14,18 +14,30 @@ var animationActions = map[string]AnimationPatch{
 	"orderUp":      OrderUp,
 	"orderDown":    OrderDown,
 	"modifyDetail": ModifyDetail,
+	"modifyThumbMobileDetail": ModifyThumbMobile,
+	"modifyThumbDesktopDetail": ModifyThumbDesktop,
+	"modifyThumbMobileTable": ModifyThumbMobile,
+	"modifyThumbDesktopTable": ModifyThumbDesktop,
 }
 
 var animationActionsResBody = map[string]AnimationPatchResBody{
 	"orderUp":      GetAnimations,
 	"orderDown":    GetAnimations,
 	"modifyDetail": GetAnimtionDetail,
+	"modifyThumbMobileDetail": GetAnimtionDetail,
+	"modifyThumbDesktopDetail": GetAnimtionDetail,
+	"modifyThumbMobileTable": GetAnimtions,
+	"modifyThumbDesktopTable": GetAnimtions,
 }
 
 var animationActionsResFunc = map[string]AnimationPatchResFunc{
 	"orderUp":      responseUtil.HTMX,
 	"orderDown":    responseUtil.HTMX,
 	"modifyDetail": responseUtil.HTMXWithSuccess,
+	"modifyThumbMobileDetail": responseUtil.HTMX,
+	"modifyThumbDesktopDetail": responseUtil.HTMX,
+	"modifyThumbMobileTable": responseUtil.HTMX,
+	"modifyThumbDesktopTable": responseUtil.HTMX,
 }
 
 func GetAnimationRes(c echo.Context) error {
@@ -48,6 +60,7 @@ func DeleteAnimationRes(c echo.Context) error {
 	if err != nil && resErr == nil { //we pioritize the error of action
 		resErr = err
 	}
+
 	return responseUtil.HTMX(c, table, resErr)
 }
 
@@ -86,3 +99,5 @@ func GetAnimationDetail(c echo.Context) templ.Component {
 	}
 	return detail
 }
+
+

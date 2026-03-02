@@ -1,10 +1,11 @@
 package portfolio
 
 import (
-	"github.com/labstack/echo/v4"
 	"mael/cmd/layout"
 	"mael/cmd/middleware"
-	"mael/web/templates/contents/portfolio"
+	portfolioTemplates "mael/web/templates/contents/portfolio"
+
+	"github.com/labstack/echo/v4"
 )
 
 func RegisterRoutes(e *echo.Echo) {

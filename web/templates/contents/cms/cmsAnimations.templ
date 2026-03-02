@@ -12,6 +12,8 @@ import (
 	label "mael/web/templates/components/ui/label"
 	cmsComp "mael/web/templates/components/cms"
 	"mael/web/templates/components/ui/table"
+    thumbBtn "mael/web/templates/components/cms/thumbModeBtn"
+
 )
 
 var animationScriptHandle = templ.NewOnceHandle();
@@ -94,13 +96,13 @@ templ animationsHeader() {
 	}
 }
 
-templ AnimationsTable(animations []sqlc.Animation) {
+templ AnimationsTable(animations []sqlc.Animation, thumbMode sqlc.ThumbMode) {  
     for _, item := range animations{
         @table.Row(table.Props{
             Class: "border-cms-border border-b-1 hover:bg-cms-muted/90",
         }) {
             @table.Cell(table.Props{
-                Class: "w-[80%]",
+                Class: "w-[70%]",
                 Attrs: templ.Attributes{
                     "x-data": "animationRow",
                     "@click.self": "toDetails",
@@ -108,7 +110,12 @@ templ AnimationsTable(animations []sqlc.Animation) {
                 },
             }) {
                 { item.Label }
+                             
             }
+            @table.Cell(table.Props{}){   
+                @thumbBtn.ThumbModeButtonRow(int(item.ID), "#animations-table", "Table", thumbMode)
+            }
+
             @table.Cell(table.Props{}) {
                 @cmsComp.Button(button.Props{
                         Variant: gocva.Variant{"variant": "destructive"},
@@ -142,6 +149,7 @@ templ AnimationsTable(animations []sqlc.Animation) {
             }
         }
     }
+    
     @AnimationRowScript()
 }
 
