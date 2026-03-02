@@ -18,7 +18,7 @@ module.exports = {
             },
         },
         backgroundSize: {
-            'full':"100% 100%"
+            'full': "100% 100%"
         },
         extend: {
             fontFamily: {
@@ -129,6 +129,22 @@ module.exports = {
                         width: "0"
                     },
                 },
+                "slide-in-mobile": {
+                    from: {
+                        transform: "translateX(70dvw)"
+                    },
+                    to: {
+                        transform: "translateX(0)"
+                    },
+                },
+                "slide-out-mobile": {
+                    from: {
+                        transform: "translateX(0)"
+                    },
+                    to: {
+                        transform: "translateX(70dvw)"
+                    },
+                },
                 "accordion-down": {
                     from: {
                         height: "0"
@@ -150,6 +166,8 @@ module.exports = {
                 "fade-in": "fade-in 0.5s ease-out",
                 "slide-in": "slide-in 0.1s ease-in forwards",
                 "slide-out": "slide-out 0.1s ease-out forwards",
+                "slide-in-mobile": "slide-in-mobile 0.3s ease-in-out forwards",
+                "slide-out-mobile": "slide-out-mobile 0.3s ease-in-out forwards",
                 "accordion-down": "accordion-down 0.2s ease-out",
                 "accordion-up": "accordion-up 0.2s ease-out",
             },

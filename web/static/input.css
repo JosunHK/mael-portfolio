@@ -83,6 +83,10 @@
 }
 
 @layer base {
+    html {
+        scroll-behavior: smooth;
+    }
+
     .no-cursor {
         cursor: none;
 
@@ -97,7 +101,7 @@
     }
 
     .bg-dotted {
-        background: radial-gradient(circle at 1px 1px, rgba(0, 0, 0, 0.04) 1px, transparent 0) 0 0 / 14px 14px, linear-gradient(#f9feff, #ffffff);
+        background: radial-gradient(circle at 1px 1px, rgba(0, 0, 0, 0.04) 1px, transparent 0) 0 0 / 14px 14px, linear-gradient(oklch(97% 0.001 106.424), #ffffff);
     }
 
     input[type="number"]::-webkit-inner-spin-button,
@@ -188,7 +192,7 @@
         margin-top: 4px;
         /* Centers thumb on the track */
         border: 1px solid black;
-        background-color: #faf7f2;
+        background-color: rgb(228 228 231);
         border-radius: 0.5rem;
         height: 0.5rem;
         width: 2rem;
@@ -208,7 +212,7 @@
 
     /* slider thumb */
     .thinRange::-moz-range-thumb {
-        background-color: #faf7f2;
+        background-color: rgb(228 228 231);
         border: 1px solid black;
         /*Removes extra border that FF applies*/
         border-radius: 0.5rem;
@@ -220,10 +224,41 @@
         outline: 0px;
     }
 
+    /* i don't think we can do animatoin-timeline in tailwind, at least i dont think its supported in tailwind 3.0*/
     .animate-background-blur {
         animation: background-blur linear forwards;
         animation-timeline: view();
-        animation-range-start: 90vh;
+        animation-range-start: 90dvh;
+    }
+
+    .animate-scroll-sprial {
+        animation: scroll-sprial linear forwards;
+        animation-timeline: scroll(y root);
+    }
+
+    .animate-scroll-anti-sprial {
+        animation: scroll-anti-sprial linear forwards;
+        animation-timeline: scroll(y root);
+    }
+
+    @keyframes scroll-sprial {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(7deg);
+        }
+    }
+
+    @keyframes scroll-anti-sprial {
+        from {
+            transform: rotate(0deg);
+        }
+
+        to {
+            transform: rotate(-7deg);
+        }
     }
 
     @keyframes background-blur {

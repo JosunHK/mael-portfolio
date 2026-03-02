@@ -15,12 +15,12 @@ var cva = gocva.CVA{
     data-[state=on]:text-background`,
 	Variants: gocva.Variants{
 		"variant": {
-			"no-color": "",
-			"default": "bg-transparent data-[state=on]:bg-eGreen hover:bg-eGreen/20 ",
-			"outline": "border border-input bg-transparent hover:text-accent-foreground",
+			"no-color":            "",
+			"default":             "bg-transparent data-[state=on]:bg-eGreen hover:bg-eGreen/20 ",
+			"outline":             "border border-input bg-transparent hover:text-accent-foreground",
 			"outline-destructive": "outline-muted outline-1 outline bg-transparent hover:text-accent-foreground data-[state=on]:bg-eRed data-[state=on]:outline-0 hover:bg-eRed/20",
-			"outline-eOrange": "outline-muted outline-1 outline bg-transparent hover:text-accent-foreground data-[state=on]:bg-eOrange data-[state=on]:outline-0 hover:bg-eOrange/20",
-			"destructive": "bg-transparent data-[state=on]:bg-eRed hover:bg-eRed/20",
+			"outline-eOrange":     "outline-muted outline-1 outline bg-transparent hover:text-accent-foreground data-[state=on]:bg-eOrange data-[state=on]:outline-0 hover:bg-eOrange/20",
+			"destructive":         "bg-transparent data-[state=on]:bg-eRed hover:bg-eRed/20",
 		},
 		"size": {
 			"default": "h-10 px-3",
@@ -48,7 +48,7 @@ templ Toggle(props Props, toggled bool) {
                 toggled: %v,
             }`, toggled) }
 		class={ M(cva.Render(props.Variant), props.Class) }
-        @click="toggled = !toggled"
+		@click="toggled = !toggled"
 		:data-state="toggled? 'on' : 'off'"
 		{ props.Attrs... }
 	>

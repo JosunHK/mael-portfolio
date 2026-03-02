@@ -3,6 +3,12 @@ SELECT * FROM animation
 WHERE active = TRUE
 ORDER BY sort_order;
 
+-- name: GetUploadedAnimations :many
+SELECT * FROM animation
+WHERE active = TRUE
+AND frames_count >= 1
+ORDER BY sort_order;
+
 -- name: GetAnimationById :one
 SELECT * FROM animation
 WHERE active = TRUE
@@ -54,5 +60,7 @@ UPDATE animation
 Set label = ?,
     fps = ?,
     animation_desc = ?,
-    frames_count = COALESCE(?, frames_count)
+    frames_count = COALESCE(?, frames_count),
+    height = COALESCE(?, height),
+    width = COALESCE(?, width)
 WHERE id = ?;

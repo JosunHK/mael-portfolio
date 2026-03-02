@@ -2,6 +2,7 @@ package cms
 
 import (
 	"archive/zip"
+	"database/sql"
 	"fmt"
 	"image"
 	"image/jpeg"
@@ -25,6 +26,14 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
+type DecodeFunc func(io.Reader) (image.Image, error)
+type ImageHandler func(string, io.ReadCloser) error
+type SaveAnimationRes struct {
+	FramesCount sql.NullInt32
+	Height      sql.NullInt32
+	Width       sql.NullInt32
+}
+
 var AllowedImageExt = []string{
 	".jpg",
 	".JPG",
@@ -35,9 +44,6 @@ var AllowedImageExt = []string{
 	".webp",
 	".WEBP",
 }
-
-type DecodeFunc func(io.Reader) (image.Image, error)
-type ImageHandler func(string, io.ReadCloser) error
 
 var imageHandlerMap = map[string]ImageHandler{
 	".jpg":  convertJpegAndSaveWebp,
@@ -53,48 +59,52 @@ var imageHandlerMap = map[string]ImageHandler{
 var destPrefixAnimation = consts.GetUploadPath() + "/uploads/animation/"
 var destPrefixImages = consts.GetUploadPath() + "/uploads/images/"
 
-func savesAnimationReturnCount(c echo.Context, id int64) (int, error) {
+func saveAnimation(c echo.Context, id int64) (SaveAnimationRes, error) {
+	var animation SaveAnimationRes
+
 	srcFile, err := c.FormFile("file")
 	if err != nil {
-		return -1, nil
+		return SaveAnimationRes{}, nil
 	}
-	log.Info("Parsed form file")
 
 	src, err := srcFile.Open()
 	if err != nil {
-		return 0, fmt.Errorf("Unable to open file")
+		return SaveAnimationRes{}, fmt.Errorf("Unable to open file")
 	}
 	defer src.Close()
 
 	ext := filepath.Ext(srcFile.Filename)
 	if ext != ".zip" {
-		return 0, fmt.Errorf("Not a .zip file")
+		return SaveAnimationRes{}, fmt.Errorf("Not a .zip file")
 	}
-	
+
 	reader, err := zip.NewReader(src, srcFile.Size)
 	if err != nil {
-		return 0, fmt.Errorf("Failed to create Reader %v", err)
+		return SaveAnimationRes{}, fmt.Errorf("Failed to create Reader %v", err)
 	}
 
 	files := sortZippedFiles(reader)
 	if !(len(files) > 0) {
-		return 0, fmt.Errorf("Zip contains no images")
+		return SaveAnimationRes{}, fmt.Errorf("Zip contains no images")
 	}
-	log.Info("Sorted files")
-
 
 	if err = clearAndCreateDir(fmt.Sprintf("%v%d/", destPrefixAnimation, id)); err != nil {
-		return 0, fmt.Errorf("Failed to create Reader %v", err)
+		return SaveAnimationRes{}, fmt.Errorf("Failed to create Reader %v", err)
 	}
-	log.Info("clearAndCreateDir() completed")
 
 	pathPrefix := fmt.Sprintf("%v%d/", destPrefixAnimation, id)
 
-	return saveUnzippedFilesReturnCount(pathPrefix, files), nil
+	err = saveUnzippedFiles(pathPrefix, files, &animation)
+	if err != nil {
+		return SaveAnimationRes{}, fmt.Errorf("Error Trying to Save Animation %v", err)
+	}
+
+	return animation, nil
 }
 
-func saveUnzippedFilesReturnCount(path string, files []*zip.File) int {
+func saveUnzippedFiles(path string, files []*zip.File, animation *SaveAnimationRes) error {
 	index := 0
+	var firstFilePath string
 	for _, file := range files {
 		uuid, err := uuid.NewV7()
 		if err != nil {
@@ -109,16 +119,46 @@ func saveUnzippedFilesReturnCount(path string, files []*zip.File) int {
 		}
 
 		path := fmt.Sprintf("%v%v_%v.webp", path, paddedIndex, uuid)
-		log.Info("Trying to save to : " + path)
+		if index == 0 {
+			firstFilePath = path
+		}
+
 		if err := saveUnzippedFile(path, file); err != nil {
 			log.Errorf("Failed to save unzipped file %v", err)
 			continue
 		}
-		log.Info("Saved to : " + path)
 
 		index++
 	}
-	return index
+
+	saveImgFramesCount(index, animation)
+	if err := saveImgRes(firstFilePath, animation); err != nil {
+		return fmt.Errorf("Error getting resolution from image, %v", err)
+	}
+
+	return nil
+}
+
+func saveImgFramesCount(count int, animation *SaveAnimationRes) {
+	animation.FramesCount = sql.NullInt32{Valid: true, Int32: int32(count)}
+}
+
+func saveImgRes(path string, animation *SaveAnimationRes) error {
+	file, err := os.Open(path)
+	if err != nil {
+		return fmt.Errorf("Failed to open file %v ", err)
+	}
+	defer file.Close()
+
+	img, err := webp.Decode(file, &decoder.Options{})
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	animation.Width = sql.NullInt32{Valid: true, Int32: int32(img.Bounds().Dx())}
+	animation.Height = sql.NullInt32{Valid: true, Int32: int32(img.Bounds().Dy())}
+
+	return nil
 }
 
 func saveUnzippedFile(path string, file *zip.File) error {
@@ -161,7 +201,12 @@ func scaleAndSaveWebp(path string, file io.ReadCloser) error {
 		return fmt.Errorf("Cannot decode webp %v", err)
 	}
 
-	m := resize.Resize(1080, 0, img, resize.Lanczos3)
+	var m image.Image
+	if img.Bounds().Dx() > img.Bounds().Dy() {
+		m = resize.Resize(2560, 0, img, resize.Lanczos3)
+	} else {
+		m = resize.Resize(0, 2560, img, resize.Lanczos3)
+	}
 
 	// write new image to file
 	jpeg.Encode(output, m, nil)

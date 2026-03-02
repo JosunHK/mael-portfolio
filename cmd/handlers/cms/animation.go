@@ -1,7 +1,6 @@
 package cms
 
 import (
-	"database/sql"
 	"fmt"
 	"mael/cmd/database"
 	cmsStruct "mael/cmd/struct/cms"
@@ -20,7 +19,7 @@ type AnimationPatch func(echo.Context) *resError.Error
 type AnimationPatchResBody func(echo.Context) (templ.Component, *resError.Error)
 type AnimationPatchResFunc func(echo.Context, templ.Component, *resError.Error) error
 
-func GetAnimtions(c echo.Context) (templ.Component, *resError.Error) {
+func GetAnimations(c echo.Context) (templ.Component, *resError.Error) {
 	queries := sqlc.New(database.DB)
 	res, err := queries.GetAnimations(c.Request().Context())
 	resThumb, errThumb := queries.GetThumbMode(c.Request().Context())
@@ -202,21 +201,20 @@ func ModifyDetail(c echo.Context) *resError.Error {
 		return resError.New("Failed update animation record ", err.Error())
 	}
 
-	newAnimation := sqlc.ModifyAnimationParams{
-		Label:         req.Label,
-		AnimationDesc: req.Desc,
-		Fps:           req.Fps,
-		ID:            id,
-	}
-
-	count, err := savesAnimationReturnCount(c, id)
+	res, err := saveAnimation(c, id)
 	if err != nil {
 		log.Error(fmt.Errorf("Failed save animation frames %v", err))
 		return resError.New("Failed save animation frames ", err.Error())
 	}
 
-	if count > 0 {
-		newAnimation.FramesCount = sql.NullInt32{Valid: true, Int32: int32(count)}
+	newAnimation := sqlc.ModifyAnimationParams{
+		ID:            id,
+		Label:         req.Label,
+		AnimationDesc: req.Desc,
+		Fps:           req.Fps,
+		FramesCount:   res.FramesCount,
+		Width:         res.Width,
+		Height:        res.Height,
 	}
 
 	if err = modifyAnimation(c, newAnimation); err != nil {

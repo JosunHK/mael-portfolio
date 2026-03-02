@@ -6,7 +6,6 @@ tmp
 /logs
 go.sum
 tailwindcss
-*_templ.go
 /db/generated
 style.css
 style.min.css

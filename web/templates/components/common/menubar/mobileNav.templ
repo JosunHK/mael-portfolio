@@ -1,0 +1,128 @@
+package menubar
+
+import (
+	gocva "github.com/gungun974/gocva"
+	button "mael/web/templates/components/ui/button"
+	icon "mael/web/templates/components/ui/icon"
+)
+
+var SideMenuScriptHandle = templ.NewOnceHandle()
+
+templ SideMenuScript() {
+	@SideMenuScriptHandle.Once() {
+		<script nonce={ templ.GetNonce(ctx) }>
+            document.addEventListener('alpine:init', () => {
+                Alpine.data('sideMenu', () => ({
+                    open: false,
+                    toggle(){
+                        this.open = !this.open
+                    },
+                    setOpen(){
+                        this.open = true
+                    },
+                    setClose(){
+                        this.open = false
+                    },
+                    setCloseAndReset(){
+                        this.open = false
+                        window.location="#top"
+                    },
+                    getIsClose(){
+                        return !this.open
+                    },
+                    getAnimation(){
+                        return this.open?'animate-slide-in-mobile':'animate-slide-out-mobile'
+                    },
+
+                }))
+            })
+        </script>
+	}
+}
+
+templ MobileNav() {
+	@SideMenu() {
+		@SideMenuContent()
+	}
+	@SideMenuScript()
+}
+
+templ NavLinkMobile(title string, toPath string, toURL string) {
+	<div class="relative font-comfortaa text-[1rem] text-stone-800 border border-stone-900/80 rounded-xl w-[40dvw] mx-auto shadow-2xl bg-stone-300 pt-2">
+		<div
+			hx-push-url={ toURL }
+			hx-swap="transition:true"
+			hx-target="#content"
+			hx-get={ toPath }
+			hx-trigger="click"
+			@click="setCloseAndReset"
+		>
+			@icon.Wrapper(icon.Props{
+				Class: " h-4 w-4 mx-2 inline-block pt-[0.05rem]",
+			}) {
+				@icon.ChevronRight()
+			}
+			<span class="pb-1">{ title }</span>
+		</div>
+	</div>
+}
+
+templ SideMenu() {
+	<span class="fixed top-4 left-4 rounded-xl bg-emerald-100 px-2 mr-8 block xl:hidden z-10 text-md shadow-xs border border-gray-600">
+		MAEL
+	</span>
+	<div
+		class="fixed top-2 right-2 block xl:hidden z-[70] "
+		x-data="sideMenu"
+	>
+		@button.Button(button.Props{
+			Attrs: templ.Attributes{
+				"@click":                 "toggle",
+				"x-on:mousedown.outside": "setClose",
+			},
+			Variant: gocva.Variant{
+				"variant": "stone",
+				"size":    "icon",
+			},
+			Class: "grid grid-rows-[100%] justify-center",
+		}) {
+			@icon.Wrapper(icon.Props{
+				Class: "h-5 w-5 col-start-1 row-start-1",
+				Attrs: templ.Attributes{
+					"x-show":                              "open",
+					"x-transition.opacity.duration.100ms": "",
+				},
+			}) {
+				@icon.X()
+			}
+			@icon.Wrapper(icon.Props{
+				Class: "h-5 w-5 col-start-1 row-start-1",
+				Attrs: templ.Attributes{
+					"x-show":                              "getIsClose",
+					"x-transition.opacity.duration.100ms": "",
+				},
+			}) {
+				@icon.Menu()
+			}
+		}
+		<template x-teleport="body">
+			<div
+				x-show="open"
+				x-transition.opacity.duration.300ms
+				:class="getAnimation"
+				class="z-[60] text-black fixed w-[45dvw] right-1 top-1 bg-stone-300/80 backdrop-blur-md h-fit border border-stone-800 rounded-lg pb-8"
+			>
+				{ children... }
+			</div>
+		</template>
+	</div>
+}
+
+templ SideMenuContent() {
+	<div Class="flex-col items-center w-full gap-3 rounded-none border-none flex pt-14">
+		@NavLinkMobile("ANIMATIONS", "/animation/body", "/animation")
+		@NavLinkMobile("CHARACTERS", "/characters/body", "/characters")
+		@NavLinkMobile("STORYBOARD", "/storyboard/body", "storyboard")
+		@NavLinkMobile("ABOUT ME", "/about/body", "about")
+	</div>
+}

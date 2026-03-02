@@ -21,8 +21,8 @@ var animationActions = map[string]AnimationPatch{
 }
 
 var animationActionsResBody = map[string]AnimationPatchResBody{
-	"orderUp":      GetAnimtions,
-	"orderDown":    GetAnimtions,
+	"orderUp":      GetAnimations,
+	"orderDown":    GetAnimations,
 	"modifyDetail": GetAnimtionDetail,
 	"modifyThumbMobileDetail": GetAnimtionDetail,
 	"modifyThumbDesktopDetail": GetAnimtionDetail,
@@ -41,13 +41,13 @@ var animationActionsResFunc = map[string]AnimationPatchResFunc{
 }
 
 func GetAnimationRes(c echo.Context) error {
-	table, err := GetAnimtions(c)
+	table, err := GetAnimations(c)
 	return responseUtil.HTMX(c, table, err)
 }
 
 func AddAnimationRes(c echo.Context) error {
 	resErr := AddAnimation(c)
-	table, err := GetAnimtions(c)
+	table, err := GetAnimations(c)
 	if err != nil && resErr == nil { //we pioritize the error of action
 		resErr = err
 	}
@@ -56,7 +56,7 @@ func AddAnimationRes(c echo.Context) error {
 
 func DeleteAnimationRes(c echo.Context) error {
 	resErr := DeleteAnimation(c)
-	table, err := GetAnimtions(c)
+	table, err := GetAnimations(c)
 	if err != nil && resErr == nil { //we pioritize the error of action
 		resErr = err
 	}

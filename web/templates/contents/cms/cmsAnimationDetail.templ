@@ -1,16 +1,19 @@
 package cmsTemplates
 
 import (
-    "fmt"
-    "mael/db/generated"
-    "mael/cmd/util/templ"
-    "mael/cmd/util/cms"
-	"mael/web/templates/components/ui/card"
-	icon "mael/web/templates/components/ui/icon"
-	button "mael/web/templates/components/ui/button"
+	"fmt"
 	gocva "github.com/gungun974/gocva"
-	label "mael/web/templates/components/ui/label"
+	"mael/cmd/util/animation"
+	"mael/cmd/util/templ"
+	"mael/db/generated"
+	"mael/web/templates/components/animation"
+	cmsComp "mael/web/templates/components/cms"
+	button "mael/web/templates/components/ui/button"
+	"mael/web/templates/components/ui/card"
 	"mael/web/templates/components/ui/dropZone"
+	icon "mael/web/templates/components/ui/icon"
+	"mael/web/templates/components/ui/input"
+	label "mael/web/templates/components/ui/label"
 	"mael/web/templates/components/ui/table"
 	"mael/web/templates/components/ui/input"
 	cmsComp "mael/web/templates/components/cms"
@@ -20,10 +23,11 @@ import (
 	
 )
 
-var animationDetailScriptHandle = templ.NewOnceHandle();
-templ animationDetailScript(){
-    @animationDetailScriptHandle.Once() {
-        <script nonce={templ.GetNonce(ctx)}>
+var animationDetailScriptHandle = templ.NewOnceHandle()
+
+templ animationDetailScript() {
+	@animationDetailScriptHandle.Once() {
+		<script nonce={ templ.GetNonce(ctx) }>
             document.addEventListener('alpine:init', () => {
                 Alpine.data('animationDetail', () => ({
                     show: true,
@@ -39,7 +43,7 @@ templ animationDetailScript(){
                 }))
             })
         </script>
-    }
+	}
 }
 
 templ AnimationDetail(animation sqlc.Animation, thumbMode sqlc.ThumbMode) {
@@ -56,7 +60,7 @@ templ AnimationDetail(animation sqlc.Animation, thumbMode sqlc.ThumbMode) {
             hx-target="#animation-detail"
             
         >
-            //<input type="hidden" name="action" value="modifyDetail">
+        
             @card.Card(card.Props{
                 Class: "scrollbar-hide text-cms-foreground h-[60vh] w-[60vw] bg-cms-background shadow-xl border-cms-border border",
             }) {
