@@ -20,7 +20,7 @@ import (
 	"mael/web/templates/components/ui/label"
 )
 
-func Animations(animations []sqlc.Animation) templ.Component {
+func Animations(animations []sqlc.Animation, thumbDesktop sqlc.Animation, thumbMobile sqlc.Animation) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -41,7 +41,7 @@ func Animations(animations []sqlc.Animation) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div id=\"content\" class=\"relative scrollbar-hide\"><div class=\"pointer-events-none fixed top-0 left-0 h-dvh w-screen z-10 animate-background-blur opacity-0 bg-black/35 max-md:backdrop-blur-sm\"></div><div class=\"w-screen sticky top-0 md:hidden block\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div id=\"content\" class=\"relative scrollbar-hide\"><div class=\"pointer-events-none fixed top-0 left-0 h-dvh w-screen z-10 animate-background-blur opacity-0 bg-black/35 max-md:backdrop-blur-sm\"></div><div class=\"w-screen h-[90vh] sticky top-[2.3rem] md:block hidden\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -59,11 +59,11 @@ func Animations(animations []sqlc.Animation) templ.Component {
 			ctx = templ.InitializeContext(ctx)
 			return nil
 		})
-		templ_7745c5c3_Err = animationComponent.FrontPageAnimationSlider(animations[0], animationUtil.GetAnimationPaths(1)).Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = animationComponent.FrontPageAnimationSlider(thumbDesktop, animationUtil.GetAnimationPaths(thumbDesktop.ID)).Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</div><div class=\"w-screen md:block hidden sticky top-0 xl:top-[2.3rem]\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "</div><div class=\"w-screen h-[90vh] sticky top-[2.3rem] md:hidden\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -81,7 +81,7 @@ func Animations(animations []sqlc.Animation) templ.Component {
 			ctx = templ.InitializeContext(ctx)
 			return nil
 		})
-		templ_7745c5c3_Err = animationComponent.FrontPageAnimationSlider(animations[1], animationUtil.GetAnimationPaths(3)).Render(templ.WithChildren(ctx, templ_7745c5c3_Var3), templ_7745c5c3_Buffer)
+		templ_7745c5c3_Err = animationComponent.FrontPageAnimationSlider(thumbMobile, animationUtil.GetAnimationPaths(thumbMobile.ID)).Render(templ.WithChildren(ctx, templ_7745c5c3_Var3), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

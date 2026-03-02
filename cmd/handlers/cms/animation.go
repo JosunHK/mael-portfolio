@@ -1,6 +1,7 @@
 package cms
 
 import (
+	"database/sql"
 	"fmt"
 	"mael/cmd/database"
 	cmsStruct "mael/cmd/struct/cms"
