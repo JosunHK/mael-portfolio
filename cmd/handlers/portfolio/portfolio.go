@@ -20,22 +20,22 @@ func Animations(c echo.Context) templ.Component {
 	mobilId, errM := queries.GetThumbMobile(c.Request().Context())
 	
 	if errD != nil || errM != nil {
-		return portfolioTemplates.Animations(sqlc.Animation{}, sqlc.Animation{})
+		return portfolioTemplates.Animations([]sqlc.Animation{}, sqlc.Animation{}, sqlc.Animation{})
 	}
   
   res, err := queries.GetUploadedAnimations(c.Request().Context())
 	if err != nil {
-		return portfolioTemplates.Animations([]sqlc.Animation{})
+		return portfolioTemplates.Animations([]sqlc.Animation{}, sqlc.Animation{}, sqlc.Animation{})
 	}
   
 	resD, err := queries.GetAnimationById(c.Request().Context(), deskId.Int64)
 	if err != nil {
-		return portfolioTemplates.Animations(sqlc.Animation{}, sqlc.Animation{})
+		return portfolioTemplates.Animations([]sqlc.Animation{}, sqlc.Animation{}, sqlc.Animation{})
 	}
   
 	resM, err := queries.GetAnimationById(c.Request().Context(), mobilId.Int64)
 	if err != nil {
-		return portfolioTemplates.Animations(sqlc.Animation{}, sqlc.Animation{})
+		return portfolioTemplates.Animations([]sqlc.Animation{}, sqlc.Animation{}, sqlc.Animation{})
 	}
   
 	return portfolioTemplates.Animations(res, resD, resM)

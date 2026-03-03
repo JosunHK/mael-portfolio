@@ -26,8 +26,8 @@ var animationActionsResBody = map[string]AnimationPatchResBody{
 	"modifyDetail": GetAnimtionDetail,
 	"modifyThumbMobileDetail": GetAnimtionDetail,
 	"modifyThumbDesktopDetail": GetAnimtionDetail,
-	"modifyThumbMobileTable": GetAnimtions,
-	"modifyThumbDesktopTable": GetAnimtions,
+	"modifyThumbMobileTable": GetAnimations,
+	"modifyThumbDesktopTable": GetAnimations,
 }
 
 var animationActionsResFunc = map[string]AnimationPatchResFunc{

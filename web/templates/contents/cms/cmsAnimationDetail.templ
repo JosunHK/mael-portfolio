@@ -15,9 +15,6 @@ import (
 	"mael/web/templates/components/ui/input"
 	label "mael/web/templates/components/ui/label"
 	"mael/web/templates/components/ui/table"
-	"mael/web/templates/components/ui/input"
-	cmsComp "mael/web/templates/components/cms"
-	"mael/web/templates/components/animation"
     thumbBtn "mael/web/templates/components/cms/thumbModeBtn"
     
 	
@@ -149,7 +146,7 @@ templ AnimationDetail(animation sqlc.Animation, thumbMode sqlc.ThumbMode) {
                 Class: "border-2 border-dashed border-cms-border w-full h-full bg-cms-background flex justify-center items-center",
             }) { 
                 if animation.FramesCount.Valid {
-                    @animationComponent.SimpleAnimationSlider(animation, cmsUtil.GetAnimationPaths(animation.ID))
+                    @animationComponent.SimpleAnimationSlider(animation, animationUtil.GetAnimationPaths(animation.ID))
                 } else {
                     @label.Label(
                         label.Props{
