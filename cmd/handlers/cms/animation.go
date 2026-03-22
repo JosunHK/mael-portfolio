@@ -30,12 +30,55 @@ func GetAnimations(c echo.Context) (templ.Component, *resError.Error) {
 	if errThumb != nil {
 		return cmsTemplates.AnimationsTable([]sqlc.Animation{}, sqlc.ThumbMode{}), resError.New("Failed to retrive Thumb Data ", errThumb.Error())
 	}
-	
 
 	return cmsTemplates.AnimationsTable(res, resThumb), nil
 }
 
+func GetSubAnimations(c echo.Context) (templ.Component, *resError.Error) {
+	queries := sqlc.New(database.DB)
+	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
+	if err != nil {
+		return cmsTemplates.SubAnimationsTable([]sqlc.SubAnimation{}), resError.New("Failed to retrive Data ", err.Error())
+	}
 
+	res, err := queries.GetSubAnimations(c.Request().Context(), id)
+	if err != nil {
+		return cmsTemplates.SubAnimationsTable([]sqlc.SubAnimation{}), resError.New("Failed to retrive Data ", err.Error())
+	}
+
+	return cmsTemplates.SubAnimationsTable(res), nil
+}
+
+func DeleteSubAnimation(c echo.Context) *resError.Error {
+	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
+	if err != nil {
+		return resError.New("Invalid id ", err.Error())
+	}
+
+	queries := sqlc.New(database.DB)
+	thumbMode, err := queries.GetThumbMode(c.Request().Context())
+	if err != nil {
+		return resError.New("Failed to retrive Thumb Data ", err.Error())
+	}
+	err = queries.DeleteAnimation(c.Request().Context(), id)
+	if err != nil {
+		return resError.New("Failed to Delete Record ", err.Error())
+	}
+
+	err = queries.UpdateMobileModeIfNull(c.Request().Context())
+	if err != nil {
+		return resError.New("Failed to update mobile mode if null ", err.Error())
+	}
+
+	err = queries.UpdateDesktopModeIfNull(c.Request().Context())
+	if err != nil {
+		return resError.New("Failed to update desktop mode if null ", err.Error())
+	}
+
+	err = DeleteAlert(c, thumbMode, id)
+
+	return nil
+}
 
 func DeleteAnimation(c echo.Context) *resError.Error {
 	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
@@ -62,9 +105,9 @@ func DeleteAnimation(c echo.Context) *resError.Error {
 	if err != nil {
 		return resError.New("Failed to update desktop mode if null ", err.Error())
 	}
-	
+
 	err = DeleteAlert(c, thumbMode, id)
-	
+
 	return nil
 }
 
@@ -100,6 +143,39 @@ func AddAnimation(c echo.Context) *resError.Error {
 	return nil
 }
 
+func AddSubAnimation(c echo.Context) *resError.Error {
+	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
+	if err != nil {
+		log.Error(fmt.Errorf("Invalid id %v", err))
+		return resError.New("Invalid id ", err.Error())
+	}
+
+	var req = cmsStruct.AddSubAnimationReq{}
+
+	err = c.Request().ParseForm()
+	if err != nil {
+		log.Error(fmt.Errorf("failed to parse form %v", err))
+		return resError.New("Failed to create New Record ", err.Error())
+	}
+
+	if err = database.SQLDecoder().Decode(&req, c.Request().PostForm); err != nil {
+		log.Error(fmt.Errorf("Failed to decode / validate Animation Request %v", err))
+		return resError.New("Failed to create New Record ", err.Error())
+	}
+
+	if err = ValidateAddSubAnimationReq(req); err != nil {
+		log.Error(fmt.Errorf("Failed to validate Aniomation Request %v", err))
+		return resError.New("Failed to create New Record ", err.Error())
+	}
+
+	if err = insertSubAnimation(c, req, id); err != nil {
+		log.Error(fmt.Errorf("Failed to insert Record %v", err))
+		return resError.New("Failed to create New Record ", err.Error())
+	}
+
+	return nil
+}
+
 func insertAnimation(c echo.Context, req cmsStruct.AddAnimationReq) error {
 	queries := sqlc.New(database.DB)
 	_, err := queries.AddAnimation(c.Request().Context(), req.Label)
@@ -111,7 +187,30 @@ func insertAnimation(c echo.Context, req cmsStruct.AddAnimationReq) error {
 	return nil
 }
 
+func insertSubAnimation(c echo.Context, req cmsStruct.AddSubAnimationReq, mainId int64) error {
+	queries := sqlc.New(database.DB)
+	_, err := queries.AddSubAnimation(c.Request().Context(), sqlc.AddSubAnimationParams{
+		Label:  req.Label,
+		MainID: mainId,
+	})
+
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
 func ValidateAddAnimationReq(req cmsStruct.AddAnimationReq) error {
+
+	if len(req.Label) > 150 {
+		return fmt.Errorf("Label is too long")
+	}
+
+	return nil
+}
+
+func ValidateAddSubAnimationReq(req cmsStruct.AddSubAnimationReq) error {
 
 	if len(req.Label) > 150 {
 		return fmt.Errorf("Label is too long")
@@ -148,6 +247,50 @@ func OrderDown(c echo.Context) *resError.Error {
 	return nil
 }
 
+func SubOrderUp(c echo.Context) *resError.Error {
+	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
+	if err != nil {
+		return resError.New("Invalid id ", err.Error())
+	}
+
+	queries := sqlc.New(database.DB)
+	err = queries.SubAnimationOrderUp(c.Request().Context(), id)
+	if err != nil {
+		return resError.New("Failed to Reorder Record ", err.Error())
+	}
+	return nil
+}
+
+func SubOrderDown(c echo.Context) *resError.Error {
+	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
+	if err != nil {
+		return resError.New("Invalid id ", err.Error())
+	}
+
+	queries := sqlc.New(database.DB)
+	err = queries.SubAnimationOrderDown(c.Request().Context(), id)
+	if err != nil {
+		return resError.New("Failed to Reorder Record ", err.Error())
+	}
+	return nil
+}
+
+func GetSubAnimtionDetail(c echo.Context) (templ.Component, *resError.Error) {
+	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
+	if err != nil {
+		return cmsTemplates.SubAnimationDetail(sqlc.SubAnimation{}), resError.New("Invalid id ", err.Error())
+	}
+
+	queries := sqlc.New(database.DB)
+
+	res, err := queries.GetSubAnimationById(c.Request().Context(), id)
+	if err != nil {
+		return cmsTemplates.SubAnimationDetail(sqlc.SubAnimation{}), resError.New("Failed to retrive Data ", err.Error())
+	}
+
+	return cmsTemplates.SubAnimationDetail(res), nil
+}
+
 func GetAnimtionDetail(c echo.Context) (templ.Component, *resError.Error) {
 	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
 	if err != nil {
@@ -156,7 +299,7 @@ func GetAnimtionDetail(c echo.Context) (templ.Component, *resError.Error) {
 
 	queries := sqlc.New(database.DB)
 
-	errThumb := EnsureThumbModeExist(c); 
+	errThumb := EnsureThumbModeExist(c)
 	if errThumb != nil {
 		return cmsTemplates.AnimationDetail(sqlc.Animation{}, sqlc.ThumbMode{}), resError.New("Failed to ensure thumb mode exists ", errThumb.Error())
 	}
@@ -169,7 +312,7 @@ func GetAnimtionDetail(c echo.Context) (templ.Component, *resError.Error) {
 	if errThumb != nil {
 		return cmsTemplates.AnimationDetail(sqlc.Animation{}, sqlc.ThumbMode{}), resError.New("Failed to retrive Thumb Data ", errThumb.Error())
 	}
-	
+
 	return cmsTemplates.AnimationDetail(res, resThumb), nil
 }
 
@@ -244,6 +387,24 @@ func ValidateAnimationDetail(detail cmsStruct.ModifyAnimationReq) error {
 	return nil
 }
 
+func ValidateSubAnimationDetail(detail cmsStruct.ModifySubAnimationReq) error {
+	if len(detail.Label) > 150 {
+		return fmt.Errorf("Label is too long")
+	}
+
+	fps := detail.Fps
+	if fps.Valid && (0 > fps.Int32 || fps.Int32 > 1000) {
+		return fmt.Errorf("Invalid fps value")
+	}
+
+	desc := detail.Desc
+	if len(desc) > 1000 {
+		return fmt.Errorf("Invalid fps value")
+	}
+
+	return nil
+}
+
 func modifyAnimation(c echo.Context, params sqlc.ModifyAnimationParams) error {
 	queries := sqlc.New(database.DB)
 	err := queries.ModifyAnimation(c.Request().Context(), params)
@@ -254,7 +415,17 @@ func modifyAnimation(c echo.Context, params sqlc.ModifyAnimationParams) error {
 	return nil
 }
 
-func ModifyThumbMobile(c echo.Context) *resError.Error{
+func modifySubAnimation(c echo.Context, params sqlc.ModifySubAnimationParams) error {
+	queries := sqlc.New(database.DB)
+	err := queries.ModifySubAnimation(c.Request().Context(), params)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func ModifyThumbMobile(c echo.Context) *resError.Error {
 	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
 	if err != nil {
 		return resError.New("Invalid id ", err.Error())
@@ -278,17 +449,17 @@ func ModifyThumbMobile(c echo.Context) *resError.Error{
 	return nil
 }
 
-func ModifyThumbDesktop(c echo.Context) *resError.Error{
+func ModifyThumbDesktop(c echo.Context) *resError.Error {
 	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
 	if err != nil {
 		return resError.New("Invalid id ", err.Error())
 	}
-	
+
 	if err = EnsureThumbModeExist(c); err != nil {
 		log.Error(fmt.Errorf("Failed to ensure thumb mode exists when modifying desktop mode %v", err))
 		return resError.New("Failed to ensure thumb mode exists when modifying desktop mode ", err.Error())
 	}
-	
+
 	queries := sqlc.New(database.DB)
 	err = queries.UpdateDesktopModeIfNull(c.Request().Context())
 	if err != nil {
@@ -309,7 +480,7 @@ func EnsureThumbModeExist(c echo.Context) error {
 	if err != nil {
 		return fmt.Errorf("Failed to Get Thumb Mode Row Count: %w", err)
 	}
-	
+
 	if rows == 0 {
 		err := queries.InsertThumbModeIfNotExists(c.Request().Context())
 		if err != nil {
@@ -321,7 +492,7 @@ func EnsureThumbModeExist(c echo.Context) error {
 }
 
 func DeleteAlert(c echo.Context, thumbModeId sqlc.ThumbMode, id int64) error {
-	if thumbModeId.DesktopID.Int64 == id && thumbModeId.MobileID.Int64 == id  {
+	if thumbModeId.DesktopID.Int64 == id && thumbModeId.MobileID.Int64 == id {
 		deleteThumbAlert := errorTemplate.WarningAlert("Deleted Both Thumbnail Options")
 		return deleteThumbAlert.Render(c.Request().Context(), c.Response().Writer)
 	}
@@ -336,5 +507,49 @@ func DeleteAlert(c echo.Context, thumbModeId sqlc.ThumbMode, id int64) error {
 	return nil
 }
 
+func SubModifyDetail(c echo.Context) *resError.Error {
+	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
+	if err != nil {
+		return resError.New("Invalid id ", err.Error())
+	}
 
+	var req = cmsStruct.ModifySubAnimationReq{}
 
+	err = c.Request().ParseForm()
+	if err != nil {
+		log.Error(fmt.Errorf("failed to parse form %v", err))
+		return resError.New("Failed to create New Record ", err.Error())
+	}
+
+	if err = database.SQLDecoder().Decode(&req, c.Request().PostForm); err != nil {
+		log.Error(fmt.Errorf("Failed to decode / validate modify Request %v", err))
+		return resError.New("Failed to create New Record ", err.Error())
+	}
+
+	if err = ValidateSubAnimationDetail(req); err != nil {
+		log.Error(fmt.Errorf("Failed to validate modify request %v", err))
+		return resError.New("Failed update animation record ", err.Error())
+	}
+
+	res, err := saveSubAnimation(c, id)
+	if err != nil {
+		log.Error(fmt.Errorf("Failed save animation frames %v", err))
+		return resError.New("Failed save animation frames ", err.Error())
+	}
+
+	newAnimation := sqlc.ModifySubAnimationParams{
+		ID:          id,
+		Label:       req.Label,
+		Fps:         req.Fps,
+		FramesCount: res.FramesCount,
+		Width:       res.Width,
+		Height:      res.Height,
+	}
+
+	if err = modifySubAnimation(c, newAnimation); err != nil {
+		log.Error(fmt.Errorf("Failed update animation record %v", err))
+		return resError.New("Failed update animation record ", err.Error())
+	}
+
+	return nil
+}

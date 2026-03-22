@@ -187,6 +187,29 @@ templ SimpleAnimationSlider(animation sqlc.Animation, paths []string) {
 	}
 }
 
+templ SimpleSubAnimationSlider(animation sqlc.SubAnimation, paths []string) {
+	@AnimationSlider(
+		Props{
+			Attrs: templ.Attributes{
+				"is-auto-play": "true",
+			},
+		},
+		int(animation.Fps.Int32),
+	) {
+		@SliderBody(Props{}) {
+			for _, path := range paths {
+				<img class="h-full max-h-full" loading="lazy" src={ path }/>
+			}
+		}
+		@SliderControl(Props{
+			Class: "cursor-move",
+		}, false)
+		@FrameDisplay(Props{
+			Class: "text-cms-foreground",
+		})
+	}
+}
+
 templ AnimationReelSlider(animation sqlc.Animation, paths []string) {
 	@AnimationSlider(Props{
 		Class: "h-full overflow-hidden",

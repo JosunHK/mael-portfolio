@@ -37,3 +37,20 @@ func GetAnimationPaths(id int64) []string {
 
 	return paths
 }
+
+func GetSubAnimationPaths(id int64) []string {
+	entries, err := os.ReadDir(fmt.Sprintf("%v/%d/", consts.LocalSubAnimationPath, id))
+	if err != nil {
+		log.Info("No animation frames found!")
+		return []string{}
+	}
+
+	var paths []string
+	for _, entry := range entries {
+		paths = append(paths, fmt.Sprintf("%v/%d/%v", consts.RequestSubAnimationPath, id, entry.Name()))
+	}
+
+	slices.Sort(paths)
+
+	return paths
+}

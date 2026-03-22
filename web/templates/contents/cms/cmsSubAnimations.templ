@@ -1,0 +1,244 @@
+package cmsTemplates
+
+import (
+	"fmt"
+	gocva "github.com/gungun974/gocva"
+	"mael/cmd/util/fp"
+	"mael/db/generated"
+	cmsComp "mael/web/templates/components/cms"
+	button "mael/web/templates/components/ui/button"
+	"mael/web/templates/components/ui/card"
+	icon "mael/web/templates/components/ui/icon"
+	input "mael/web/templates/components/ui/input"
+	label "mael/web/templates/components/ui/label"
+	"mael/web/templates/components/ui/table"
+)
+
+var subAnimationScriptHandle = templ.NewOnceHandle()
+
+templ SubAnimationScript() {
+	@subAnimationScriptHandle.Once() {
+		<script nonce={ templ.GetNonce(ctx) }>
+            document.addEventListener('alpine:init', () => {
+                Alpine.data('subAnimationForm', () => ({
+                    reset() {
+                        this.$el.reset();
+                    },
+                    reset() {
+                        this.$el.reset();
+                    }
+                }))
+            })
+        </script>
+	}
+}
+
+var subAnimationRowScriptHandle = templ.NewOnceHandle()
+
+templ subAnimationRowScript() {
+	@subAnimationRowScriptHandle.Once() {
+		<script nonce={ templ.GetNonce(ctx) }>
+            Alpine.data('subAnimationRow', () => ({
+                toDetails() {
+                    const animationId = this.$el.getAttribute("animation-id");
+                    window.location = `/cms/animation/sub/detail/${animationId}`
+                }
+            }))
+        </script>
+	}
+}
+
+templ SubAnimations(id int64) {
+	<div class="flex h-full w-full flex-row items-center justify-center gap-12 pt-24 font-barlow">
+		<form
+			x-data="subAnimationForm"
+			@htmx:after-request="reset"
+			hx-post={ fmt.Sprintf("/cms/animation/sub/%d", id) }
+			hx-swap="innerHTML transition:true"
+			hx-target="#animations-table"
+		>
+			@card.Card(card.Props{
+				Class: "scrollbar-hide text-cms-foreground mt-24 h-min h-[450px] w-[800px] bg-cms-background shadow-xl border-cms-border border flex flex-col",
+			}) {
+				@table.Table(table.Props{}) {
+					@subAnimationsHeader(id)
+				}
+				<div class="overflow-y-scroll h-full">
+					@table.Table(table.Props{}) {
+						@table.Body(table.Props{
+							Attrs: templ.Attributes{
+								"id":         "animations-table",
+								"hx-get":     fmt.Sprintf("/cms/animation/sub/table/%d", id),
+								"hx-trigger": "load",
+							},
+						})
+					}
+				</div>
+			}
+		</form>
+	</div>
+	@SubAnimationScript()
+}
+
+templ subAnimationsHeader(id int64) {
+	@table.Header(table.Props{}) {
+		@table.Row(table.Props{
+			Class: "border-cms-border border-b hover:bg-cms-muted/90",
+		}) {
+			@table.Head(table.Props{
+				Class: "text-lg ",
+				Attrs: templ.Attributes{"colspan": "3"},
+			}) {
+				Animation Layers
+				<a href={ fmt.Sprintf("/cms/animation/%d", id) }>
+					@cmsComp.Button(button.Props{
+						Attrs: templ.Attributes{
+							"type":          "button",
+							"x-data":        "",
+							"x-tooltip.raw": "Go Back",
+						},
+						Variant: gocva.Variant{"variant": "ghost", "size": "iconsm"},
+						Class:   "border-cms-border border-2 ml-4",
+					}) {
+						@label.Label(
+							label.Props{
+								Variant: gocva.Variant{"variant": "title"},
+							},
+						) {
+							@icon.Wrapper(icon.Props{
+								Class: "h-4 w-4",
+							}) {
+								@icon.Undo()
+							}
+						}
+					}
+				</a>
+			}
+		}
+		@NewSubRow()
+	}
+}
+
+templ SubAnimationsTable(animations []sqlc.SubAnimation) {
+	for _, item := range animations {
+		@table.Row(table.Props{
+			Class: "border-cms-border border-b-1 hover:bg-cms-muted/90",
+		}) {
+			@table.Cell(table.Props{
+				Class: "w-[70%]",
+				Attrs: templ.Attributes{
+					"x-data":       "subAnimationRow",
+					"@click.self":  "toDetails",
+					"animation-id": item.ID,
+				},
+			}) {
+				{ item.Label }
+			}
+			@table.Cell(table.Props{}) {
+			}
+			@table.Cell(table.Props{}) {
+				@cmsComp.Button(button.Props{
+					Variant: gocva.Variant{"variant": "destructive"},
+					Attrs: templ.Attributes{
+						"type":       "button",
+						"hx-delete":  fmt.Sprintf("/cms/animation/sub/%d", item.ID),
+						"hx-trigger": "click",
+						"hx-swap":    "innerHTML transition:true",
+						"hx-target":  "#animations-table",
+					},
+				}) {
+					@label.Label(
+						label.Props{
+							Variant: gocva.Variant{"variant": "title"},
+						},
+					) {
+						@icon.Wrapper(icon.Props{}) {
+							@icon.X()
+						}
+					}
+				}
+			}
+			@table.Cell(table.Props{
+				Class: "w-[5%]",
+			}) {
+				{{
+					isFirst := fputil.ElemIndex(item, animations) == 0
+					isLast := fputil.ElemIndex(item, animations) == (len(animations) - 1)
+				}}
+				@SubSortOrderButtonRow(item, isFirst, isLast)
+			}
+		}
+	}
+	@subAnimationRowScript()
+}
+
+templ NewSubRow() {
+	@table.Row(table.Props{
+		Class: "border-top-none border-cms-border hover:bg-cms-muted/90 table-row w-[80%]",
+	}) {
+		@table.Cell(table.Props{
+			Class: "w-[80%]",
+		}) {
+			@cmsComp.Input(
+				input.Props{
+					Name: "label",
+				},
+			)
+		}
+		@table.Cell(table.Props{}) {
+			@cmsComp.Button(button.Props{
+				Attrs: templ.Attributes{
+					"type": "submit",
+				},
+				Variant: gocva.Variant{"variant": "default"},
+			}) {
+				@label.Label(
+					label.Props{
+						Variant: gocva.Variant{"variant": "title"},
+					},
+				) {
+					@icon.Wrapper(icon.Props{}) {
+						@icon.Plus()
+					}
+				}
+			}
+		}
+		@table.Cell(table.Props{
+			Class: "w-[5%]",
+		})
+	}
+}
+
+templ SubSortOrderButtonRow(item sqlc.SubAnimation, isFirst bool, isLast bool) {
+	<div class="flex flex-col justify-center items-center">
+		@SubSortOrderButton(item.ID, isFirst, "orderUp", icon.ArrowUp)
+		@SubSortOrderButton(item.ID, isLast, "orderDown", icon.ArrowDown)
+	</div>
+}
+
+templ SubSortOrderButton(id int64, isShow bool, action string, buttonIcon func() templ.Component) {
+	<form
+		hx-patch={ fmt.Sprintf("/cms/animation/sub/%d", id) }
+		hx-swap="innerHTML transition:true"
+		hx-target="#animations-table"
+	>
+		<input type="hidden" name="action" value={ action }/>
+		{{
+			upButton := cmsComp.Button
+			if isShow {
+				upButton = cmsComp.ButtonDisabled
+			}
+		}}
+		@upButton(button.Props{
+			Attrs: templ.Attributes{
+				"type": "submit",
+			},
+			Variant: gocva.Variant{"variant": "ghost", "size": "iconsm"},
+			Class:   "mt-0 mb-0",
+		}) {
+			@icon.Wrapper(icon.Props{}) {
+				@buttonIcon()
+			}
+		}
+	</form>
+}

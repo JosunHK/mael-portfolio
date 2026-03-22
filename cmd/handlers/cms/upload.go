@@ -57,7 +57,51 @@ var imageHandlerMap = map[string]ImageHandler{
 }
 
 var destPrefixAnimation = consts.GetUploadPath() + "/uploads/animation/"
+var destPrefixSubAnimation = consts.GetUploadPath() + "/uploads/animation/sub/"
 var destPrefixImages = consts.GetUploadPath() + "/uploads/images/"
+
+func saveSubAnimation(c echo.Context, id int64) (SaveAnimationRes, error) {
+	var animation SaveAnimationRes
+
+	srcFile, err := c.FormFile("file")
+	if err != nil {
+		return SaveAnimationRes{}, nil
+	}
+
+	src, err := srcFile.Open()
+	if err != nil {
+		return SaveAnimationRes{}, fmt.Errorf("Unable to open file")
+	}
+	defer src.Close()
+
+	ext := filepath.Ext(srcFile.Filename)
+	if ext != ".zip" {
+		return SaveAnimationRes{}, fmt.Errorf("Not a .zip file")
+	}
+
+	reader, err := zip.NewReader(src, srcFile.Size)
+	if err != nil {
+		return SaveAnimationRes{}, fmt.Errorf("Failed to create Reader %v", err)
+	}
+
+	files := sortZippedFiles(reader)
+	if !(len(files) > 0) {
+		return SaveAnimationRes{}, fmt.Errorf("Zip contains no images")
+	}
+
+	if err = clearAndCreateDir(fmt.Sprintf("%v%d/", destPrefixSubAnimation, id)); err != nil {
+		return SaveAnimationRes{}, fmt.Errorf("Failed to create Reader %v", err)
+	}
+
+	pathPrefix := fmt.Sprintf("%v%d/", destPrefixSubAnimation, id)
+
+	err = saveUnzippedFiles(pathPrefix, files, &animation)
+	if err != nil {
+		return SaveAnimationRes{}, fmt.Errorf("Error Trying to Save Animation %v", err)
+	}
+
+	return animation, nil
+}
 
 func saveAnimation(c echo.Context, id int64) (SaveAnimationRes, error) {
 	var animation SaveAnimationRes

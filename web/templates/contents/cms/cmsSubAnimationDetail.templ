@@ -1,0 +1,226 @@
+package cmsTemplates
+
+import (
+	"fmt"
+	gocva "github.com/gungun974/gocva"
+	"mael/cmd/util/animation"
+	"mael/cmd/util/templ"
+	"mael/db/generated"
+	"mael/web/templates/components/animation"
+	cmsComp "mael/web/templates/components/cms"
+	button "mael/web/templates/components/ui/button"
+	"mael/web/templates/components/ui/card"
+	"mael/web/templates/components/ui/dropZone"
+	icon "mael/web/templates/components/ui/icon"
+	"mael/web/templates/components/ui/input"
+	label "mael/web/templates/components/ui/label"
+	"mael/web/templates/components/ui/table"
+)
+
+var subAnimationDetailScriptHandle = templ.NewOnceHandle()
+
+templ subAnimationDetailScript() {
+	@subAnimationDetailScriptHandle.Once() {
+		<script nonce={ templ.GetNonce(ctx) }>
+            document.addEventListener('alpine:init', () => {
+                Alpine.data('subAnimationDetail', () => ({
+                    show: true,
+                    hideContent(){
+                        this.show = false;
+                    },
+                    showContent(){
+                        this.show = true;
+                    },
+                    isShowLoading(){
+                        return !this.show
+                    },
+                }))
+            })
+        </script>
+	}
+}
+
+templ SubAnimationDetail(animation sqlc.SubAnimation) {
+	<div id="animation-detail" class="flex w-full flex-row items-center justify-center gap-12 font-barlow mt-48">
+		@subAnimationDetailScript()
+		<form
+			x-data="subAnimationDetail"
+			@htmx:before-request="hideContent"
+			@htmx:after-request="showContent"
+			enctype="multipart/form-data"
+			hx-patch={ fmt.Sprintf("/cms/animation/sub/%v", animation.ID) }
+			hx-swap="outerHTML transition:true"
+			hx-target="#animation-detail"
+		>
+			@card.Card(card.Props{
+				Class: "scrollbar-hide text-cms-foreground h-[60vh] w-[60vw] bg-cms-background shadow-xl border-cms-border border",
+			}) {
+				@subCardHeader(animation)
+				@subCardContent(animation)
+				@subCardLoadingIndicator()
+			}
+		</form>
+		@subAnimationPreview(animation)
+	</div>
+}
+
+templ subAnimationPreview(animation sqlc.SubAnimation) {
+	@card.Card(card.Props{
+		Class: "scrollbar-hide text-cms-foreground h-[35vh] w-[35vw] bg-cms-background shadow-xl border-cms-border border p-8 ",
+	}) {
+		@card.Card(card.Props{
+			Class: "border-2 border-dashed border-cms-border w-full h-full bg-cms-background flex justify-center items-center",
+		}) {
+			if animation.FramesCount.Valid {
+				@animationComponent.SimpleSubAnimationSlider(animation, animationUtil.GetSubAnimationPaths(animation.ID))
+			} else {
+				@label.Label(
+					label.Props{
+						Variant: gocva.Variant{"variant": "title"},
+						Class:   "text-cms-muted font-barlow italic",
+					},
+				) {
+					No frames uploaded yet! 
+				}
+			}
+		}
+	}
+}
+
+templ subAnimationDetailForm(animation sqlc.SubAnimation) {
+	@table.Table(table.Props{
+		Class: "text-base font-medium",
+	}) {
+		@table.Body(table.Props{
+			Attrs: templ.Attributes{},
+		}) {
+			@table.Row(table.Props{
+				Class: "border-cms-border border-b-1 hover:bg-cms-background",
+			}) {
+				@table.Cell(table.Props{}) {
+					Title:
+				}
+				@table.Cell(table.Props{}) {
+					@cmsComp.Input(
+						input.Props{
+							Name:  "label",
+							Value: animation.Label,
+						},
+					)
+				}
+				@table.Cell(table.Props{}) {
+					Playback:
+				}
+				@table.Cell(table.Props{}) {
+					<div class="flex flex-row justify-center items-center gap-4">
+						@cmsComp.Input(
+							input.Props{
+								Name:  "framesCount",
+								Type:  "number",
+								Class: "w-12",
+								Value: templUtil.ExtractInt32(animation.FramesCount),
+								Attrs: templ.Attributes{"disabled": "disabled"},
+							},
+						)
+						@label.Label(label.Props{}) {
+							Frames @
+						}
+						@cmsComp.Input(
+							input.Props{
+								Name:  "fps",
+								Type:  "number",
+								Class: "w-12",
+								Value: templUtil.ExtractInt32(animation.Fps),
+							},
+						)
+						@label.Label(label.Props{}) {
+							fps
+						}
+					</div>
+				}
+			}
+		}
+	}
+}
+
+templ subCardHeader(animation sqlc.SubAnimation) {
+	@card.Header(card.Props{}) {
+		<div class="flex flex-row justify-between items-center">
+			@card.Title(card.Props{}) {
+				{ animation.Label }
+			}
+			<div class="flex flex-row justify-between gap-2 items-center">
+				<a href={ fmt.Sprintf("/cms/animation/sub/%d", animation.MainID) }>
+					@cmsComp.Button(button.Props{
+						Attrs: templ.Attributes{
+							"type":          "button",
+							"x-data":        "",
+							"x-tooltip.raw": "Go Back",
+						},
+						Variant: gocva.Variant{"variant": "ghost", "size": "icon"},
+						Class:   "border-cms-border border-2",
+					}) {
+						@label.Label(
+							label.Props{
+								Variant: gocva.Variant{"variant": "title"},
+							},
+						) {
+							@icon.Wrapper(icon.Props{
+								Class: "h-6 w-6",
+							}) {
+								@icon.Undo()
+							}
+						}
+					}
+				</a>
+				@cmsComp.Button(button.Props{
+					Attrs: templ.Attributes{
+						"type":          "submit",
+						"x-data":        "",
+						"x-tooltip.raw": "Submit Changes",
+						"name":          "action",
+						"value":         "modifyDetail",
+					},
+					Variant: gocva.Variant{"variant": "ghost", "size": "icon"},
+					Class:   "border-cms-border border-2",
+				}) {
+					@label.Label(
+						label.Props{
+							Variant: gocva.Variant{"variant": "title"},
+						},
+					) {
+						@icon.Wrapper(icon.Props{
+							Class: "h-6 w-6",
+						}) {
+							@icon.Save()
+						}
+					}
+				}
+			</div>
+		</div>
+	}
+}
+
+templ subCardContent(animation sqlc.SubAnimation) {
+	@card.Content(card.Props{
+		Attrs: templ.Attributes{
+			"x-show": "show",
+		},
+	}) {
+		@subAnimationDetailForm(animation)
+		@dropZone.DropZoneDefault("Uploading will remove all previously saved images.")
+	}
+}
+
+templ subCardLoadingIndicator() {
+	@card.Content(card.Props{
+		Class: "w-full h-full",
+		Attrs: templ.Attributes{
+			"x-show": "isShowLoading",
+		},
+	}) {
+		<div class="flex w-full h-full justify-center items-center text-lg font-bold animate-pulse">
+			Loading...
+		</div>
+	}
+}
