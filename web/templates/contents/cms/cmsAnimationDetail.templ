@@ -42,7 +42,7 @@ templ animationDetailScript() {
 }
 
 templ AnimationDetail(animation sqlc.Animation, thumbMode sqlc.ThumbMode) {
-	<div id="animation-detail" class="flex w-full flex-row items-center justify-center gap-12 font-barlow mt-48">
+	<div id="animation-detail" class="flex w-full flex-col items-center justify-center xl:flex-row gap-12 font-barlow mt-48">
 		@animationDetailScript()
 		<form
 			x-data="animationDetail"
@@ -54,7 +54,7 @@ templ AnimationDetail(animation sqlc.Animation, thumbMode sqlc.ThumbMode) {
 			hx-target="#animation-detail"
 		>
 			@card.Card(card.Props{
-				Class: "scrollbar-hide text-cms-foreground h-[60vh] w-[60vw] bg-cms-background shadow-xl border-cms-border border",
+				Class: "scrollbar-hide text-cms-foreground h-[60vh] w-[60vw] bg-cms-background shadow-xl border-cms-border border max-xl:h-auto",
 			}) {
 				@cardHeader(animation)
 				@cardContent(animation, thumbMode)
@@ -67,7 +67,7 @@ templ AnimationDetail(animation sqlc.Animation, thumbMode sqlc.ThumbMode) {
 
 templ animationPreview(animation sqlc.Animation) {
 	@card.Card(card.Props{
-		Class: "scrollbar-hide text-cms-foreground h-[35vh] w-[35vw] bg-cms-background shadow-xl border-cms-border border p-8 ",
+		Class: "scrollbar-hide text-cms-foreground h-[35vh] w-[35vw] bg-cms-background shadow-xl border-cms-border border p-8 max-xl:w-[80vw] max-xl:h-auto",
 	}) {
 		@card.Card(card.Props{
 			Class: "border-2 border-dashed border-cms-border w-full h-full bg-cms-background flex justify-center items-center",
@@ -90,13 +90,13 @@ templ animationPreview(animation sqlc.Animation) {
 
 templ animationDetailForm(animation sqlc.Animation, thumbMode sqlc.ThumbMode) {
 	@table.Table(table.Props{
-		Class: "text-base font-medium",
+		Class: "text-base font-medium xl:h-auto",
 	}) {
 		@table.Body(table.Props{
 			Attrs: templ.Attributes{},
 		}) {
 			@table.Row(table.Props{
-				Class: "border-cms-border border-b-1 hover:bg-cms-background",
+				Class: "border-cms-border border-b-1 hover:bg-cms-background max-xl:flex max-xl:flex-col max-xl:gap-2",
 			}) {
 				@table.Cell(table.Props{}) {
 					Title:
@@ -144,7 +144,7 @@ templ animationDetailForm(animation sqlc.Animation, thumbMode sqlc.ThumbMode) {
 				}
 			}
 			@table.Row(table.Props{
-				Class: "border-cms-border border-b-1 hover:bg-cms-background",
+				Class: "border-cms-border border-b-1 hover:bg-cms-background max-xl:flex max-xl:flex-col max-xl:gap-2",
 			}) {
 				@table.Cell(table.Props{}) {
 					Description:

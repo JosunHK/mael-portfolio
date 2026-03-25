@@ -109,7 +109,7 @@ func AnimationDetail(animation sqlc.Animation, thumbMode sqlc.ThumbMode) templ.C
 			templ_7745c5c3_Var4 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<div id=\"animation-detail\" class=\"flex w-full flex-row items-center justify-center gap-12 font-barlow mt-48\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<div id=\"animation-detail\" class=\"flex w-full flex-col items-center justify-center xl:flex-row gap-12 font-barlow mt-48\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -169,7 +169,7 @@ func AnimationDetail(animation sqlc.Animation, thumbMode sqlc.ThumbMode) templ.C
 			return nil
 		})
 		templ_7745c5c3_Err = card.Card(card.Props{
-			Class: "scrollbar-hide text-cms-foreground h-[60vh] w-[60vw] bg-cms-background shadow-xl border-cms-border border",
+			Class: "scrollbar-hide text-cms-foreground h-[60vh] w-[60vw] bg-cms-background shadow-xl border-cms-border border max-xl:h-auto",
 		}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var6), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -280,7 +280,7 @@ func animationPreview(animation sqlc.Animation) templ.Component {
 			return nil
 		})
 		templ_7745c5c3_Err = card.Card(card.Props{
-			Class: "scrollbar-hide text-cms-foreground h-[35vh] w-[35vw] bg-cms-background shadow-xl border-cms-border border p-8 ",
+			Class: "scrollbar-hide text-cms-foreground h-[35vh] w-[35vw] bg-cms-background shadow-xl border-cms-border border p-8 max-xl:w-[80vw] max-xl:h-auto",
 		}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var8), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
@@ -551,7 +551,7 @@ func animationDetailForm(animation sqlc.Animation, thumbMode sqlc.ThumbMode) tem
 					return nil
 				})
 				templ_7745c5c3_Err = table.Row(table.Props{
-					Class: "border-cms-border border-b-1 hover:bg-cms-background",
+					Class: "border-cms-border border-b-1 hover:bg-cms-background max-xl:flex max-xl:flex-col max-xl:gap-2",
 				}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var14), templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
@@ -726,7 +726,7 @@ func animationDetailForm(animation sqlc.Animation, thumbMode sqlc.ThumbMode) tem
 					return nil
 				})
 				templ_7745c5c3_Err = table.Row(table.Props{
-					Class: "border-cms-border border-b-1 hover:bg-cms-background",
+					Class: "border-cms-border border-b-1 hover:bg-cms-background max-xl:flex max-xl:flex-col max-xl:gap-2",
 				}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var22), templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
@@ -742,7 +742,7 @@ func animationDetailForm(animation sqlc.Animation, thumbMode sqlc.ThumbMode) tem
 			return nil
 		})
 		templ_7745c5c3_Err = table.Table(table.Props{
-			Class: "text-base font-medium",
+			Class: "text-base font-medium xl:h-auto",
 		}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var12), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err

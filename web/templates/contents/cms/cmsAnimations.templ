@@ -58,7 +58,7 @@ templ Animations() {
             hx-target="#animations-table"
         >
             @card.Card(card.Props{
-                Class: "scrollbar-hide text-cms-foreground mt-24 h-min h-[450px] w-[800px] bg-cms-background shadow-xl border-cms-border border flex flex-col",
+                Class: "scrollbar-hide text-cms-foreground mt-24 h-min h-[450px] w-[800px] max-xl:w-[70vw] bg-cms-background shadow-xl border-cms-border border flex flex-col",
             }) {
                 @table.Table(table.Props{}) {
                     @animationsHeader()
