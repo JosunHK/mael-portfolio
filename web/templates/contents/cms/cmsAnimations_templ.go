@@ -245,7 +245,7 @@ func Animations() templ.Component {
 			return nil
 		})
 		templ_7745c5c3_Err = card.Card(card.Props{
-			Class: "scrollbar-hide text-cms-foreground mt-24 h-min h-[450px] w-[800px] bg-cms-background shadow-xl border-cms-border border flex flex-col",
+			Class: "scrollbar-hide text-cms-foreground mt-24 h-min h-[450px] w-[800px] max-xl:w-[70vw] bg-cms-background shadow-xl border-cms-border border flex flex-col",
 		}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var8), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err

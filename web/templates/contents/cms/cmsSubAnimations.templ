@@ -49,7 +49,7 @@ templ subAnimationRowScript() {
 }
 
 templ SubAnimations(id int64) {
-	<div class="flex h-full w-full flex-row items-center justify-center gap-12 pt-24 font-barlow">
+	<div class="flex h-full w-full  flex-row items-center justify-center gap-12 pt-24 font-barlow ">
 		<form
 			x-data="subAnimationForm"
 			@htmx:after-request="reset"
@@ -58,7 +58,7 @@ templ SubAnimations(id int64) {
 			hx-target="#animations-table"
 		>
 			@card.Card(card.Props{
-				Class: "scrollbar-hide text-cms-foreground mt-24 h-min h-[450px] w-[800px] bg-cms-background shadow-xl border-cms-border border flex flex-col",
+				Class: "scrollbar-hide text-cms-foreground mt-24 h-min h-[450px] w-[800px] max-xl:w-[70vw] bg-cms-background shadow-xl border-cms-border border flex flex-col",
 			}) {
 				@table.Table(table.Props{}) {
 					@subAnimationsHeader(id)

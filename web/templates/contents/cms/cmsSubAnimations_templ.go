@@ -167,7 +167,7 @@ func SubAnimations(id int64) templ.Component {
 			templ_7745c5c3_Var7 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "<div class=\"flex h-full w-full flex-row items-center justify-center gap-12 pt-24 font-barlow\"><form x-data=\"subAnimationForm\" @htmx:after-request=\"reset\" hx-post=\"")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "<div class=\"flex h-full w-full  flex-row items-center justify-center gap-12 pt-24 font-barlow \"><form x-data=\"subAnimationForm\" @htmx:after-request=\"reset\" hx-post=\"")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -257,7 +257,7 @@ func SubAnimations(id int64) templ.Component {
 			return nil
 		})
 		templ_7745c5c3_Err = card.Card(card.Props{
-			Class: "scrollbar-hide text-cms-foreground mt-24 h-min h-[450px] w-[800px] bg-cms-background shadow-xl border-cms-border border flex flex-col",
+			Class: "scrollbar-hide text-cms-foreground mt-24 h-min h-[450px] w-[800px] max-xl:w-[70vw] bg-cms-background shadow-xl border-cms-border border flex flex-col",
 		}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var9), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
