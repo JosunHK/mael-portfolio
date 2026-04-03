@@ -34,10 +34,11 @@ WHERE id = ?;
 
 -- name: ReorderAnimation :exec
 UPDATE animation AS a
-JOIN animation AS t ON t.id = ? AND t.active = TRUE
+JOIN animation AS b
+ON a.sort_order >= b.sort_order
 SET a.sort_order = a.sort_order - 1
 WHERE a.active = TRUE
-  AND a.sort_order >= t.sort_order;
+AND b.id = ?;
 
 -- name: AnimationOrderUp :exec
 UPDATE animation AS a

@@ -34,14 +34,36 @@ func GetAnimations(c echo.Context) (templ.Component, *resError.Error) {
 	return cmsTemplates.AnimationsTable(res, resThumb), nil
 }
 
-func GetSubAnimations(c echo.Context) (templ.Component, *resError.Error) {
-	queries := sqlc.New(database.DB)
+func getMainIdFromSubRequest(c echo.Context) (int64, error) {
 	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
 	if err != nil {
+		return -1, fmt.Errorf("Failed to retrive Data %v", err.Error())
+	}
+
+	queries := sqlc.New(database.DB)
+	mainId, err := queries.GetMainAnimationId(c.Request().Context(), id)
+	if err != nil {
+		return -1, fmt.Errorf("Failed to retrive Data %v", err.Error())
+	}
+
+	return mainId, nil
+}
+
+func GetSubAnimations(c echo.Context) (templ.Component, *resError.Error) {
+	mainId, err := strconv.ParseInt(c.Param("mainId"), 10, 64)
+	if err != nil {
+		mainId, err = getMainIdFromSubRequest(c)
+		if err != nil {
+			return cmsTemplates.SubAnimationsTable([]sqlc.SubAnimation{}), resError.New("Failed to retrive Data ", err.Error())
+		}
+	}
+
+	if mainId <= 0 {
 		return cmsTemplates.SubAnimationsTable([]sqlc.SubAnimation{}), resError.New("Failed to retrive Data ", err.Error())
 	}
 
-	res, err := queries.GetSubAnimations(c.Request().Context(), id)
+	queries := sqlc.New(database.DB)
+	res, err := queries.GetSubAnimations(c.Request().Context(), mainId)
 	if err != nil {
 		return cmsTemplates.SubAnimationsTable([]sqlc.SubAnimation{}), resError.New("Failed to retrive Data ", err.Error())
 	}
@@ -56,26 +78,16 @@ func DeleteSubAnimation(c echo.Context) *resError.Error {
 	}
 
 	queries := sqlc.New(database.DB)
-	thumbMode, err := queries.GetThumbMode(c.Request().Context())
-	if err != nil {
-		return resError.New("Failed to retrive Thumb Data ", err.Error())
-	}
-	err = queries.DeleteAnimation(c.Request().Context(), id)
+
+	err = queries.DeleteSubAnimation(c.Request().Context(), id)
 	if err != nil {
 		return resError.New("Failed to Delete Record ", err.Error())
 	}
 
-	err = queries.UpdateMobileModeIfNull(c.Request().Context())
+	err = queries.ReorderSubAnimation(c.Request().Context(), id)
 	if err != nil {
-		return resError.New("Failed to update mobile mode if null ", err.Error())
+		return resError.New("Failed to Reorder Record ", err.Error())
 	}
-
-	err = queries.UpdateDesktopModeIfNull(c.Request().Context())
-	if err != nil {
-		return resError.New("Failed to update desktop mode if null ", err.Error())
-	}
-
-	err = DeleteAlert(c, thumbMode, id)
 
 	return nil
 }
@@ -91,9 +103,15 @@ func DeleteAnimation(c echo.Context) *resError.Error {
 	if err != nil {
 		return resError.New("Failed to retrive Thumb Data ", err.Error())
 	}
+
 	err = queries.DeleteAnimation(c.Request().Context(), id)
 	if err != nil {
 		return resError.New("Failed to Delete Record ", err.Error())
+	}
+
+	err = queries.ReorderAnimation(c.Request().Context(), id)
+	if err != nil {
+		return resError.New("Failed to Reorder Record ", err.Error())
 	}
 
 	err = queries.UpdateMobileModeIfNull(c.Request().Context())
@@ -144,7 +162,7 @@ func AddAnimation(c echo.Context) *resError.Error {
 }
 
 func AddSubAnimation(c echo.Context) *resError.Error {
-	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
+	id, err := strconv.ParseInt(c.Param("mainId"), 10, 64)
 	if err != nil {
 		log.Error(fmt.Errorf("Invalid id %v", err))
 		return resError.New("Invalid id ", err.Error())

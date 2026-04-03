@@ -71,7 +71,7 @@ func GetSubAnimationRes(c echo.Context) error {
 }
 
 func GetSubAnimationWrapper(c echo.Context) templ.Component {
-	id, err := strconv.ParseInt(c.Param("id"), 10, 64)
+	id, err := strconv.ParseInt(c.Param("mainId"), 10, 64)
 	if err != nil {
 		return errorTemplate.SimpleError("invalid Id")
 	}

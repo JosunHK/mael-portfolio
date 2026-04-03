@@ -16,6 +16,10 @@ SELECT * FROM sub_animation
 WHERE active = TRUE
 AND id = ?;
 
+-- name: GetMainAnimationId :one
+SELECT main_id FROM sub_animation
+WHERE id = ?;
+
 -- name: AddSubAnimation :execresult
 INSERT INTO sub_animation(
     label,
@@ -24,7 +28,7 @@ INSERT INTO sub_animation(
 ) VALUES (
     ?,?, COALESCE(
             (SELECT max_sort_order FROM (
-                    SELECT MAX(sort_order) AS max_sort_order FROM animation 
+                    SELECT MAX(sort_order) AS max_sort_order FROM sub_animation 
                     WHERE active = TRUE
             ) AS derived_table) + 1
         , 0)
@@ -37,10 +41,11 @@ WHERE id = ?;
 
 -- name: ReorderSubAnimation :exec
 UPDATE sub_animation AS a
-JOIN sub_animation AS t ON t.id = ? AND t.active = TRUE
+JOIN sub_animation AS b
+ON a.sort_order >= b.sort_order
 SET a.sort_order = a.sort_order - 1
 WHERE a.active = TRUE
-  AND a.sort_order >= t.sort_order;
+AND b.id = ?;
 
 -- name: SubAnimationOrderUp :exec
 UPDATE sub_animation AS a
