@@ -60,7 +60,7 @@ templ AnimationsShowcase(animations []sqlc.Animation) {
 						}) {
 							@animationComponent.AnimationReelSlider(animation, animationUtil.GetAnimationPaths(animation.ID))
 							for _, subAnimation := range animationUtil.GetSubAnimations(ctx, animation.ID) {
-								@animationComponent.SubAnimationReelSlider(animation, animationUtil.GetSubAnimationPaths(subAnimation.ID))
+								@animationComponent.SubAnimationReelSlider(subAnimation, animationUtil.GetSubAnimationPaths(subAnimation.ID))
 							}
 						}
 					</div>
@@ -97,7 +97,7 @@ templ AnimationShowcaseButtons(animationCount int) {
 			}
 		</div>
 		@button.Button(button.Props{
-			Class: "pointer-events-auto data-[isshow=false]:opacity-0 data-[isshow=false]:scale-10 md:flex ",
+			Class: "pointer-events-auto data-[isshow=false]:opacity-0 data-[isshow=false]:scale-10 md:flex hidden",
 			Attrs: templ.Attributes{
 				"@click":           "toPrev",
 				":data-isShow":     "getIsShowPrev",
@@ -115,7 +115,7 @@ templ AnimationShowcaseButtons(animationCount int) {
 			}
 		}
 		@button.Button(button.Props{
-			Class: "pointer-events-auto data-[isshow=false]:opacity-0 data-[isshow=false]:scale-10 opacity-1 md:flex ",
+			Class: "pointer-events-auto data-[isshow=false]:opacity-0 data-[isshow=false]:scale-10 opacity-1 md:flex hidden",
 			Attrs: templ.Attributes{
 				"@click":           "toNext",
 				":data-isShow":     "getIsShowNext",
@@ -141,7 +141,7 @@ var ShowcaseSliderScriptHandle = templ.NewOnceHandle()
 templ ShowcaseSliderScript(animationCount int) {
 	@ShowcaseSliderScriptHandle.Once() {
 		<script nonce={ templ.GetNonce(ctx) }>
-            document.addEventListener('alpine:init', () => {
+            function registerShowcaseSlider() {
                 Alpine.data('showcaseSlider', () => ({
                     currentSlide:  0,
                     maxSlideIndex: {{ animationCount-1 }},
@@ -219,7 +219,14 @@ templ ShowcaseSliderScript(animationCount int) {
                         return this.isShowDown+"";
                     },
                 }))
-            })
+            }
+            if (typeof Alpine !== "undefined") {
+                registerShowcaseSlider();
+            } else {
+                document.addEventListener('alpine:init', () => {
+                    registerShowcaseSlider();
+                });
+            }  
         </script>
 	}
 }

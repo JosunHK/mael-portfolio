@@ -1,8 +1,12 @@
 package animationComponent
 
 import (
+	"fmt"
 	twmerge "github.com/Oudwins/tailwind-merge-go/pkg/twmerge"
+	"github.com/gungun974/gocva"
+	"mael/cmd/util/animation"
 	"mael/db/generated"
+	"mael/web/templates/components/ui/button"
 )
 
 var M = twmerge.Merge
@@ -11,6 +15,30 @@ type Props struct {
 	Name  string
 	Class string
 	Attrs templ.Attributes
+}
+
+var layerBtnScriptHandle = templ.NewOnceHandle()
+
+templ LayerBtnScript() {
+	@layerBtnScriptHandle.Once() {
+		<script nonce={ templ.GetNonce(ctx) }>
+            document.addEventListener('alpine:init', () => {
+                Alpine.data('layerBtn', () => ({
+                    handleClick() {
+                       let refId = this.$el.getAttribute("data-ref-id");
+                       let refClass = this.$el.getAttribute("data-ref-class");
+                       let refClasses = $$("." + refClass)
+                       for (let i = 0; i < refClasses.length; i++) {
+                            let ele = refClasses[i]
+                            ele.style.display = "none";
+                       }
+                       let ele = $("#" + refId)
+                       ele.style.display = "block";
+                    },
+                }))
+            })
+        </script>
+	}
 }
 
 var animationSliderScriptHandle = templ.NewOnceHandle()
@@ -212,38 +240,98 @@ templ SimpleSubAnimationSlider(animation sqlc.SubAnimation, paths []string) {
 
 templ AnimationReelSlider(animation sqlc.Animation, paths []string) {
 	@AnimationSlider(Props{
-		Class: "h-full overflow-hidden",
+		Class: fmt.Sprintf("h-full overflow-hidden fade-in animation-main-%d", animation.ID),
+		Attrs: templ.Attributes{
+			"id":           fmt.Sprintf("animation-main-%d", animation.ID),
+			"is-auto-play": "true",
+		},
 	},
 		int(animation.Fps.Int32),
 	) {
 		@SliderBody(Props{
-			Class: "h-[80%] md:h-[80%] my-4 md:my-0 max-md:items-center pt-8",
+			Class: "h-[65%] md:h-[80%] my-4 md:my-0 max-md:items-center pt-8",
 		}) {
 			for _, path := range paths {
 				<img class="tv-glow h-fit max-h-full md:h-[calc(85dvh*0.7)] md:max-h-full rounded-lg" loading="lazy" src={ path }/>
 			}
 		}
-		<div class="p-2 border border-zinc-800/80 bg-stone-600 rounded-lg max-md:backdrop-blur-md mt-24 inward-shadow">
+		<div class="p-2 border border-zinc-800/80 bg-stone-500 rounded-lg max-md:backdrop-blur-md mt-18 inward-shadow ">
+			<span>{ animation.Label }</span>
+			<div class="my-4 flex flex-row gap-2">
+				@layerBtnCurrent("Current Version")
+				for _, subAnimation := range animationUtil.GetSubAnimations(ctx, animation.ID) {
+					@layerBtn(subAnimation.Label, fmt.Sprintf("animation-sub-%d", subAnimation.ID), fmt.Sprintf("animation-main-%d", subAnimation.MainID))
+				}
+			</div>
 			@SliderControl(Props{}, false)
 			@FrameDisplay(Props{})
 		</div>
 	}
 }
 
-templ SubAnimationReelSlider(animation sqlc.Animation, paths []string) {
+templ layerBtnCurrent(label string) {
+	@button.Button(button.Props{
+		Class: "text-[0.7rem]",
+		Attrs: templ.Attributes{
+			"cursor-clickable": "true",
+		},
+		Variant: gocva.Variant{
+			"variant": "ghost",
+			"size":    "sm",
+		},
+	}) {
+		{ label }
+	}
+}
+
+templ layerBtn(label string, refId string, refClass string) {
+	@button.Button(button.Props{
+		Class: "text-[0.7rem]",
+		Attrs: templ.Attributes{
+			"x-data":           "layerBtn",
+			"data-ref-id":      refId,
+			"data-ref-class":   refClass,
+			"@click":           "handleClick",
+			"cursor-clickable": "true",
+		},
+		Variant: gocva.Variant{
+			"variant": "glass",
+			"size":    "sm",
+		},
+	}) {
+		{ label }
+	}
+}
+
+templ SubAnimationReelSlider(animation sqlc.SubAnimation, paths []string) {
 	@AnimationSlider(Props{
-		Class: "h-full overflow-hidden hidden",
+		Class: fmt.Sprintf("h-full overflow-hidden hidden fade-in animation-main-%d", animation.MainID),
+		Attrs: templ.Attributes{
+			"id":           fmt.Sprintf("animation-sub-%d", animation.ID),
+			"is-auto-play": "true",
+		},
 	},
 		int(animation.Fps.Int32),
 	) {
 		@SliderBody(Props{
-			Class: "h-[80%] md:h-[80%] my-4 md:my-0 max-md:items-center pt-8",
+			Class: "h-[65%] md:h-[80%] my-4 md:my-0 max-md:items-center pt-8",
 		}) {
 			for _, path := range paths {
 				<img class="tv-glow h-fit max-h-full md:h-[calc(85dvh*0.7)] md:max-h-full rounded-lg" loading="lazy" src={ path }/>
 			}
 		}
-		<div class="p-2 border border-zinc-800/80 bg-stone-600 rounded-lg max-md:backdrop-blur-md mt-24 inward-shadow">
+		<div class="p-2 border border-zinc-800/80 bg-stone-500 rounded-lg max-md:backdrop-blur-md mt-18 inward-shadow">
+			<span>{ animation.Label }</span>
+			<div class="my-4 flex flex-row gap-2">
+				@layerBtn("Current Version", fmt.Sprintf("animation-main-%d", animation.MainID), fmt.Sprintf("animation-main-%d", animation.MainID))
+				for _, subAnimation := range animationUtil.GetSubAnimations(ctx, animation.MainID) {
+					if animation.ID == subAnimation.ID {
+						@layerBtnCurrent(subAnimation.Label)
+					} else {
+						@layerBtn(subAnimation.Label, fmt.Sprintf("animation-sub-%d", subAnimation.ID), fmt.Sprintf("animation-main-%d", subAnimation.MainID))
+					}
+				}
+			</div>
 			@SliderControl(Props{}, false)
 			@FrameDisplay(Props{})
 		</div>
