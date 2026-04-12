@@ -107,7 +107,7 @@ templ AnimationSliderScript() {
 }
 
 templ SliderControl(props Props, isTrackCursor bool) {
-	<div class="w-full relative flex justify-center items-center flex-col pt-2">
+	<div class="w-full relative flex justify-center items-center flex-col pt-4 px-2">
 		<div class="w-full h-[0.1rem] bg-black absolute"></div>
 		<input
 			class={ M("w-full thinRange absolute", props.Class) }
@@ -217,13 +217,33 @@ templ AnimationReelSlider(animation sqlc.Animation, paths []string) {
 		int(animation.Fps.Int32),
 	) {
 		@SliderBody(Props{
-			Class: "h-[80%] md:h-[80%] my-4 md:my-0 max-md:items-center",
+			Class: "h-[80%] md:h-[80%] my-4 md:my-0 max-md:items-center pt-8",
 		}) {
 			for _, path := range paths {
-				<img class="h-fit max-h-full md:h-[calc(85dvh*0.7)] md:max-h-full rounded-lg shadow-lg border border-zinc-800/80" loading="lazy" src={ path }/>
+				<img class="tv-glow h-fit max-h-full md:h-[calc(85dvh*0.7)] md:max-h-full rounded-lg" loading="lazy" src={ path }/>
 			}
 		}
-		<div class="p-2 border border-stone-900/20 md:border-stone-500/20 bg-stone-500/55 md:bg-stone-500/20 rounded-lg max-md:backdrop-blur-sm ">
+		<div class="p-2 border border-zinc-800/80 bg-stone-600 rounded-lg max-md:backdrop-blur-md mt-24 inward-shadow">
+			@SliderControl(Props{}, false)
+			@FrameDisplay(Props{})
+		</div>
+	}
+}
+
+templ SubAnimationReelSlider(animation sqlc.Animation, paths []string) {
+	@AnimationSlider(Props{
+		Class: "h-full overflow-hidden hidden",
+	},
+		int(animation.Fps.Int32),
+	) {
+		@SliderBody(Props{
+			Class: "h-[80%] md:h-[80%] my-4 md:my-0 max-md:items-center pt-8",
+		}) {
+			for _, path := range paths {
+				<img class="tv-glow h-fit max-h-full md:h-[calc(85dvh*0.7)] md:max-h-full rounded-lg" loading="lazy" src={ path }/>
+			}
+		}
+		<div class="p-2 border border-zinc-800/80 bg-stone-600 rounded-lg max-md:backdrop-blur-md mt-24 inward-shadow">
 			@SliderControl(Props{}, false)
 			@FrameDisplay(Props{})
 		</div>

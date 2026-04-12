@@ -1,8 +1,10 @@
 package animationUtil
 
 import (
+	"context"
 	"fmt"
 	"mael/cmd/consts"
+	"mael/cmd/database"
 	"os"
 	"slices"
 
@@ -53,4 +55,14 @@ func GetSubAnimationPaths(id int64) []string {
 	slices.Sort(paths)
 
 	return paths
+}
+
+func GetSubAnimations(c context.Context, id int64) []sqlc.SubAnimation {
+	queries := sqlc.New(database.DB)
+	res, err := queries.GetSubAnimations(c, id)
+	if err != nil {
+		return []sqlc.SubAnimation{}
+	}
+
+	return res
 }

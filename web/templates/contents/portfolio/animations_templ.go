@@ -41,7 +41,7 @@ func Animations(animations []sqlc.Animation, thumbDesktop sqlc.Animation, thumbM
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div id=\"content\" class=\"relative scrollbar-hide\"><div class=\"pointer-events-none fixed top-0 left-0 h-dvh w-screen z-10 animate-background-blur opacity-0 bg-black/35 max-md:backdrop-blur-sm\"></div><div class=\"w-screen h-[90vh] sticky top-[2.3rem] md:block hidden\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div id=\"content\" class=\"relative scrollbar-hide\"><div class=\"pointer-events-none fixed top-0 left-0 h-dvh w-screen z-10 animate-background-blur opacity-0 bg-black/85 max-md:backdrop-blur-sm\"></div><div class=\"w-screen h-[90vh] sticky top-[2.3rem] md:block hidden\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -148,7 +148,7 @@ func AnimationsShowcase(animations []sqlc.Animation) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "\" class=\"max-md:w-screen h-full md:h-screen z-20 relative rounded-xl p-2 font-comfortaa text-stone-700 snap-center block md:inline-block md:w-screen mr-[4.5dvw] isolate \"><div class=\"absolute top-0 left-0 hidden justify-center items-center w-full gap-4 mt-8 md:h-full md:mt-0 z-10 md:flex\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "\" class=\"max-md:w-screen h-full md:h-screen z-20 relative rounded-xl p-2 font-comfortaa text-stone-700 snap-center block md:inline-block md:w-screen mr-[4.5dvw] isolate \"><div class=\"absolute top-0 left-0 hidden justify-center items-center w-full gap-4 mt-8 md:h-full md:mt-0 z-10 \">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -210,7 +210,7 @@ func AnimationsShowcase(animations []sqlc.Animation) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "</div><div class=\"flex justify-center items-center w-full gap-4 mt-8 md:h-full md:mt-0 z-20 relative\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 11, "</div><div class=\"flex justify-center items-end w-full gap-4 mt-8 md:h-full md:mt-0 z-20 relative\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -230,10 +230,16 @@ func AnimationsShowcase(animations []sqlc.Animation) templ.Component {
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
+				for _, subAnimation := range animationUtil.GetSubAnimations(ctx, animation.ID) {
+					templ_7745c5c3_Err = animationComponent.SubAnimationReelSlider(animation, animationUtil.GetSubAnimationPaths(subAnimation.ID)).Render(ctx, templ_7745c5c3_Buffer)
+					if templ_7745c5c3_Err != nil {
+						return templ_7745c5c3_Err
+					}
+				}
 				return nil
 			})
 			templ_7745c5c3_Err = card.Card(card.Props{
-				Class: `border-0 flex justify-center items-center h-[80dvh] w-screen md:h-[85%] md:w-[85%] md:px-12 md:bg-gradient-to-br from-neutral-300 to-orange-50 py-2 flex-col max-md:pb-12 pt-12 md:mt-8 bg-transparent`,
+				Class: `border-0 flex justify-center items-center h-[80dvh] w-screen md:h-[90%] md:w-[85%] md:px-12 py-2 flex-col max-md:pb-12 pt-12 md:mt-8 bg-transparent shadow-none`,
 			}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var9), templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
@@ -493,7 +499,7 @@ func ShowcaseSliderScript(animationCount int) templ.Component {
 			var templ_7745c5c3_Var19 string
 			templ_7745c5c3_Var19, templ_7745c5c3_Err = templ.JoinStringErrs(templ.GetNonce(ctx))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/contents/portfolio/animations.templ`, Line: 140, Col: 37}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/contents/portfolio/animations.templ`, Line: 143, Col: 37}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var19))
 			if templ_7745c5c3_Err != nil {
@@ -505,7 +511,7 @@ func ShowcaseSliderScript(animationCount int) templ.Component {
 			}
 			templ_7745c5c3_Var20, templ_7745c5c3_Err := templruntime.ScriptContentOutsideStringLiteral(animationCount - 1)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/contents/portfolio/animations.templ`, Line: 144, Col: 54}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/contents/portfolio/animations.templ`, Line: 147, Col: 54}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ_7745c5c3_Var20)
 			if templ_7745c5c3_Err != nil {
