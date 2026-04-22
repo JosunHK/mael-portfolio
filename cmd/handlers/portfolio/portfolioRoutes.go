@@ -16,6 +16,6 @@ func RegisterRoutes(e *echo.Echo) {
 	e.GET("/characters/body", middleware.StaticHTMX(portfolioTemplates.Characters()))
 	e.GET("/storyboard", middleware.Pages(layout.Layout, Characters))
 	e.GET("/storyboard/body", middleware.StaticHTMX(portfolioTemplates.Characters()))
-	e.GET("/about", middleware.Pages(layout.Layout, Characters))
-	e.GET("/about/body", middleware.StaticHTMX(portfolioTemplates.Characters()))
+	e.GET("/about", middleware.Pages(layout.Layout, About))
+	e.GET("/about/body", middleware.StaticHTMX(portfolioTemplates.About()))
 }

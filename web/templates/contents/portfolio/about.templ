@@ -1,0 +1,67 @@
+package portfolioTemplates
+
+import(
+    "mael/web/templates/components/ui/card"
+    "mael/web/templates/components/ui/icon"
+
+
+)
+
+templ About() {
+    
+    <div class="w-full h-full flex items-center justify-center">
+        @card.Card(card.Props{
+            Class: "h-auto w-[90%] bg-secondary/50 backdrop-blur-md p-8 rounded-lg shadow-lg mt-12 mb-12",
+        }) {
+            <div
+				class="absolute h-5 w-10 left-[-0.4rem] top-[-0.25rem] border-t-[5px] border-l-[5px] border-gray-600 transition-transform duration-300"
+				x-ref="leftBracket"
+			></div>
+			<div
+				class="absolute h-5 w-10 right-[-0.4rem] bottom-[-0.1rem] border-b-[5px] border-r-[5px] border-gray-600 transition-transform duration-300"
+				x-ref="rightBracket"
+			></div>
+
+            <div class=" flex flex-col gap-18 items-center justify-center">
+                <div>
+                    <h1 class="text-4xl font-bold text-9xl mb-4">About</h1>
+                </div>
+                <div class="w-[60vw] h-[30vh] flex items-center justify-center">
+                    <img src="static/asset/profile.jpg" alt="Profile Picture" class="w-auto h-[60%] rounded-full object-cover">
+                </div>
+                <div class="w-[60vw] h-auto mt-10">
+                    <p class="text-7xl">MAEL</p>
+                    <p class="text-4xl/10 tracking-wide italic text-center text-gray-700 mt-10">
+                        Hello! I'm Mael, a passionate developer and designer with a love for creating beautiful and functional digital experiences. With a background in both front-end and back-end development, I enjoy working on projects that challenge me to think creatively and push the boundaries of what's possible.  
+                        In my free time, I like to explore new technologies, contribute to open-source projects, and share my knowledge through blogging and speaking at conferences. I'm always eager to connect with like-minded individuals and collaborate on exciting projects.
+                    </p>
+                </div>
+                
+                <div class="mt-30 w-[40vw] h-[20vh] flex items-center justify-center">
+                    <ul class="w-[30vw] h-full flex flex-row gap-20 items-center justify-center">
+                        <li class="w-[5rem] h-[5rem] ">
+                            <a href="https://www.instagram.com/mael.flp/" target="_blank" class="border-2 border-gray-600 rounded-full p-4 hover:bg-gray-600/20 transition-colors duration-300 w-full h-full flex items-center justify-center" role="button">
+                                @icon.Wrapper(icon.Props{
+                                    Class: "h-full w-full",
+                                }) {
+                                    @icon.Instagram()
+                                }
+                            </a>
+                        </li>
+                        
+                       
+                    </ul>
+                    
+                
+                </div>
+                <div class="w-auto h-[20vh]">
+                    <h2 class="text-5xl flex justify-center">Let's Talk!</h2>
+                    <h1 class="text-8xl flex justify-center">email@example.com</h1>
+                </div>
+                
+                
+            </div>
+        }
+    </div>
+    
+}

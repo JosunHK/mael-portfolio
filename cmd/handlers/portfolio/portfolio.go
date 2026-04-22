@@ -9,6 +9,9 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+func About(c echo.Context) templ.Component {
+	return portfolioTemplates.About()
+}
 
 func Characters(c echo.Context) templ.Component {
 	return portfolioTemplates.Characters()
