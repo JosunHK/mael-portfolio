@@ -13,7 +13,9 @@ import (
 	"mael/web/templates/components/ui/icon"
 )
 
-func About() templ.Component {
+var shadowParallaxScriptHandle = templ.NewOnceHandle()
+
+func ShadowParallaxScript() templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -34,10 +36,6 @@ func About() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div class=\"w-full h-full flex items-center justify-center\">")
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
 		templ_7745c5c3_Var2 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 			templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 			templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
@@ -50,11 +48,79 @@ func About() templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "<div class=\"absolute h-5 w-10 left-[-0.4rem] top-[-0.25rem] border-t-[5px] border-l-[5px] border-gray-600 transition-transform duration-300\" x-ref=\"leftBracket\"></div><div class=\"absolute h-5 w-10 right-[-0.4rem] bottom-[-0.1rem] border-b-[5px] border-r-[5px] border-gray-600 transition-transform duration-300\" x-ref=\"rightBracket\"></div><div class=\" flex flex-col gap-18 items-center justify-center\"><div><h1 class=\"text-4xl font-bold text-9xl mb-4\">About</h1></div><div class=\"w-[60vw] h-[30vh] flex items-center justify-center\"><img src=\"static/asset/profile.jpg\" alt=\"Profile Picture\" class=\"w-auto h-[60%] rounded-full object-cover\"></div><div class=\"w-[60vw] h-auto mt-10\"><p class=\"text-7xl\">MAEL</p><p class=\"text-4xl/10 tracking-wide italic text-center text-gray-700 mt-10\">Hello! I'm Mael, a passionate developer and designer with a love for creating beautiful and functional digital experiences. With a background in both front-end and back-end development, I enjoy working on projects that challenge me to think creatively and push the boundaries of what's possible.   In my free time, I like to explore new technologies, contribute to open-source projects, and share my knowledge through blogging and speaking at conferences. I'm always eager to connect with like-minded individuals and collaborate on exciting projects.</p></div><div class=\"mt-30 w-[40vw] h-[20vh] flex items-center justify-center\"><ul class=\"w-[30vw] h-full flex flex-row gap-20 items-center justify-center\"><li class=\"w-[5rem] h-[5rem] \"><a href=\"https://www.instagram.com/mael.flp/\" target=\"_blank\" class=\"border-2 border-gray-600 rounded-full p-4 hover:bg-gray-600/20 transition-colors duration-300 w-full h-full flex items-center justify-center\" role=\"button\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<script nonce=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Var3 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+			var templ_7745c5c3_Var3 string
+			templ_7745c5c3_Var3, templ_7745c5c3_Err = templ.JoinStringErrs(templ.GetNonce(ctx))
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/contents/portfolio/about.templ`, Line: 11, Col: 42}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var3))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\">\n            function registerShadowParallax() {\n                Alpine.data('shadowParallax', () => ({\n                    rectX: 0,\n                    rectY: 0,   \n                    init(){\n                        const rectCoordinate = this.$el.getBoundingClientRect();\n                        this.rectX = rectCoordinate.left + rectCoordinate.width/2;\n                        this.rectY = rectCoordinate.top + rectCoordinate.height/2;\n                    },\n                    \n                    shadowMove(e){\n                        const rectCoordinate = this.$el.getBoundingClientRect();\n                        const mouseX = e.clientX;\n                        const mouseY = e.clientY;\n                        const positionX = this.rectX - mouseX;\n                        const positionY = this.rectY - mouseY;\n                        const transX = positionX*rectCoordinate.width/window.innerWidth/rectCoordinate.width*0.7;\n                        const transY = positionY*rectCoordinate.height/window.innerHeight/rectCoordinate.height*0.7;\n                        this.$el.style.transform = 'translateX(' + transX + 'rem) translateY(' + transY + 'rem)';\n                        \n\n                    },\n                    shadowMove2(e){\n                        const rectCoordinate = this.$el.getBoundingClientRect();\n                        const mouseX = e.clientX;\n                        const mouseY = e.clientY;\n                        const positionX = this.rectX - mouseX;\n                        const positionY = this.rectY - mouseY;\n                        const transX = positionX*rectCoordinate.width/window.innerWidth/rectCoordinate.width*1.4;\n                        const transY = positionY*rectCoordinate.height/window.innerHeight/rectCoordinate.height*1.4;\n                        this.$el.style.transform = 'translateX(' + transX + 'rem) translateY(' + transY + 'rem)';\n                        \n\n                    },\n\n                }))\n            }\n            if (typeof Alpine !== \"undefined\") {\n            registerShadowParallax();\n        } else {\n            document.addEventListener('alpine:init', () => {\n                registerShadowParallax();\n            });\n        }  \n\n        </script>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			return nil
+		})
+		templ_7745c5c3_Err = shadowParallaxScriptHandle.Once().Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		return nil
+	})
+}
+
+func About() templ.Component {
+	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
+		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
+			return templ_7745c5c3_CtxErr
+		}
+		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
+		if !templ_7745c5c3_IsBuffer {
+			defer func() {
+				templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
+				if templ_7745c5c3_Err == nil {
+					templ_7745c5c3_Err = templ_7745c5c3_BufErr
+				}
+			}()
+		}
+		ctx = templ.InitializeContext(ctx)
+		templ_7745c5c3_Var4 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var4 == nil {
+			templ_7745c5c3_Var4 = templ.NopComponent
+		}
+		ctx = templ.ClearChildren(ctx)
+		templ_7745c5c3_Err = ShadowParallaxScript().Render(ctx, templ_7745c5c3_Buffer)
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<div class=\"w-full h-full flex flex-row items-center justify-center\"><div class=\"rotate-[270deg] text-grey-500 absolute left-[-14rem] top-[15rem] hidden xl:block\n        \"><span class=\"font-bold text-[18rem]\">MAEL</span></div><div class=\" rotate-[270deg] text-orange-500 absolute left-[-14rem] top-[15rem] hidden xl:block\"><span class=\"font-bold text-[18rem]\">MAEL</span></div>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		templ_7745c5c3_Var5 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+			templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
+			templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
+			if !templ_7745c5c3_IsBuffer {
+				defer func() {
+					templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
+					if templ_7745c5c3_Err == nil {
+						templ_7745c5c3_Err = templ_7745c5c3_BufErr
+					}
+				}()
+			}
+			ctx = templ.InitializeContext(ctx)
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<div class=\"absolute h-5 w-10 left-[-0.6rem] top-[-0.4rem] border-t-[7px] border-l-[7px] border-gray-600\"></div><div class=\"absolute h-5 w-10 right-[-0.6rem] bottom-[-0.5rem] border-b-[7px] border-r-[7px] border-gray-600\"></div><div x-data=\"shadowParallax\" @mousemove.window=\"shadowMove2\" class=\"mask-luminance mask rounded absolute h-[5rem] w-[10rem] right-[7rem] top-[3rem] border-t-[2rem] border-r-[2rem] border-gray-300  hidden xl:block\"></div><div x-data=\"shadowParallax\" @mousemove.window=\"shadowMove\" class=\" rounded absolute h-[5rem] w-[10rem] right-[7rem] top-[3rem] border-t-[2rem] border-r-[2rem] border-gray-400  hidden xl:block\"></div><div class=\"absolute h-[5rem] w-[10rem] right-[7rem] top-[3rem] border-t-[2rem] border-r-[2rem] border-orange-500  hidden xl:block\"></div><div x-data=\"shadowParallax\" @mousemove.window=\"shadowMove2\" class=\"rounded absolute h-[5rem] w-[10rem] left-[7rem] bottom-[3rem] border-b-[2rem] border-l-[2rem] border-gray-300 hidden xl:block\"></div><div x-data=\"shadowParallax\" @mousemove.window=\"shadowMove\" class=\"rounded absolute h-[5rem] w-[10rem] left-[7rem] bottom-[3rem] border-b-[2rem] border-l-[2rem] border-gray-400 hidden xl:block\"></div><div class=\"absolute h-[5rem] w-[10rem] left-[7rem] bottom-[3rem] border-b-[2rem] border-l-[2rem] border-orange-500 hidden xl:block\"></div><div class=\"w-full h-auto xl:h-[80vh] flex flex-col gap-4 xl:grid xl:grid-flow-col xl:grid-row-3 xl:mt-8 justify-center\"><div class=\" text-orange-500 flex justify-center xl:hidden\"><span class=\"font-bold text-[5rem]\">MAEL</span></div><div class=\"w-full h-auto col-span-2 row-span-1 flex items-center justify-center\"><div class=\"w-full h-full flex items-center justify-center\"><img src=\"static/asset/profile.jpg\" alt=\"Profile Picture\" class=\"w-auto h-full rounded-full object-cover\"></div></div><div class=\"col-span-2 row-span-2 w-full h-auto xl:p-8 flex items-center justify-center\"><div class=\"flex item-center justify-center xl:p-8\"><p class=\"text-xl xl:text-4xl/10 tracking-wide italic text-center text-gray-700 mt-10\">Hello! I'm Mael, a passionate developer and designer with a love for creating beautiful and functional digital experiences. With a background in both front-end and back-end development, I enjoy working on projects that challenge me to think creatively and push the boundaries of what's possible.  </p></div></div><div class=\"col-span-1 row-span-3\"><div class=\"w-full h-[60%] flex flex-col items-center justify-center gap-4\"><h2 class=\"text-3xl xl:text-5xl flex justify-center\">Let's Talk!</h2><h1 class=\"text-3xl xl:text-5xl flex justify-center\">email@example.com</h1><p>And here's my number: +852 5105 3003</p><p>So call me maybe!</p></div><div class=\"w-full h-[40%] flex items-center justify-center mt-12 xl:mt-0\"><ul class=\"w-full xl:w-[30vw] h-full flex flex-row gap-10 items-center justify-center xl:gap-1\"><div class=\"xl:flex flex-row justify-center items-center w-24 pl-3 pr-3 gap-1 hidden xl:block\"><div class=\"w-[7px] h-[1px] border-2 border-b border-gray-600 rotate-45\"></div><div class=\"w-[7px] h-[1px] border-2 border-b border-gray-600 rotate-45\"></div><div class=\"w-full h-[1px] border-2 border-b border-gray-600 \"></div></div><li class=\"w-[5rem] h-[5rem] \"><a href=\"https://www.instagram.com/mael.flp/\" target=\"_blank\" class=\"border-2 border-gray-600 rounded-full p-4 hover:bg-gray-600/20 transition-colors duration-300 w-full h-full flex items-center justify-center\" role=\"button\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Var6 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 				templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 				templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
 				if !templ_7745c5c3_IsBuffer {
@@ -74,23 +140,51 @@ func About() templ.Component {
 			})
 			templ_7745c5c3_Err = icon.Wrapper(icon.Props{
 				Class: "h-full w-full",
-			}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var3), templ_7745c5c3_Buffer)
+			}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var6), templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "</a></li></ul></div><div class=\"w-auto h-[20vh]\"><h2 class=\"text-5xl flex justify-center\">Let's Talk!</h2><h1 class=\"text-8xl flex justify-center\">email@example.com</h1></div></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "</a></li><div class=\"xl:flex justify-center items-center w-24 pl-3 pr-3 hidden xl:block\"><div class=\"w-full h-[1px] border-2 border-b  border-gray-600\"></div></div><li class=\"w-[5rem] h-[5rem]\"><a href=\"https://wa.me/59390977\" target=\"_blank\" class=\"border-2 border-gray-600 rounded-full p-4 hover:bg-gray-600/20 transition-colors duration-300 w-full h-full flex items-center justify-center\" role=\"button\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Var7 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+				templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
+				templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
+				if !templ_7745c5c3_IsBuffer {
+					defer func() {
+						templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
+						if templ_7745c5c3_Err == nil {
+							templ_7745c5c3_Err = templ_7745c5c3_BufErr
+						}
+					}()
+				}
+				ctx = templ.InitializeContext(ctx)
+				templ_7745c5c3_Err = icon.WhatsApp().Render(ctx, templ_7745c5c3_Buffer)
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				return nil
+			})
+			templ_7745c5c3_Err = icon.Wrapper(icon.Props{
+				Class: "h-full w-full",
+			}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var7), templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "</a></li><div class=\"xl:flex justify-center items-center w-24 pl-3 pr-3 gap-1 hidden xl:block\"><div class=\"w-full h-[1px] border-2 border-b  border-gray-600\"></div><div class=\"w-[7px] h-[1px] border-2 border-b border-gray-600 rotate-45\"></div><div class=\"w-[7px] h-[1px] border-2 border-b border-gray-600 rotate-45\"></div></div></ul></div></div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			return nil
 		})
 		templ_7745c5c3_Err = card.Card(card.Props{
-			Class: "h-auto w-[90%] bg-secondary/50 backdrop-blur-md p-8 rounded-lg shadow-lg mt-12 mb-12",
-		}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var2), templ_7745c5c3_Buffer)
+			Class: "h-auto w-[90vw] xl:w-[80vw] bg-secondary/20 backdrop-blur-md p-[5rem] rounded-lg shadow-lg mt-16 mb-16 xl:ml-12 ",
+		}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var5), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "</div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "</div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

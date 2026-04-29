@@ -15,7 +15,7 @@ import (
 templ Animations(animations []sqlc.Animation, thumbDesktop sqlc.Animation, thumbMobile sqlc.Animation) {
 	<div id="content" class="relative scrollbar-hide">
 		<div
-			class="pointer-events-none fixed top-0 left-0 h-dvh w-screen z-10 animate-background-blur opacity-0 bg-black/85 max-md:backdrop-blur-sm"
+			class="pointer-events-none fixed top-0 left-0 h-dvh w-screen z-20 animate-background-blur opacity-0 bg-black/85 max-md:backdrop-blur-sm"
 		></div>
 		<div class="w-screen h-[90vh] sticky top-[2.3rem] md:block hidden">
 			@animationComponent.FrontPageAnimationSlider(thumbDesktop, animationUtil.GetAnimationPaths(thumbDesktop.ID)) {
