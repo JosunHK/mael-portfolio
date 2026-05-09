@@ -11,35 +11,40 @@ templ ShadowParallaxScript() {
         <script nonce={templ.GetNonce(ctx)}>
             function registerShadowParallax() {
                 Alpine.data('shadowParallax', () => ({
-                    rectX: 0,
-                    rectY: 0,   
-                    init(){
-                        const rectCoordinate = this.$el.getBoundingClientRect();
-                        this.rectX = rectCoordinate.left + rectCoordinate.width/2;
-                        this.rectY = rectCoordinate.top + rectCoordinate.height/2;
+                    mouseX: 0,
+                    mouseY: 0,   
+                    mouseMove(e){
+                        this.mouseX = e.clientX;
+                        this.mouseY = e.clientY;
                     },
                     
-                    shadowMove(e){
+                    shadowMove(lengthRatio, scaleRatio){
                         const rectCoordinate = this.$el.getBoundingClientRect();
-                        const mouseX = e.clientX;
-                        const mouseY = e.clientY;
-                        const positionX = this.rectX - mouseX;
-                        const positionY = this.rectY - mouseY;
-                        const transX = positionX*rectCoordinate.width/window.innerWidth/rectCoordinate.width*0.7;
-                        const transY = positionY*rectCoordinate.height/window.innerHeight/rectCoordinate.height*0.7;
-                        this.$el.style.transform = 'translateX(' + transX + 'rem) translateY(' + transY + 'rem)';
+                        const mouseX = this.mouseX;
+                        const mouseY = this.mouseY;
+                        const itemX = rectCoordinate.left + rectCoordinate.width/2;
+                        const itemY = rectCoordinate.top + rectCoordinate.height/2;
+                        const positionX = itemX - mouseX;
+                        const positionY = itemY - mouseY;
+                        const transX = positionX*rectCoordinate.width/window.innerWidth/rectCoordinate.width*lengthRatio*3;
+                        const transY = positionY*rectCoordinate.height/window.innerHeight/rectCoordinate.height*lengthRatio*1.5;
+                        const slope = Math.sqrt(positionX*positionX + positionY*positionY);
+                        this.$el.style.transform = 'translateX(' + transX + 'rem) translateY(' + transY + 'rem) scale(' + (1+slope/window.innerWidth*scaleRatio) + ')';
                         
 
                     },
-                    shadowMove2(e){
+                    shadowWRotate(lengthRatio, scaleRatio, rotateDegree){
                         const rectCoordinate = this.$el.getBoundingClientRect();
-                        const mouseX = e.clientX;
-                        const mouseY = e.clientY;
-                        const positionX = this.rectX - mouseX;
-                        const positionY = this.rectY - mouseY;
-                        const transX = positionX*rectCoordinate.width/window.innerWidth/rectCoordinate.width*1.4;
-                        const transY = positionY*rectCoordinate.height/window.innerHeight/rectCoordinate.height*1.4;
-                        this.$el.style.transform = 'translateX(' + transX + 'rem) translateY(' + transY + 'rem)';
+                        const mouseX = this.mouseX;
+                        const mouseY = this.mouseY;
+                        const itemX = rectCoordinate.left + rectCoordinate.width/2;
+                        const itemY = rectCoordinate.top + rectCoordinate.height/2;
+                        const positionX = itemX - mouseX;
+                        const positionY = itemY - mouseY;
+                        const transX = positionX*rectCoordinate.width/window.innerWidth/rectCoordinate.width*lengthRatio*3;
+                        const transY = positionY*rectCoordinate.height/window.innerHeight/rectCoordinate.height*lengthRatio*3;
+                        const slope = Math.sqrt(positionX*positionX + positionY*positionY);
+                        this.$el.style.transform = 'translateX(' + transX + 'rem) translateY(' + transY + 'rem) scale(' + (1) + ') rotate(' + (rotateDegree) + 'deg)';
                         
 
                     },
@@ -60,13 +65,17 @@ templ ShadowParallaxScript() {
 
 templ About() {
     @ShadowParallaxScript()
-    <div class="w-full h-full flex flex-row items-center justify-center">      
-        <div class="rotate-[270deg] text-grey-500 absolute left-[-14rem] top-[15rem] hidden xl:block
+    <div x-data="shadowParallax" @mousemove.window="mouseMove" class="w-full h-full flex flex-row items-center justify-center">      
+        <div @mousemove.window="shadowWRotate(1.3, 1, 270)" class="rotate-[270deg]  text-gray-300 absolute left-[-14rem] top-[15rem] hidden xl:block
         ">
             <span class="font-bold text-[18rem]">MAEL</span>
             
         </div>
-        <div class=" rotate-[270deg] text-orange-500 absolute left-[-14rem] top-[15rem] hidden xl:block">
+        <div @mousemove.window="shadowWRotate(0.9, 1, 270)" class=" rotate-[270deg] text-gray-400 absolute left-[-14rem] top-[15rem] hidden xl:block">
+            <span class="font-bold text-[18rem]">MAEL</span>
+            
+        </div>
+        <div @mousemove.window="shadowWRotate(0.5, 1, 270)" class=" rotate-[270deg] text-orange-500 absolute left-[-14rem] top-[15rem] hidden xl:block">
             <span class="font-bold text-[18rem]">MAEL</span>
             
         </div>
@@ -75,6 +84,7 @@ templ About() {
         
         @card.Card(card.Props{
             Class: "h-auto w-[90vw] xl:w-[80vw] bg-secondary/20 backdrop-blur-md p-[5rem] rounded-lg shadow-lg mt-16 mb-16 xl:ml-12 ",
+            
         }) {
             
             <div
@@ -86,28 +96,28 @@ templ About() {
 			
 			></div>
 
-            <div x-data="shadowParallax" @mousemove.window="shadowMove2"
-				class="mask-luminance mask rounded absolute h-[5rem] w-[10rem] right-[7rem] top-[3rem] border-t-[2rem] border-r-[2rem] border-gray-300  hidden xl:block"
+            <div  @mousemove.window="shadowMove(3, 1.1)"
+				class="rounded absolute h-[5rem] w-[10rem] right-[7rem] top-[3rem] border-t-[2rem] border-r-[2rem] border-gray-300  hidden xl:block"
 			
 			></div>
-            <div x-data="shadowParallax" @mousemove.window="shadowMove"
+            <div  @mousemove.window="shadowMove(2.5, 0.8)"
 				class=" rounded absolute h-[5rem] w-[10rem] right-[7rem] top-[3rem] border-t-[2rem] border-r-[2rem] border-gray-400  hidden xl:block"
 			
 			></div>
-            <div 
+            <div @mousemove.window="shadowMove(2, 0.5)"
 				class="absolute h-[5rem] w-[10rem] right-[7rem] top-[3rem] border-t-[2rem] border-r-[2rem] border-orange-500  hidden xl:block"
 				
 			></div>
 
-            <div x-data="shadowParallax" @mousemove.window="shadowMove2"
+            <div  @mousemove.window="shadowMove(3, 1.1)"
 				class="rounded absolute h-[5rem] w-[10rem] left-[7rem] bottom-[3rem] border-b-[2rem] border-l-[2rem] border-gray-300 hidden xl:block"
 				
 			></div>
-            <div x-data="shadowParallax" @mousemove.window="shadowMove"
+            <div @mousemove.window="shadowMove(2.5, 0.8)"
 				class="rounded absolute h-[5rem] w-[10rem] left-[7rem] bottom-[3rem] border-b-[2rem] border-l-[2rem] border-gray-400 hidden xl:block"
 				
 			></div>
-            <div
+            <div @mousemove.window="shadowMove(2, 0.5)"
 				class="absolute h-[5rem] w-[10rem] left-[7rem] bottom-[3rem] border-b-[2rem] border-l-[2rem] border-orange-500 hidden xl:block"
 				
 			></div>
