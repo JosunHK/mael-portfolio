@@ -73,7 +73,7 @@ func LayerBtnScript() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\">\n            document.addEventListener('alpine:init', () => {\n                Alpine.data('layerBtn', () => ({\n                    handleClick() {\n                       let refId = this.$el.getAttribute(\"data-ref-id\");\n                       let refClass = this.$el.getAttribute(\"data-ref-class\");\n                       let refClasses = $$(\".\" + refClass)\n                       for (let i = 0; i < refClasses.length; i++) {\n                            let ele = refClasses[i]\n                            ele.style.display = \"none\";\n                       }\n                       let ele = $(\"#\" + refId)\n                       ele.style.display = \"block\";\n                    },\n                }))\n            })\n        </script>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 2, "\">\n            document.addEventListener('alpine:init', () => {\n                Alpine.data('layerBtn', () => ({\n                    handleClick() {\n                       let refId = this.$el.getAttribute(\"data-ref-id\");\n                       let refClass = this.$el.getAttribute(\"data-ref-class\");\n                       let refClasses = $$(\".\" + refClass)\n                       for (let i = 0; i < refClasses.length; i++) {\n                            let ele = refClasses[i]\n                            ele.style.display = \"none\";\n                       }\n                       let ele = $(\"#\" + refId)\n                       ele.style.display = \"block\";\n                       this.currentID = refId;\n                       this.masterPlaybackFrame = this.currentPlaybackFrame;\n                       this.masterIsPlaying = this.isPlaying;\n                       this.stopPlaying();\n                    },\n                }))\n            })\n        </script>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -129,13 +129,13 @@ func AnimationSliderScript() templ.Component {
 			var templ_7745c5c3_Var6 string
 			templ_7745c5c3_Var6, templ_7745c5c3_Err = templ.JoinStringErrs(templ.GetNonce(ctx))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/animation/animationSlider.templ`, Line: 48, Col: 37}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/animation/animationSlider.templ`, Line: 52, Col: 37}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var6))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\">\n    document.addEventListener('alpine:init', () => {\n        Alpine.data('animationSlider', () => ({\n            isPlaying: false,\n            currentPlaybackFrame: 0,\n            init() {\n                const frames = this.$refs.sliderBody.children\n                this.$refs.sliderControl.value = 0;\n                this.$refs.framesDisplay.textContent = 1 + \" / \" + frames.length;\n                this.$refs.sliderControl.setAttribute(\"max\", frames.length - 1)\n                this.updateCurrentFrame();\n                if(this.$refs.sliderContainer.getAttribute(\"is-auto-play\") === \"true\"){\n                    this.$nextTick(async () => {this.play()})\n                }\n            },\n            currentFrame() {\n                this.$watch('currentPlaybackFrame', value => {\n                    const frames = this.$refs.sliderBody.children\n                    this.$refs.framesDisplay.textContent = (value + 1) + \" / \" + frames.length\n                })\n            },\n            updateToCursorPos(e) {\n                this.stopPlaying()\n                const x = e.clientX\n                const maxWidth = document.body.clientWidth;\n                const frames = this.$refs.sliderBody.children\n                this.$refs.sliderControl.value = Math.floor(x / (maxWidth / frames.length - 1));\n                this.$refs.sliderControl.dispatchEvent(new Event(\"input\"));\n            },\n            updateCurrentFrame(e) {\n                if(e){\n                    e.stopPropagation()\n                }\n                const currVal = this.$refs.sliderControl.value;\n                const frames = this.$refs.sliderBody.children\n                for (let i = 0; i < frames.length; i++) {\n                    if (i == currVal) {\n                        this.currentPlaybackFrame = i\n                        frames[i].style.opacity = \"100%\";\n                    } else {\n                        frames[i].style.opacity = \"0%\";\n                    }\n                }\n            },\n            handleMouseEnter() {\n                if (this.isPlaying) {\n                    document.body.dispatchEvent(new CustomEvent(\"animationCursorPlay\"));\n                } else {\n                    document.body.dispatchEvent(new CustomEvent(\"animationCursorPause\"));\n                }\n            },\n            handleMouseLeave() {\n                document.body.dispatchEvent(new CustomEvent(\"animationCursorLeave\"));\n            },\n            async play(e) {\n                if (this.isPlaying) {\n                    this.stopPlaying(e)\n                    return\n                }\n                this.isPlaying = true;\n                if (e && e.target != this.$refs.sliderControl) { //only update when is triggered via event aka not by init()\n                    document.body.dispatchEvent(new CustomEvent(\"animationCursorPlay\"));\n                }\n                const frames = this.$refs.sliderBody.children\n                const fps = this.$refs.sliderContainer.getAttribute(\"slider-fps\") * 1;\n                for (let i = this.currentPlaybackFrame; i < frames.length; i++) {\n                    if (this.isPlaying === false) return;\n                    if (!this.$refs.sliderControl) return;\n                    this.$refs.sliderControl.value = i\n                    this.$refs.sliderControl.dispatchEvent(new Event(\"input\"));\n                    await new Promise(r => setTimeout(r, (1000 / fps)));\n                }\n                this.$refs.sliderControl.value = 0\n                this.$refs.sliderControl.dispatchEvent(new Event(\"input\"));\n                this.stopPlaying()\n                this.$nextTick(async () => {this.play()})\n            },\n            stopPlaying(e) {\n                this.isPlaying = false;\n                if (e && e.target !== this.$refs.sliderControl) { //only when triggered by body but no control\n                    document.body.dispatchEvent(new CustomEvent(\"animationCursorPause\"));\n                }\n            }\n        }))\n    })\n</script>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "\">\n    document.addEventListener('alpine:init', () => {\n        Alpine.data('animationSliderData', () => ({\n            currentID: \"\",\n            masterPlaybackFrame: 0,\n            masterIsPlaying: false,\n        }))\n        Alpine.data('animationSlider', () => ({\n            isPlaying: false,\n            currentPlaybackFrame: 0,\n            init() {\n                if(!this.currentID){\n                    this.currentID = this.$el.id\n                }\n                const frames = this.$refs.sliderBody.children\n                this.$refs.sliderControl.value = 0;\n                this.$refs.framesDisplay.textContent = 1 + \" / \" + frames.length;\n                this.$refs.sliderControl.setAttribute(\"max\", frames.length - 1)\n                this.updateCurrentFrame();\n                if(this.$refs.sliderContainer.getAttribute(\"is-auto-play\") === \"true\"){\n                    this.$nextTick(async () => {this.play()})\n                }\n                this.$watch('masterPlaybackFrame', value => {\n                    if(this.isPlaying){\n                        this.stopPlaying()\n                    }\n                    this.currentPlaybackFrame = this.masterPlaybackFrame;\n                    this.$refs.sliderControl.value = this.masterPlaybackFrame;\n                    if(this.masterIsPlaying){\n                        this.play()\n                    }\n                })\n            },\n            currentFrame() {\n                this.$watch('currentPlaybackFrame', value => {\n                    const frames = this.$refs.sliderBody.children\n                    this.$refs.framesDisplay.textContent = (value + 1) + \" / \" + frames.length\n                    this.updateCurrentFrame();\n                })\n            },\n            updateToCursorPos(e) {\n                this.stopPlaying()\n                const x = e.clientX\n                const maxWidth = document.body.clientWidth;\n                const frames = this.$refs.sliderBody.children\n                this.$refs.sliderControl.value = Math.floor(x / (maxWidth / frames.length - 1));\n                this.$refs.sliderControl.dispatchEvent(new Event(\"input\"));\n            },\n            updateCurrentFrame(e) {\n                if(e){\n                    e.stopPropagation()\n                }\n                const currVal = this.$refs.sliderControl.value;\n                const frames = this.$refs.sliderBody.children\n                for (let i = 0; i < frames.length; i++) {\n                    if (i == currVal) {\n                        this.currentPlaybackFrame = i\n                        frames[i].style.opacity = \"100%\";\n                    } else {\n                        frames[i].style.opacity = \"0%\";\n                    }\n                }\n            },\n            handleMouseEnter() {\n                if (this.isPlaying) {\n                    document.body.dispatchEvent(new CustomEvent(\"animationCursorPlay\"));\n                } else {\n                    document.body.dispatchEvent(new CustomEvent(\"animationCursorPause\"));\n                }\n            },\n            handleMouseLeave() {\n                document.body.dispatchEvent(new CustomEvent(\"animationCursorLeave\"));\n            },\n            async play(e) {\n                if (this.isPlaying) {\n                    this.stopPlaying(e)\n                    return\n                }\n                this.isPlaying = true;\n                if (e && e.target != this.$refs.sliderControl) { //only update when is triggered via event aka not by init()\n                    document.body.dispatchEvent(new CustomEvent(\"animationCursorPlay\"));\n                }\n                const frames = this.$refs.sliderBody.children\n                const fps = this.$refs.sliderContainer.getAttribute(\"slider-fps\") * 1;\n                for (let i = this.currentPlaybackFrame; i < frames.length; i++) {\n                    if (this.isPlaying === false) return;\n                    if (!this.$refs.sliderControl) return;\n                    this.$refs.sliderControl.value = i\n                    this.$refs.sliderControl.dispatchEvent(new Event(\"input\"));\n                    await new Promise(r => setTimeout(r, (1000 / fps)));\n                }\n                this.$refs.sliderControl.value = 0\n                this.$refs.sliderControl.dispatchEvent(new Event(\"input\"));\n                this.stopPlaying()\n                this.$nextTick(async () => {this.play()})\n            },\n            stopPlaying(e) {\n                this.isPlaying = false;\n                if (e && e.target !== this.$refs.sliderControl) { //only when triggered by body but no control\n                    document.body.dispatchEvent(new CustomEvent(\"animationCursorPause\"));\n                }\n            }\n        }))\n    })\n</script>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -303,7 +303,7 @@ func AnimationSlider(props Props, fps int) templ.Component {
 		var templ_7745c5c3_Var16 string
 		templ_7745c5c3_Var16, templ_7745c5c3_Err = templ.JoinStringErrs(fps)
 		if templ_7745c5c3_Err != nil {
-			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/animation/animationSlider.templ`, Line: 172, Col: 18}
+			return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/animation/animationSlider.templ`, Line: 195, Col: 18}
 		}
 		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var16))
 		if templ_7745c5c3_Err != nil {
@@ -450,7 +450,7 @@ func SimpleAnimationSlider(animation sqlc.Animation, paths []string) templ.Compo
 					var templ_7745c5c3_Var23 string
 					templ_7745c5c3_Var23, templ_7745c5c3_Err = templ.JoinStringErrs(path)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/animation/animationSlider.templ`, Line: 206, Col: 60}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/animation/animationSlider.templ`, Line: 229, Col: 60}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var23))
 					if templ_7745c5c3_Err != nil {
@@ -557,7 +557,7 @@ func SimpleSubAnimationSlider(animation sqlc.SubAnimation, paths []string) templ
 					var templ_7745c5c3_Var27 string
 					templ_7745c5c3_Var27, templ_7745c5c3_Err = templ.JoinStringErrs(path)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/animation/animationSlider.templ`, Line: 229, Col: 60}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/animation/animationSlider.templ`, Line: 252, Col: 60}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var27))
 					if templ_7745c5c3_Err != nil {
@@ -611,7 +611,7 @@ func SimpleSubAnimationSlider(animation sqlc.SubAnimation, paths []string) templ
 	})
 }
 
-func AnimationReelSlider(animation sqlc.Animation, paths []string) templ.Component {
+func AnimationReelSlider(animation sqlc.Animation, paths []string, index int) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -664,7 +664,7 @@ func AnimationReelSlider(animation sqlc.Animation, paths []string) templ.Compone
 					var templ_7745c5c3_Var31 string
 					templ_7745c5c3_Var31, templ_7745c5c3_Err = templ.JoinStringErrs(path)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/animation/animationSlider.templ`, Line: 255, Col: 115}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/animation/animationSlider.templ`, Line: 278, Col: 115}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var31))
 					if templ_7745c5c3_Err != nil {
@@ -683,20 +683,33 @@ func AnimationReelSlider(animation sqlc.Animation, paths []string) templ.Compone
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 31, " <div class=\"p-2 border border-zinc-800/80 bg-stone-500 rounded-lg max-md:backdrop-blur-md mt-18 inward-shadow \"><span>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 31, " <div class=\"fixed bottom-2 w-screen flex justify-center left-0\" x-show=\"getIsShowControl\" data-animation-control-index=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var32 string
-			templ_7745c5c3_Var32, templ_7745c5c3_Err = templ.JoinStringErrs(animation.Label)
+			templ_7745c5c3_Var32, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%d", index))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/animation/animationSlider.templ`, Line: 259, Col: 26}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/animation/animationSlider.templ`, Line: 284, Col: 58}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var32))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 32, "</span><div class=\"my-4 flex flex-row gap-2\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 32, "\"><div class=\"p-2 border border-zinc-800/80 bg-stone-500 rounded-lg max-md:backdrop-blur-md mt-18 inward-shadow fixed bottom-2 w-[80%]\"><span>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var33 string
+			templ_7745c5c3_Var33, templ_7745c5c3_Err = templ.JoinStringErrs(animation.Label)
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/animation/animationSlider.templ`, Line: 287, Col: 27}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var33))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 33, "</span><div class=\"my-4 flex flex-row gap-2\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -710,7 +723,7 @@ func AnimationReelSlider(animation sqlc.Animation, paths []string) templ.Compone
 					return templ_7745c5c3_Err
 				}
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 33, "</div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 34, "</div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -722,7 +735,7 @@ func AnimationReelSlider(animation sqlc.Animation, paths []string) templ.Compone
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 34, "</div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 35, "</div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -760,12 +773,12 @@ func layerBtnCurrent(label string) templ.Component {
 			}()
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var33 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var33 == nil {
-			templ_7745c5c3_Var33 = templ.NopComponent
+		templ_7745c5c3_Var34 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var34 == nil {
+			templ_7745c5c3_Var34 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Var34 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+		templ_7745c5c3_Var35 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 			templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 			templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
 			if !templ_7745c5c3_IsBuffer {
@@ -777,12 +790,12 @@ func layerBtnCurrent(label string) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			var templ_7745c5c3_Var35 string
-			templ_7745c5c3_Var35, templ_7745c5c3_Err = templ.JoinStringErrs(label)
+			var templ_7745c5c3_Var36 string
+			templ_7745c5c3_Var36, templ_7745c5c3_Err = templ.JoinStringErrs(label)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/animation/animationSlider.templ`, Line: 283, Col: 9}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/animation/animationSlider.templ`, Line: 312, Col: 9}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var35))
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var36))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -797,7 +810,7 @@ func layerBtnCurrent(label string) templ.Component {
 				"variant": "ghost",
 				"size":    "sm",
 			},
-		}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var34), templ_7745c5c3_Buffer)
+		}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var35), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -821,12 +834,12 @@ func layerBtn(label string, refId string, refClass string) templ.Component {
 			}()
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var36 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var36 == nil {
-			templ_7745c5c3_Var36 = templ.NopComponent
+		templ_7745c5c3_Var37 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var37 == nil {
+			templ_7745c5c3_Var37 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Var37 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+		templ_7745c5c3_Var38 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 			templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 			templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
 			if !templ_7745c5c3_IsBuffer {
@@ -838,12 +851,12 @@ func layerBtn(label string, refId string, refClass string) templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			var templ_7745c5c3_Var38 string
-			templ_7745c5c3_Var38, templ_7745c5c3_Err = templ.JoinStringErrs(label)
+			var templ_7745c5c3_Var39 string
+			templ_7745c5c3_Var39, templ_7745c5c3_Err = templ.JoinStringErrs(label)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/animation/animationSlider.templ`, Line: 302, Col: 9}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/animation/animationSlider.templ`, Line: 331, Col: 9}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var38))
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var39))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -862,7 +875,7 @@ func layerBtn(label string, refId string, refClass string) templ.Component {
 				"variant": "glass",
 				"size":    "sm",
 			},
-		}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var37), templ_7745c5c3_Buffer)
+		}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var38), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -870,7 +883,7 @@ func layerBtn(label string, refId string, refClass string) templ.Component {
 	})
 }
 
-func SubAnimationReelSlider(animation sqlc.SubAnimation, paths []string) templ.Component {
+func SubAnimationReelSlider(animation sqlc.SubAnimation, paths []string, index int) templ.Component {
 	return templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 		if templ_7745c5c3_CtxErr := ctx.Err(); templ_7745c5c3_CtxErr != nil {
@@ -886,12 +899,12 @@ func SubAnimationReelSlider(animation sqlc.SubAnimation, paths []string) templ.C
 			}()
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var39 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var39 == nil {
-			templ_7745c5c3_Var39 = templ.NopComponent
+		templ_7745c5c3_Var40 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var40 == nil {
+			templ_7745c5c3_Var40 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Var40 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+		templ_7745c5c3_Var41 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 			templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 			templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
 			if !templ_7745c5c3_IsBuffer {
@@ -903,7 +916,7 @@ func SubAnimationReelSlider(animation sqlc.SubAnimation, paths []string) templ.C
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Var41 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+			templ_7745c5c3_Var42 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 				templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 				templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
 				if !templ_7745c5c3_IsBuffer {
@@ -916,20 +929,20 @@ func SubAnimationReelSlider(animation sqlc.SubAnimation, paths []string) templ.C
 				}
 				ctx = templ.InitializeContext(ctx)
 				for _, path := range paths {
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 35, "<img class=\"tv-glow h-fit max-h-full md:h-[calc(85dvh*0.7)] md:max-h-full rounded-lg\" loading=\"lazy\" src=\"")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 36, "<img class=\"tv-glow h-fit max-h-full md:h-[calc(85dvh*0.7)] md:max-h-full rounded-lg\" loading=\"lazy\" src=\"")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					var templ_7745c5c3_Var42 string
-					templ_7745c5c3_Var42, templ_7745c5c3_Err = templ.JoinStringErrs(path)
+					var templ_7745c5c3_Var43 string
+					templ_7745c5c3_Var43, templ_7745c5c3_Err = templ.JoinStringErrs(path)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/animation/animationSlider.templ`, Line: 320, Col: 115}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/animation/animationSlider.templ`, Line: 349, Col: 115}
 					}
-					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var42))
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var43))
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 36, "\">")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 37, "\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -938,24 +951,37 @@ func SubAnimationReelSlider(animation sqlc.SubAnimation, paths []string) templ.C
 			})
 			templ_7745c5c3_Err = SliderBody(Props{
 				Class: "h-[65%] md:h-[80%] my-4 md:my-0 max-md:items-center pt-8",
-			}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var41), templ_7745c5c3_Buffer)
+			}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var42), templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 37, " <div class=\"p-2 border border-zinc-800/80 bg-stone-500 rounded-lg max-md:backdrop-blur-md mt-18 inward-shadow\"><span>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 38, " <div class=\"fixed bottom-2 w-screen flex justify-center left-0\" x-show=\"getIsShowControl\" data-animation-control-index=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			var templ_7745c5c3_Var43 string
-			templ_7745c5c3_Var43, templ_7745c5c3_Err = templ.JoinStringErrs(animation.Label)
+			var templ_7745c5c3_Var44 string
+			templ_7745c5c3_Var44, templ_7745c5c3_Err = templ.JoinStringErrs(fmt.Sprintf("%d", index))
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/animation/animationSlider.templ`, Line: 324, Col: 26}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/animation/animationSlider.templ`, Line: 355, Col: 58}
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var43))
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var44))
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 38, "</span><div class=\"my-4 flex flex-row gap-2\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 39, "\"><div class=\"p-2 border border-zinc-800/80 bg-stone-500 rounded-lg max-md:backdrop-blur-md mt-18 inward-shadow w-[80%]\"><span>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			var templ_7745c5c3_Var45 string
+			templ_7745c5c3_Var45, templ_7745c5c3_Err = templ.JoinStringErrs(animation.Label)
+			if templ_7745c5c3_Err != nil {
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/animation/animationSlider.templ`, Line: 358, Col: 27}
+			}
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var45))
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 40, "</span><div class=\"my-4 flex flex-row gap-2\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -976,7 +1002,7 @@ func SubAnimationReelSlider(animation sqlc.SubAnimation, paths []string) templ.C
 					}
 				}
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 39, "</div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 41, "</div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -988,7 +1014,7 @@ func SubAnimationReelSlider(animation sqlc.SubAnimation, paths []string) templ.C
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 40, "</div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 42, "</div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -1002,7 +1028,7 @@ func SubAnimationReelSlider(animation sqlc.SubAnimation, paths []string) templ.C
 			},
 		},
 			int(animation.Fps.Int32),
-		).Render(templ.WithChildren(ctx, templ_7745c5c3_Var40), templ_7745c5c3_Buffer)
+		).Render(templ.WithChildren(ctx, templ_7745c5c3_Var41), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -1026,12 +1052,12 @@ func FrontPageAnimationSlider(animation sqlc.Animation, paths []string) templ.Co
 			}()
 		}
 		ctx = templ.InitializeContext(ctx)
-		templ_7745c5c3_Var44 := templ.GetChildren(ctx)
-		if templ_7745c5c3_Var44 == nil {
-			templ_7745c5c3_Var44 = templ.NopComponent
+		templ_7745c5c3_Var46 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var46 == nil {
+			templ_7745c5c3_Var46 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Var45 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+		templ_7745c5c3_Var47 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 			templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 			templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
 			if !templ_7745c5c3_IsBuffer {
@@ -1043,7 +1069,7 @@ func FrontPageAnimationSlider(animation sqlc.Animation, paths []string) templ.Co
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Var46 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+			templ_7745c5c3_Var48 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 				templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
 				templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
 				if !templ_7745c5c3_IsBuffer {
@@ -1056,20 +1082,20 @@ func FrontPageAnimationSlider(animation sqlc.Animation, paths []string) templ.Co
 				}
 				ctx = templ.InitializeContext(ctx)
 				for _, path := range paths {
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 41, "<img class=\"w-full\" loading=\"lazy\" src=\"")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 43, "<img class=\"w-full\" loading=\"lazy\" src=\"")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					var templ_7745c5c3_Var47 string
-					templ_7745c5c3_Var47, templ_7745c5c3_Err = templ.JoinStringErrs(path)
+					var templ_7745c5c3_Var49 string
+					templ_7745c5c3_Var49, templ_7745c5c3_Err = templ.JoinStringErrs(path)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/animation/animationSlider.templ`, Line: 354, Col: 49}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/animation/animationSlider.templ`, Line: 389, Col: 49}
 					}
-					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var47))
+					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var49))
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 42, "\">")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 44, "\">")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
@@ -1078,11 +1104,11 @@ func FrontPageAnimationSlider(animation sqlc.Animation, paths []string) templ.Co
 			})
 			templ_7745c5c3_Err = SliderBody(Props{
 				Class: "h-min",
-			}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var46), templ_7745c5c3_Buffer)
+			}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var48), templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 43, " ")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 45, " ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -1090,7 +1116,7 @@ func FrontPageAnimationSlider(animation sqlc.Animation, paths []string) templ.Co
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 44, " ")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 46, " ")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -1107,7 +1133,7 @@ func FrontPageAnimationSlider(animation sqlc.Animation, paths []string) templ.Co
 			},
 		},
 			int(animation.Fps.Int32),
-		).Render(templ.WithChildren(ctx, templ_7745c5c3_Var45), templ_7745c5c3_Buffer)
+		).Render(templ.WithChildren(ctx, templ_7745c5c3_Var47), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

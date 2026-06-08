@@ -17,20 +17,16 @@ templ Animations(animations []sqlc.Animation, thumbDesktop sqlc.Animation, thumb
 		<div
 			class="pointer-events-none fixed top-0 left-0 h-dvh w-screen z-10 animate-background-blur opacity-0 bg-black/85 max-md:backdrop-blur-sm"
 		></div>
-		<div class="w-screen h-[90vh] sticky top-[2.3rem] md:block hidden">
-			@animationComponent.FrontPageAnimationSlider(thumbDesktop, animationUtil.GetAnimationPaths(thumbDesktop.ID)) {
-			}
-		</div>
-		<div class="w-screen h-[90vh] sticky top-[2.3rem] md:hidden">
-			@animationComponent.FrontPageAnimationSlider(thumbMobile, animationUtil.GetAnimationPaths(thumbMobile.ID)) {
-			}
-		</div>
 		@AnimationsShowcase(animations)
 	</div>
 }
 
 templ AnimationsShowcase(animations []sqlc.Animation) {
-	<div id="animation-slide-container" class="relative max-md:mb-4 min-h-[400px] max-md:bottom-4">
+	<div
+		id="animation-slide-container"
+		class="fixed top-0 max-md:mb-4 min-h-[400px] max-md:bottom-4"
+		x-data="showcaseSlider"
+	>
 		@AnimationShowcaseButtons(len(animations))
 		<div
 			class="h-[85dvh] md:h-screen max-w-screen w-screen overflow-scroll max-md:px-[4.5dvw] md:pl-[5dvw] gap-[4.5dvw] max-md:mb-4 scrollbar-hide snap-x scroll-smooth relative whitespace-nowrap md:block flex flex-row"
@@ -38,9 +34,9 @@ templ AnimationsShowcase(animations []sqlc.Animation) {
 			for i, animation := range animations {
 				<div
 					id={ fmt.Sprintf("animation-slide-%d", i) }
-					class="max-md:w-screen h-full md:h-screen z-20 relative rounded-xl p-2 font-comfortaa text-stone-700 snap-center block md:inline-block md:w-screen mr-[4.5dvw] isolate "
+					class="max-md:w-screen h-full md:h-screen z-20 relative rounded-xl font-comfortaa text-stone-700 snap-center block md:inline-block md:w-screen mr-[4.5dvw] isolate "
 				>
-					<div class="absolute top-0 left-0 hidden justify-center items-center w-full gap-4 mt-8 md:h-full md:mt-0 z-10 ">
+					<div class="absolute top-0 left-0 hidden justify-center items-center w-full gap-4 md:h-full md:mt-0 z-10 ">
 						@card.Card(card.Props{
 							Class: `flex justify-center items-center h-[80%] w-[75%] p-4 py-2 flex-col justify-start items-start bg-gradient-to-br from-zinc-500 to-zinc-700 border-zinc-800 animate-scroll-sprial delay-200 duration-200`,
 						}) {
@@ -56,11 +52,14 @@ templ AnimationsShowcase(animations []sqlc.Animation) {
 					</div>
 					<div class="flex justify-center items-end w-full gap-4 mt-8 md:h-full md:mt-0 z-20 relative">
 						@card.Card(card.Props{
-							Class: `border-0 flex justify-center items-center h-[80dvh] w-screen md:h-[90%] md:w-[85%] md:px-12 py-2 flex-col max-md:pb-12 pt-12 md:mt-8 bg-transparent shadow-none`,
+							Attrs: templ.Attributes{
+								"x-data": "animationSliderData",
+							},
+							Class: `border-0 flex justify-center items-center h-[80dvh] w-screen md:h-[90%] md:w-[85%] md:px-12 py-2 flex-col bg-transparent shadow-none`,
 						}) {
-							@animationComponent.AnimationReelSlider(animation, animationUtil.GetAnimationPaths(animation.ID))
+							@animationComponent.AnimationReelSlider(animation, animationUtil.GetAnimationPaths(animation.ID), i)
 							for _, subAnimation := range animationUtil.GetSubAnimations(ctx, animation.ID) {
-								@animationComponent.SubAnimationReelSlider(subAnimation, animationUtil.GetSubAnimationPaths(subAnimation.ID))
+								@animationComponent.SubAnimationReelSlider(subAnimation, animationUtil.GetSubAnimationPaths(subAnimation.ID), i)
 							}
 						}
 					</div>
@@ -72,30 +71,8 @@ templ AnimationsShowcase(animations []sqlc.Animation) {
 
 templ AnimationShowcaseButtons(animationCount int) {
 	<div
-		x-data="showcaseSlider"
-		@scroll.window="handleScroll"
 		class="h-full w-screen absolute bottom-6 md:bottom-0 flex flex-row justify-between items-end md:items-center left-0 z-50 px-4 pointer-events-none"
 	>
-		<div class="fixed bottom-4 right-4 flex flex-row ">
-			@button.Button(button.Props{
-				Class: "pointer-events-auto data-[isshow=false]:rotate-180",
-				Attrs: templ.Attributes{
-					"@click":           "handleClick",
-					":data-isshow":     "getIsShowUp",
-					"cursor-clickable": "true",
-				},
-				Variant: gocva.Variant{
-					"variant": "stone",
-					"size":    "icon",
-				},
-			}) {
-				@icon.Wrapper(icon.Props{
-					Class: "[&>svg]:stroke-black/70 [&>svg]:stroke-[0.25rem]",
-				}) {
-					@icon.ArrowUpCurve()
-				}
-			}
-		</div>
 		@button.Button(button.Props{
 			Class: "pointer-events-auto data-[isshow=false]:opacity-0 data-[isshow=false]:scale-10 md:flex hidden",
 			Attrs: templ.Attributes{
@@ -205,6 +182,9 @@ templ ShowcaseSliderScript(animationCount int) {
                             st = 'scrollTop',
                             sh = 'scrollHeight';
                         return (h[st]||b[st]) / ((h[sh]||b[sh]) - h.clientHeight) * 100;
+                    },
+                    getIsShowControl(){
+                        return this.currentSlide+"" === this.$el.getAttribute("data-animation-control-index");
                     },
                     getIsShowPrev(){
                         return this.isShowPrev + "";
