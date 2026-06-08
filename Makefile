@@ -36,7 +36,7 @@ init-build:
 	mv tailwindcss-linux-x64 tailwindcss
 	make tailwind-build
 
-	go install github.com/a-h/templ/cmd/templ@latest
+	go install github.com/a-h/templ/cmd/templ@v0.3.977
 	go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
 
 	`go env GOPATH`/bin/templ generate
