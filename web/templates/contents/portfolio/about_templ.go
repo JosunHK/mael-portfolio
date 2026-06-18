@@ -176,7 +176,7 @@ func About() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "</a></li><div class=\"xl:flex justify-center items-center w-24 pl-3 pr-3 hidden xl:block  xl:w-[3vw]\"><div class=\"w-full h-[1px] border-2 border-b  border-gray-600\"></div></div><li class=\"w-[5rem] h-[5rem] \"><a href=\"mailto:eschon.ec@gmail.com\" target=\"_blank\" class=\"border-2 border-gray-600 rounded-full p-4 hover:bg-gray-600/20 transition-colors duration-300 w-full h-full flex items-center justify-center\" role=\"button\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "</a></li><div class=\"xl:flex justify-center items-center w-24 pl-3 pr-3 hidden xl:block  xl:w-[3vw]\"><div class=\"w-full h-[1px] border-2 border-b  border-gray-600\"></div></div><li class=\"w-[5rem] h-[5rem] \"><a href=\"mailto:BarcodeHKMusic@gmail.com\" target=\"_blank\" class=\"border-2 border-gray-600 rounded-full p-4 hover:bg-gray-600/20 transition-colors duration-300 w-full h-full flex items-center justify-center\" role=\"button\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
