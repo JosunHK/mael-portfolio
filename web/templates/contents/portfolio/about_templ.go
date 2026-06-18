@@ -120,7 +120,7 @@ func About() templ.Component {
 				}()
 			}
 			ctx = templ.InitializeContext(ctx)
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "<div class=\"absolute h-5 w-10 left-[-0.6rem] top-[-0.4rem] border-t-[7px] border-l-[7px] border-gray-600\"></div><div class=\"absolute h-5 w-10 right-[-0.6rem] bottom-[-0.5rem] border-b-[7px] border-r-[7px] border-gray-600\"></div><div @mousemove.window=\"shadowMove(3, 1.1)\" @touchmove.window=\"shadowMove(3, 1.1)\" class=\"rounded absolute h-[5rem] w-[10rem] right-[7rem] top-[3rem] border-t-[2rem] border-r-[2rem] border-gray-300  hidden xl:block\"></div><div @mousemove.window=\"shadowMove(2.5, 0.8)\" @touchmove.window=\"shadowMove(2.5, 0.8)\" class=\" rounded absolute h-[5rem] w-[10rem] right-[7rem] top-[3rem] border-t-[2rem] border-r-[2rem] border-gray-400  hidden xl:block\"></div><div @mousemove.window=\"shadowMove(2, 0.5)\" @touchmove.window=\"shadowMove(2, 0.5)\" class=\"absolute h-[5rem] w-[10rem] right-[7rem] top-[3rem] border-t-[2rem] border-r-[2rem] border-orange-500  hidden xl:block\"></div><div @mousemove.window=\"shadowMove(3, 1.1)\" @touchmove.window=\"shadowMove(3, 1.1)\" class=\"rounded absolute h-[5rem] w-[10rem] left-[7rem] bottom-[3rem] border-b-[2rem] border-l-[2rem] border-gray-300 hidden xl:block\"></div><div @mousemove.window=\"shadowMove(2.5, 0.8)\" @touchmove.window=\"shadowMove(2.5, 0.8)\" class=\"rounded absolute h-[5rem] w-[10rem] left-[7rem] bottom-[3rem] border-b-[2rem] border-l-[2rem] border-gray-400 hidden xl:block\"></div><div @mousemove.window=\"shadowMove(2, 0.5)\" @touchmove.window=\"shadowMove(2, 0.5)\" class=\"absolute h-[5rem] w-[10rem] left-[7rem] bottom-[3rem] border-b-[2rem] border-l-[2rem] border-orange-500 hidden xl:block\"></div><div class=\"w-full h-auto  flex flex-col gap-4 xl:grid xl:grid-flow-col xl:grid-row-3 xl:mt-8 justify-center\"><div class=\" text-orange-500 flex justify-center xl:hidden\"><span class=\"font-bold text-[5rem]\">MAEL</span></div><div class=\"w-full h-auto col-span-2 row-span-1 flex items-center justify-center\"><div class=\"w-[30vh] h-[30vh] flex items-center justify-center\"><img src=\"static/asset/Sixix_Mugshot.png\" alt=\"Profile Picture\" class=\"w-auto h-full rounded-full object-cover\"></div></div><div class=\"col-span-2 row-span-2 w-full h-auto xl:p-8 flex items-center justify-center mb-[10vh]\"><div class=\"h-full w-full flex item-start justify-center xl:p-8\"><div class=\"text-xl xl:text-2xl/10 tracking-wide italic text-center text-gray-700 mt-10\"><p class=\"mb-6\">I'm MAEL, a traditional 2D animator from Hong Kong, specializing in character design, keyframing, and tweening. I'm also skilled in all aspects of animation pre-production and development.</p><p class=\"mb-6\">I began my artistic career as a music producer, and discovered a love for the magic of animation through collaborative projects. Today, I approach animation with a musician's mindset, focusing heavily on the beats, rhythm, and pacing of movement.</p><p>I truly believe our hands are capable of creating magic. By crafting precise, intentional movement within imaginary worlds, we can blur the line between fantasy and reality. </p></div></div></div><div class=\"col-span-1 row-span-3\"><div class=\"w-full h-[60%] flex flex-col items-center justify-center gap-4\"><h2 class=\"text-3xl xl:text-5xl flex justify-center\">Let's Talk!</h2><h1 class=\"text-2xl xl:text-5xl flex justify-center\">BarcodeHKMusic@gmail.com</h1><p>And here's my number: </p><a href=\"https://wa.me/51053003\">+852 5105 3003</a><p>So call me maybe!</p></div><div class=\"w-full h-[40%] flex items-center justify-center mt-12 xl:mt-0\"><ul class=\"w-full xl:w-[30vw] h-full flex flex-row gap-10 items-center justify-center xl:gap-1\"><div class=\"xl:flex flex-row justify-center items-center w-24 pl-3 pr-3 gap-1 hidden xl:block\"><div class=\"w-[7px] h-[1px] border-2 border-b border-gray-600 rotate-45\"></div><div class=\"w-[7px] h-[1px] border-2 border-b border-gray-600 rotate-45\"></div><div class=\"w-full h-[1px] border-2 border-b border-gray-600 \"></div></div><li class=\"w-[5rem] h-[5rem] \"><a href=\"https://www.instagram.com/mael.flp/\" target=\"_blank\" class=\"border-2 border-gray-600 rounded-full p-4 hover:bg-gray-600/20 transition-colors duration-300 w-full h-full flex items-center justify-center\" role=\"button\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 5, "<div class=\"absolute h-5 w-10 left-[-0.6rem] top-[-0.4rem] border-t-[7px] border-l-[7px] border-gray-600\"></div><div class=\"absolute h-5 w-10 right-[-0.6rem] bottom-[-0.5rem] border-b-[7px] border-r-[7px] border-gray-600\"></div><div @mousemove.window=\"shadowMove(3, 1.1)\" @touchmove.window=\"shadowMove(3, 1.1)\" class=\"rounded absolute h-[5rem] w-[10rem] right-[7rem] top-[3rem] border-t-[2rem] border-r-[2rem] border-gray-300  hidden xl:block\"></div><div @mousemove.window=\"shadowMove(2.5, 0.8)\" @touchmove.window=\"shadowMove(2.5, 0.8)\" class=\" rounded absolute h-[5rem] w-[10rem] right-[7rem] top-[3rem] border-t-[2rem] border-r-[2rem] border-gray-400  hidden xl:block\"></div><div @mousemove.window=\"shadowMove(2, 0.5)\" @touchmove.window=\"shadowMove(2, 0.5)\" class=\"absolute h-[5rem] w-[10rem] right-[7rem] top-[3rem] border-t-[2rem] border-r-[2rem] border-orange-500  hidden xl:block\"></div><div @mousemove.window=\"shadowMove(3, 1.1)\" @touchmove.window=\"shadowMove(3, 1.1)\" class=\"rounded absolute h-[5rem] w-[10rem] left-[7rem] bottom-[3rem] border-b-[2rem] border-l-[2rem] border-gray-300 hidden xl:block\"></div><div @mousemove.window=\"shadowMove(2.5, 0.8)\" @touchmove.window=\"shadowMove(2.5, 0.8)\" class=\"rounded absolute h-[5rem] w-[10rem] left-[7rem] bottom-[3rem] border-b-[2rem] border-l-[2rem] border-gray-400 hidden xl:block\"></div><div @mousemove.window=\"shadowMove(2, 0.5)\" @touchmove.window=\"shadowMove(2, 0.5)\" class=\"absolute h-[5rem] w-[10rem] left-[7rem] bottom-[3rem] border-b-[2rem] border-l-[2rem] border-orange-500 hidden xl:block\"></div><div class=\"w-full h-auto flex flex-col gap-4 xl:grid xl:grid-cols-6 xl:grid-flow-row xl:mt-8 justify-center\"><div class=\" text-orange-500 flex justify-center xl:hidden\"><span class=\"font-bold text-[5rem]\">MAEL</span></div><div class=\"xl:col-span-4 flex flex-col gap-4\"><div class=\"w-full h-auto flex items-center justify-center\"><div class=\"w-[30vh] h-[30vh] flex items-center justify-center\"><img src=\"static/asset/Sixix_Mugshot.png\" alt=\"Profile Picture\" class=\"w-auto h-full rounded-full object-cover\"></div></div><div class=\" w-full h-auto xl:p-10 flex items-center justify-center mb-[10vh]\"><div class=\"h-full w-full flex item-start justify-center xl:p-8\"><div class=\"text-xl xl:text-3xl/10 tracking-wide  text-center text-gray-700 mt-10\"><p class=\"mb-6\">I'm MAEL, a traditional 2D animator from Hong Kong, specializing in character design, keyframing, and tweening. I'm also skilled in all aspects of animation pre-production and development.</p><p class=\"mb-6\">I began my artistic career as a music producer, and discovered a love for the magic of animation through collaborative projects. Today, I approach animation with a musician's mindset, focusing heavily on the beats, rhythm, and pacing of movement.</p><p>I truly believe our hands are capable of creating magic. By crafting precise, intentional movement within imaginary worlds, we can blur the line between fantasy and reality. </p></div></div></div></div><div class=\"col-span-2 row-span-3\"><div class=\"w-full h-[70%] flex flex-row justify-center items-end gap-4\"><h2 class=\"text-3xl xl:text-5xl flex justify-center\">Contact Me!</h2></div><div class=\"w-full h-[30%] flex items-center justify-center mt-12 xl:mt-0 \"><ul class=\"w-full xl:w-[40vw] h-full flex flex-row gap-10 items-center justify-center xl:gap-0 mb-20\"><div class=\"xl:flex flex-row justify-center items-start w-24 pl-3 pr-3 gap-1 hidden xl:block xl:w-[4vw]\"><div class=\"w-[7px] h-[1px] border-2 border-b border-gray-600 rotate-45\"></div><div class=\"w-[7px] h-[1px] border-2 border-b border-gray-600 rotate-45\"></div><div class=\"w-full h-[1px] border-2 border-b border-gray-600 \"></div></div><li class=\"w-[5rem] h-[5rem]\"><a href=\"https://www.instagram.com/mael.flp/\" target=\"_blank\" class=\"border-2 border-gray-600 rounded-full p-4 hover:bg-gray-600/20 transition-colors duration-300 w-full h-full flex items-center justify-center\" role=\"button\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -148,7 +148,7 @@ func About() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "</a></li><div class=\"xl:flex justify-center items-center w-24 pl-3 pr-3 hidden xl:block\"><div class=\"w-full h-[1px] border-2 border-b  border-gray-600\"></div></div><li class=\"w-[5rem] h-[5rem]\"><a href=\"https://wa.me/51053003\" target=\"_blank\" class=\"border-2 border-gray-600 rounded-full p-4 hover:bg-gray-600/20 transition-colors duration-300 w-full h-full flex items-center justify-center\" role=\"button\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 6, "</a></li><div class=\"xl:flex justify-center items-center w-24 pl-3 pr-3 hidden xl:block xl:w-[3vw]\"><div class=\"w-full h-[1px] border-2 border-b  border-gray-600\"></div></div><li class=\"w-[5rem] h-[5rem]\"><a href=\"https://wa.me/51053003\" target=\"_blank\" class=\"border-2 border-gray-600 rounded-full p-4 hover:bg-gray-600/20 transition-colors duration-300 w-full h-full flex items-center justify-center\" role=\"button\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -176,19 +176,47 @@ func About() templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "</a></li><div class=\"xl:flex justify-center items-center w-24 pl-3 pr-3 gap-1 hidden xl:block\"><div class=\"w-full h-[1px] border-2 border-b  border-gray-600\"></div><div class=\"w-[7px] h-[1px] border-2 border-b border-gray-600 rotate-45\"></div><div class=\"w-[7px] h-[1px] border-2 border-b border-gray-600 rotate-45\"></div></div></ul></div></div></div>")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 7, "</a></li><div class=\"xl:flex justify-center items-center w-24 pl-3 pr-3 hidden xl:block  xl:w-[3vw]\"><div class=\"w-full h-[1px] border-2 border-b  border-gray-600\"></div></div><li class=\"w-[5rem] h-[5rem] \"><a href=\"mailto:eschon.ec@gmail.com\" target=\"_blank\" class=\"border-2 border-gray-600 rounded-full p-4 hover:bg-gray-600/20 transition-colors duration-300 w-full h-full flex items-center justify-center\" role=\"button\">")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Var8 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
+				templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context
+				templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templruntime.GetBuffer(templ_7745c5c3_W)
+				if !templ_7745c5c3_IsBuffer {
+					defer func() {
+						templ_7745c5c3_BufErr := templruntime.ReleaseBuffer(templ_7745c5c3_Buffer)
+						if templ_7745c5c3_Err == nil {
+							templ_7745c5c3_Err = templ_7745c5c3_BufErr
+						}
+					}()
+				}
+				ctx = templ.InitializeContext(ctx)
+				templ_7745c5c3_Err = icon.Mail().Render(ctx, templ_7745c5c3_Buffer)
+				if templ_7745c5c3_Err != nil {
+					return templ_7745c5c3_Err
+				}
+				return nil
+			})
+			templ_7745c5c3_Err = icon.Wrapper(icon.Props{
+				Class: "h-full w-full",
+			}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var8), templ_7745c5c3_Buffer)
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "</a></li><div class=\"xl:flex justify-center items-center w-24 pl-3 pr-3 gap-1 hidden xl:block xl:w-[4vw]\"><div class=\"w-full h-[1px] border-2 border-b  border-gray-600\"></div><div class=\"w-[7px] h-[1px] border-2 border-b border-gray-600 rotate-45\"></div><div class=\"w-[7px] h-[1px] border-2 border-b border-gray-600 rotate-45\"></div></div></ul></div></div></div>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			return nil
 		})
 		templ_7745c5c3_Err = card.Card(card.Props{
-			Class: "h-auto w-[90vw] xl:w-[80vw] bg-secondary/20 backdrop-blur-md p-[5rem] rounded-lg shadow-lg mt-16 mb-16 xl:ml-12 ",
+			Class: "h-auto w-[90vw] xl:w-[80vw] bg-secondary/20 backdrop-blur-md p-[3rem] rounded-lg shadow-lg mt-16 mb-16 xl:ml-12 xl:p-[5rem]",
 		}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var5), templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "</div></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "</div></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
