@@ -7,6 +7,8 @@ import (
 	"mael/cmd/util/animation"
 	"mael/db/generated"
 	"mael/web/templates/components/ui/button"
+	
+	"mael/web/templates/components/ui/icon"
 )
 
 var M = twmerge.Merge
@@ -24,6 +26,49 @@ templ LayerBtnScript() {
 		<script nonce={ templ.GetNonce(ctx) }>
             document.addEventListener('alpine:init', () => {
                 Alpine.data('layerBtn', () => ({
+					init(){
+						this.$watch('nextBtn', value =>{
+							let allNextBtn = $$('[x-ref="nextBtn"]')
+							let allLastBtn = $$('[x-ref="lastBtn"]')
+							if(this.nextBtn === true){
+								allNextBtn.forEach(btn =>{
+									btn.disabled = true
+								})
+								allLastBtn.forEach(btn =>{
+									btn.disabled = true
+								})
+							}
+							if(this.nextBtn === false){
+								allNextBtn.forEach(btn =>{
+									btn.disabled = false
+								})
+								allLastBtn.forEach(btn =>{
+									btn.disabled = false
+								})
+							} 
+						})
+						this.$watch('prevBtn', value =>{
+							let allPrevBtn = $$('[x-ref="prevBtn"]')
+							let allFirstBtn = $$('[x-ref="firstBtn"]')
+							if(this.prevBtn === true){
+								allPrevBtn.forEach(btn =>{
+									btn.disabled = true
+								})
+								allFirstBtn.forEach(btn =>{
+									btn.disabled = true
+								})
+							}
+							if(this.prevBtn === false){
+								allPrevBtn.forEach(btn =>{
+									btn.disabled = false
+								})
+								allFirstBtn.forEach(btn =>{
+									btn.disabled = false
+								})
+							} 
+						})
+
+					},
                     handleClick() {
                        let refId = this.$el.getAttribute("data-ref-id");
                        let refClass = this.$el.getAttribute("data-ref-class");
@@ -35,10 +80,158 @@ templ LayerBtnScript() {
                        let ele = $("#" + refId)
                        ele.style.display = "block";
                        this.currentID = refId;
+					   this.masterIsPlaying = this.isPlaying;
+					   this.stopPlaying();					   
                        this.masterPlaybackFrame = this.currentPlaybackFrame;
-                       this.masterIsPlaying = this.isPlaying;
-                       this.stopPlaying();
                     },
+					playBtn(){
+						this.play()
+						this.getIsPlaying
+						this.getIsStoping
+					},
+					getIsPlaying(){
+						if(!this.renew){
+							return true
+						}
+						return false
+					},
+					getIsStoping(){
+						if(!this.renew){
+							return false
+						}
+						return true
+					},
+					toFirst(){
+						let refId = this.$el.getAttribute("first-layer-id");
+						let refClass = this.$el.getAttribute("first-layer-id");
+						let refClasses = $$("." + refClass)
+						for (let i = 0; i < refClasses.length; i++) {
+								let ele = refClasses[i]
+								ele.style.display = "none";
+						}
+						
+						let ele = $("#" + refId)
+						ele.style.display = "block";
+						this.currentID = refId;
+						this.currVer = refId;
+						this.masterIsPlaying = this.isPlaying;
+						this.stopPlaying();					   
+						this.masterPlaybackFrame = this.currentPlaybackFrame;
+
+						
+					},
+					toLast(){
+						let refId = this.$el.getAttribute("last-layer-id");
+						let refClass = this.$el.getAttribute("first-layer-id")
+						let refClasses = $$("." + refClass)
+						
+						for (let i = 0; i < refClasses.length; i++) {
+								let ele = refClasses[i]
+								ele.style.display = "none";
+						}
+						
+						let ele = $("#" + refId)
+						ele.style.display = "block";
+						this.currentID = refId;
+						
+						this.masterIsPlaying = this.isPlaying;
+						this.stopPlaying();					   
+						this.masterPlaybackFrame = this.currentPlaybackFrame;
+					},
+					toNext(){
+						let currId = this.currentID
+						let refClass = this.masterClass
+						let refClasses = $$("." + refClass)
+						let nextId = ""
+						for (let i = 0; i < this.verList.length; i++){
+							if(this.verList[i] === currId){
+								nextId = this.verList[i+1]
+								for (let j = 0; j < refClasses.length; j++) {
+									let ele = refClasses[j]
+									ele.style.display = "none";
+								}
+								
+								let ele = $("#" + nextId)
+								ele.style.display = "block";
+								this.currentID = nextId;
+								
+								this.masterIsPlaying = this.isPlaying;
+								this.stopPlaying();					   
+								this.masterPlaybackFrame = this.currentPlaybackFrame;
+							}
+							
+						}
+						this.checkAvailable()
+					},
+					toPrev(){
+						let currId = this.currentID
+						let refClass = this.masterClass
+						let refClasses = $$("." + refClass)
+						let nextId = ""
+						for (let i = 0; i < this.verList.length; i++){
+							if(this.verList[i] === currId){
+								nextId = this.verList[i-1]
+								for (let j = 0; j < refClasses.length; j++) {
+									let ele = refClasses[j]
+									ele.style.display = "none";
+								}
+								
+								let ele = $("#" + nextId)
+								ele.style.display = "block";
+								this.currentID = nextId;
+								
+								this.masterIsPlaying = this.isPlaying;
+								this.stopPlaying();					   
+								this.masterPlaybackFrame = this.currentPlaybackFrame;
+							}
+							
+						}
+						this.checkAvailable()
+					},
+					nextFrame(){
+
+						this.stopPlaying();
+						this.masterIsPlaying = false;			
+						let nextFrame = this.currentPlaybackFrame + 1;
+						if (nextFrame === this.frameLength ){
+							nextFrame = 0;
+						}		   
+						this.masterPlaybackFrame = nextFrame;
+					},
+					prevFrame(){
+						this.stopPlaying();
+						this.masterIsPlaying = false;
+						let prevFrame = this.currentPlaybackFrame - 1;
+						if (prevFrame < 0 ){
+							prevFrame = this.frameLength - 1;
+						}
+						this.masterPlaybackFrame = prevFrame;
+					},
+					firstFrame(){
+						this.stopPlaying();
+						this.masterIsPlaying = false;
+								
+						this.currentPlaybackFrame = 0;			   
+						this.masterPlaybackFrame = 0;
+						if (this.masterPlaybackFrame == this.currentPlaybackFrame){
+							this.renew = true;
+							this.currentPlaybackFrame = this.masterPlaybackFrame;
+							this.$refs.sliderControl.value = this.masterPlaybackFrame;
+						}
+					},
+					lastFrame(){
+						this.stopPlaying();
+						this.masterIsPlaying = false;
+								
+						this.currentPlaybackFrame = this.frameLength - 1;			   
+						this.masterPlaybackFrame = this.frameLength - 1;
+						if (this.masterPlaybackFrame == this.currentPlaybackFrame){
+							this.renew = true;
+							this.currentPlaybackFrame = this.masterPlaybackFrame;
+							this.$refs.sliderControl.value = this.masterPlaybackFrame;
+						}
+					}
+
                 }))
             })
         </script>
@@ -55,8 +248,15 @@ templ AnimationSliderScript() {
             currentID: "",
             masterPlaybackFrame: 0,
             masterIsPlaying: false,
+			renew: false,
+			verList: [],
+			masterClass: "",
+			nextBtn: false,
+			prevBtn: true,
+			frameLength: 0,
         }))
         Alpine.data('animationSlider', () => ({
+			playbackId: 0,
             isPlaying: false,
             currentPlaybackFrame: 0,
             init() {
@@ -64,6 +264,7 @@ templ AnimationSliderScript() {
                     this.currentID = this.$el.id
                 }
                 const frames = this.$refs.sliderBody.children
+				this.frameLength = frames.length
                 this.$refs.sliderControl.value = 0;
                 this.$refs.framesDisplay.textContent = 1 + " / " + frames.length;
                 this.$refs.sliderControl.setAttribute("max", frames.length - 1)
@@ -75,12 +276,14 @@ templ AnimationSliderScript() {
                     if(this.isPlaying){
                         this.stopPlaying()
                     }
+						this.renew = true;
                     this.currentPlaybackFrame = this.masterPlaybackFrame;
                     this.$refs.sliderControl.value = this.masterPlaybackFrame;
                     if(this.masterIsPlaying){
                         this.play()
                     }
                 })
+				
             },
             currentFrame() {
                 this.$watch('currentPlaybackFrame', value => {
@@ -124,22 +327,28 @@ templ AnimationSliderScript() {
             },
             async play(e) {
                 if (this.isPlaying) {
+					this.renew = true;
                     this.stopPlaying(e)
                     return
                 }
+				this.renew = false;
                 this.isPlaying = true;
+
+				this.playbackId++;
+				const currentPlaybackId = this.playbackId;
                 if (e && e.target != this.$refs.sliderControl) { //only update when is triggered via event aka not by init()
                     document.body.dispatchEvent(new CustomEvent("animationCursorPlay"));
                 }
                 const frames = this.$refs.sliderBody.children
                 const fps = this.$refs.sliderContainer.getAttribute("slider-fps") * 1;
                 for (let i = this.currentPlaybackFrame; i < frames.length; i++) {
-                    if (this.isPlaying === false) return;
+					if (currentPlaybackId !== this.playbackId || this.renew === true || this.isPlaying === false) return;
                     if (!this.$refs.sliderControl) return;
                     this.$refs.sliderControl.value = i
                     this.$refs.sliderControl.dispatchEvent(new Event("input"));
                     await new Promise(r => setTimeout(r, (1000 / fps)));
                 }
+				if (currentPlaybackId !== this.playbackId) return;
                 this.$refs.sliderControl.value = 0
                 this.$refs.sliderControl.dispatchEvent(new Event("input"));
                 this.stopPlaying()
@@ -147,18 +356,48 @@ templ AnimationSliderScript() {
             },
             stopPlaying(e) {
                 this.isPlaying = false;
+				this.renew = true;
+
                 if (e && e.target !== this.$refs.sliderControl) { //only when triggered by body but no control
-                    document.body.dispatchEvent(new CustomEvent("animationCursorPause"));
+					document.body.dispatchEvent(new CustomEvent("animationCursorPause"));
                 }
-            }
+            },
+			mouseUp(e){
+				this.playbackId++;
+				this.masterPlaybackFrame++;
+				this.masterIsPlaying = true;
+				this.masterPlaybackFrame = this.currentPlaybackFrame
+				if(this.masterPlaybackFrame === this.currentPlaybackFrame){
+					this.play();
+				}
+			},
+			mouseStop(e){
+				this.renew = true;
+				this.stopPlaying()
+				
+				
+				
+			},
+			
         }))
+		Alpine.data('animationSliderInsert', () => ({
+			insertVerSub(){
+				this.verList.push(this.$el.getAttribute("ver-id"))
+			},
+			insertVerMain(){
+				this.verList.push(this.$el.getAttribute("ver-id"))
+				this.masterClass = this.$el.getAttribute("ver-id")
+			},
+		}))
+
     })
 </script>
 	}
 }
 
+
 templ SliderControl(props Props, isTrackCursor bool) {
-	<div class="w-full relative flex justify-center items-center flex-col pt-4 px-2">
+	<div class="w-full relative flex justify-center items-start flex-col  ">
 		<div class="w-full h-[0.1rem] bg-black absolute"></div>
 		<input
 			class={ M("w-full thinRange absolute", props.Class) }
@@ -167,10 +406,10 @@ templ SliderControl(props Props, isTrackCursor bool) {
 			max="0"
 			value="0"
 			@input="updateCurrentFrame"
-			@mousedown="stopPlaying"
-			@touchstart="stopPlaying"
-			@mouseup="play"
-			@touchend="play"
+			@mousedown="mouseStop"
+			@touchstart="mouseStop"
+			@mouseup="mouseUp"
+			@touchend="mouseUp"
 			if isTrackCursor {
 				@mousemove.window="updateToCursorPos"
 			}
@@ -181,7 +420,7 @@ templ SliderControl(props Props, isTrackCursor bool) {
 
 templ FrameDisplay(props Props) {
 	<div
-		class={ M("w-full text-end font-barlow text-[0.6rem] mt-2", props.Class) }
+		class={ M("w-fit text-end font-barlow text-[0.6rem] [@media(min-height:700px)]:mt-2", props.Class) }
 		x-ref="framesDisplay"
 		x-init="currentFrame"
 	></div>
@@ -267,46 +506,67 @@ templ AnimationReelSlider(animation sqlc.Animation, paths []string, index int) {
 		Attrs: templ.Attributes{
 			"id":           fmt.Sprintf("animation-main-%d", animation.ID),
 			"is-auto-play": "true",
+			
 		},
 	},
 		int(animation.Fps.Int32),
 	) {
 		@SliderBody(Props{
-			Class: "h-[65%] md:h-[80%] my-4 md:my-0 max-md:items-center pt-8",
+			Class: "h-[65%] md:h-[95%] my-4 md:my-0 max-md:items-center [@media(min-height:700px)]:pt-3 ",
+			Attrs: templ.Attributes{
+				"@touchstart": 	"touchStart",
+				"@touchend": 	"touchEnd",
+			},
 		}) {
 			for _, path := range paths {
-				<img class="tv-glow h-fit max-h-full md:h-[calc(85dvh*0.7)] md:max-h-full rounded-lg" loading="lazy" src={ path }/>
+				<img class="tv-glow h-fit max-h-full md:h-[calc(85dvh*0.9)] md:max-h-full rounded-lg" loading="lazy" src={ path }/>
 			}
 		}
 		<div
-			class="fixed bottom-2 w-screen flex justify-center left-0"
+			class=" fixed bottom-2 [@media(max-height:700px)]:h-[22%] w-screen flex justify-center left-0 "
 			x-show="getIsShowControl"
 			data-animation-control-index={ fmt.Sprintf("%d", index) }
 		>
-			<div class="p-2 border border-zinc-800/80 bg-stone-500 rounded-lg max-md:backdrop-blur-md mt-18 inward-shadow fixed bottom-2 w-[80%]">
-				<span>{ animation.Label }</span>
-				<div class="my-4 flex flex-row gap-2">
-					@layerBtnCurrent("Current Version")
-					for _, subAnimation := range animationUtil.GetSubAnimations(ctx, animation.ID) {
-						@layerBtn(subAnimation.Label, fmt.Sprintf("animation-sub-%d", subAnimation.ID), fmt.Sprintf("animation-main-%d", subAnimation.MainID))
-					}
+			<div class="p-2 border border-zinc-800/80 bg-stone-500 rounded-lg max-md:backdrop-blur-md mt-18 inward-shadow  bottom-1 w-[80%] flex flex-col gap-2 [@media(min-height:700px)and(max-width:500px)]:h-[20vh]">
+				<div class="flex sm:justify-between max-sm:flex-col max-sm:gap-1">
+					<span>{ animation.Label }</span>
+					<div class="my-0 gap-2 flex flex-row items-start">
+						@layerBtnCurrent(animation.SubName)
+						for _, subAnimation := range animationUtil.GetSubAnimations(ctx, animation.ID) {
+							@layerBtn(subAnimation.Label, fmt.Sprintf("animation-sub-%d", subAnimation.ID), fmt.Sprintf("animation-main-%d", subAnimation.MainID))
+						}
+					</div>
 				</div>
-				@SliderControl(Props{}, false)
-				@FrameDisplay(Props{})
+				<div class=" gap-2 flex flex-col justify-center my-2 [@media(max-height:500px)]:my-0">
+					<div class="flex relative justify-center gap-2 [@media(max-height:700px)]:mb-1">
+						@firstLayerBtn()
+						@prevLayerBtn()
+						@startBtn()
+						@nextLayerBtn()
+						@lastLayerBtn()
+						<div class="absolute right-0 bottom-0">
+							@FrameDisplay(Props{})
+						</div>	
+					</div>			
+						
+					
+					@SliderControl(Props{}, false)
+				</div>
 			</div>
 		</div>
 	}
+
 }
 
 templ layerBtnCurrent(label string) {
 	@button.Button(button.Props{
-		Class: "text-[0.7rem]",
+		Class: "text-[0.7rem] [@media(max-height:700px)]:text-[1.5vh]",
 		Attrs: templ.Attributes{
 			"cursor-clickable": "true",
 		},
 		Variant: gocva.Variant{
 			"variant": "ghost",
-			"size":    "sm",
+			"size":    "smBar",
 		},
 	}) {
 		{ label }
@@ -315,7 +575,7 @@ templ layerBtnCurrent(label string) {
 
 templ layerBtn(label string, refId string, refClass string) {
 	@button.Button(button.Props{
-		Class: "text-[0.7rem]",
+		Class: "text-[0.7rem] [@media(max-height:700px)]:text-[1.5vh]",
 		Attrs: templ.Attributes{
 			"x-data":           "layerBtn",
 			"data-ref-id":      refId,
@@ -325,14 +585,135 @@ templ layerBtn(label string, refId string, refClass string) {
 		},
 		Variant: gocva.Variant{
 			"variant": "glass",
-			"size":    "sm",
+			"size":    "smBar",
 		},
 	}) {
 		{ label }
 	}
 }
 
-templ SubAnimationReelSlider(animation sqlc.SubAnimation, paths []string, index int) {
+templ startBtn(){
+	@button.Button(button.Props{
+		Class: "text-[0.7rem] [@media(max-height:700px)]:text-[1.5vh]",
+		Attrs: templ.Attributes{
+			"x-data":			"layerBtn",
+			"@click":           "playBtn",
+			"cursor-clickable": "true",
+		},
+		Variant: gocva.Variant{
+			"variant": "glass",
+			"size":    "smCircle",
+		},
+	}){
+		@icon.Wrapper(icon.Props{
+				Class: "[&>svg]:stroke-black/70 [&>svg]:stroke-[0.25rem]",
+				Attrs: templ.Attributes{
+					"x-show":		"getIsPlaying",
+				},
+			}) {
+				@icon.Pause()
+			}
+			
+		@icon.Wrapper(icon.Props{
+				Class: "[&>svg]:stroke-black/70 [&>svg]:stroke-[0.25rem]",
+				Attrs: templ.Attributes{
+					"x-show":		"getIsStoping",
+				},
+			}) {
+				@icon.Play()
+			
+		}
+	}
+}
+
+templ prevLayerBtn(){
+	@button.Button(button.Props{
+		Class: "text-[0.7rem] [@media(max-height:700px)]:text-[1.5vh]",
+		Attrs: templ.Attributes{
+			"x-data":			"layerBtn",
+			"@click":           "prevFrame",
+			"cursor-clickable": "true",
+		},
+		Variant: gocva.Variant{
+			"variant": "glass",
+			"size":    "smCircle",
+		},
+	}){
+		@icon.Wrapper(icon.Props{
+				Class: "[&>svg]:stroke-black/70 [&>svg]:stroke-[0.25rem]",
+			}) {
+				@icon.ArrowLeftCurve()
+			}
+	}
+}
+
+templ nextLayerBtn(){
+	@button.Button(button.Props{
+		Class: "text-[0.7rem] [@media(max-height:700px)]:text-[1.5vh]",
+		Attrs: templ.Attributes{
+			"x-data":			"layerBtn",
+			"@click":           "nextFrame",
+			"cursor-clickable": "true",
+			
+		},
+		Variant: gocva.Variant{
+			"variant": "glass",
+			"size":    "smCircle",
+		},
+	}){
+		@icon.Wrapper(icon.Props{
+				Class: "[&>svg]:stroke-black/70 [&>svg]:stroke-[0.25rem]",
+			}) {
+				@icon.ArrowRightCurve()
+			}
+	}
+}
+
+templ firstLayerBtn(){
+	@button.Button(button.Props{
+		Class: "text-[0.7rem] [@media(max-height:700px)]:text-[1.5vh]",
+		Attrs: templ.Attributes{
+			"x-data":			"layerBtn",
+			"cursor-clickable": "true",
+			"@click":           "firstFrame",
+		},
+		Variant: gocva.Variant{
+			"variant": "glass",
+			"size":    "smCircle",
+		},
+	}){
+		@icon.Wrapper(icon.Props{
+				Class: "[&>svg]:stroke-black/70 [&>svg]:stroke-[0.25rem]",
+			}) {
+				@icon.ArrowLeftToLine()
+			}
+	}
+}
+
+templ lastLayerBtn(){
+	
+	@button.Button(button.Props{
+		Class: "text-[0.7rem] [@media(max-height:700px)]:text-[1.5vh]",
+		Attrs: templ.Attributes{
+			"x-data":			"layerBtn",
+			"@click":           "lastFrame",
+			"cursor-clickable": "true",
+
+		},
+		Variant: gocva.Variant{
+			"variant": "glass",
+			"size":    "smCircle",
+		},
+	}){
+		@icon.Wrapper(icon.Props{
+				Class: "[&>svg]:stroke-black/70 [&>svg]:stroke-[0.25rem]",
+			}) {
+				@icon.ArrowRightToLine()
+			}
+	}
+}
+
+templ SubAnimationReelSlider(animation sqlc.SubAnimation, paths []string, index int, mainAnimation sqlc.Animation) {
 	@AnimationSlider(Props{
 		Class: fmt.Sprintf("h-full overflow-hidden hidden fade-in animation-main-%d", animation.MainID),
 		Attrs: templ.Attributes{
@@ -343,31 +724,52 @@ templ SubAnimationReelSlider(animation sqlc.SubAnimation, paths []string, index 
 		int(animation.Fps.Int32),
 	) {
 		@SliderBody(Props{
-			Class: "h-[65%] md:h-[80%] my-4 md:my-0 max-md:items-center pt-8",
+			Class: "h-[65%] md:h-[95%] my-4 md:my-0 max-md:items-center [@media(min-height:700px)]:pt-3" ,
+			Attrs: templ.Attributes{
+				"@touchstart": 	"touchStart",
+				"@touchend": 	"touchEnd",
+			},
 		}) {
 			for _, path := range paths {
-				<img class="tv-glow h-fit max-h-full md:h-[calc(85dvh*0.7)] md:max-h-full rounded-lg" loading="lazy" src={ path }/>
+				<img class="tv-glow h-fit max-h-full md:max-h-full md:h-[calc(85dvh*0.9)] rounded-lg" loading="lazy" src={ path }/>
 			}
 		}
 		<div
-			class="fixed bottom-2 w-screen flex justify-center left-0"
+			class="fixed bottom-2 [@media(max-height:700px)]:h-[22%] w-screen flex justify-center left-0 "
 			x-show="getIsShowControl"
 			data-animation-control-index={ fmt.Sprintf("%d", index) }
 		>
-			<div class="p-2 border border-zinc-800/80 bg-stone-500 rounded-lg max-md:backdrop-blur-md mt-18 inward-shadow w-[80%]">
-				<span>{ animation.Label }</span>
-				<div class="my-4 flex flex-row gap-2">
-					@layerBtn("Current Version", fmt.Sprintf("animation-main-%d", animation.MainID), fmt.Sprintf("animation-main-%d", animation.MainID))
-					for _, subAnimation := range animationUtil.GetSubAnimations(ctx, animation.MainID) {
-						if animation.ID == subAnimation.ID {
-							@layerBtnCurrent(subAnimation.Label)
-						} else {
-							@layerBtn(subAnimation.Label, fmt.Sprintf("animation-sub-%d", subAnimation.ID), fmt.Sprintf("animation-main-%d", subAnimation.MainID))
+			
+			<div class="p-2 border border-zinc-800/80 bg-stone-500 rounded-lg max-md:backdrop-blur-md mt-18 inward-shadow  bottom-2 w-[80%] flex flex-col gap-2 [@media(min-height:700px)and(max-width:500px)]:h-[20vh]">
+				<div class="flex sm:justify-between max-sm:flex-col max-sm:gap-1">
+					<span>{ mainAnimation.Label }</span>
+					<div class="my-0 gap-2 flex flex-row items-start">
+						@layerBtn(mainAnimation.SubName, fmt.Sprintf("animation-main-%d", animation.MainID), fmt.Sprintf("animation-main-%d", animation.MainID))
+						for _, subAnimation := range animationUtil.GetSubAnimations(ctx, animation.MainID) {
+							if animation.ID == subAnimation.ID {
+								@layerBtnCurrent(subAnimation.Label)
+							} else {
+								@layerBtn(subAnimation.Label, fmt.Sprintf("animation-sub-%d", subAnimation.ID), fmt.Sprintf("animation-main-%d", subAnimation.MainID))
+							}
 						}
-					}
+						
+					</div>
 				</div>
-				@SliderControl(Props{}, false)
-				@FrameDisplay(Props{})
+				<div class=" gap-2 flex flex-col justify-center my-2 [@media(max-height:500px)]:my-0">
+					<div class="flex relative justify-center gap-2 [@media(max-height:700px)]:mb-1">
+						@firstLayerBtn()
+						@prevLayerBtn()
+						@startBtn()
+						@nextLayerBtn()
+						@lastLayerBtn()
+						<div class="absolute right-0 bottom-0">
+							@FrameDisplay(Props{})
+						</div>	
+					</div>			
+						
+					
+					@SliderControl(Props{}, false)
+				</div>
 			</div>
 		</div>
 	}

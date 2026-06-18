@@ -1,0 +1,110 @@
+package FrontDesign
+
+templ AnimationFrontDesign(){
+    @theM()
+
+    @ShadowParallaxScript()
+    @CornerWrapper()
+}
+
+var shadowParallaxScriptHandle = templ.NewOnceHandle()
+templ ShadowParallaxScript() {
+    @shadowParallaxScriptHandle.Once() {
+        <script nonce={templ.GetNonce(ctx)}>
+            function registerShadowParallax() {
+                Alpine.data('shadowParallax11', () => ({
+                    mouseX: 0,
+                    mouseY: 0,   
+                    mouseMove(e){
+                        this.mouseX = e.clientX;
+                        this.mouseY = e.clientY;
+                    },
+                    
+                    shadowMove(lengthRatio, scaleRatio){
+                        const rectCoordinate = this.$el.getBoundingClientRect();
+                        const mouseX = this.mouseX;
+                        const mouseY = this.mouseY;
+                        const itemX = rectCoordinate.left + rectCoordinate.width/2;
+                        const itemY = rectCoordinate.top + rectCoordinate.height/2;
+                        const positionX = itemX - mouseX;
+                        const positionY = itemY - mouseY;
+                        const transX = positionX*rectCoordinate.width/window.innerWidth/rectCoordinate.width*lengthRatio*3;
+                        const transY = positionY*rectCoordinate.height/window.innerHeight/rectCoordinate.height*lengthRatio*1.5;
+                        const slope = Math.sqrt(positionX*positionX + positionY*positionY);
+                        this.$el.style.transform = 'translateX(' + transX + 'rem) translateY(' + transY + 'rem) scale(' + (1+slope/window.innerWidth*scaleRatio) + ')';
+                        
+
+                    },
+                    shadowWRotate(lengthRatio, scaleRatio, rotateDegree){
+                        const rectCoordinate = this.$el.getBoundingClientRect();
+                        const mouseX = this.mouseX;
+                        const mouseY = this.mouseY;
+                        const itemX = rectCoordinate.left + rectCoordinate.width/2;
+                        const itemY = rectCoordinate.top + rectCoordinate.height/2;
+                        const positionX = itemX - mouseX;
+                        const positionY = itemY - mouseY;
+                        const transX = positionX*rectCoordinate.width/window.innerWidth/rectCoordinate.width*lengthRatio*3;
+                        const transY = positionY*rectCoordinate.height/window.innerHeight/rectCoordinate.height*lengthRatio*3;
+                        const slope = Math.sqrt(positionX*positionX + positionY*positionY);
+                        this.$el.style.transform = 'translateX(' + transX + 'rem) translateY(' + transY + 'rem) scale(' + (1) + ') rotate(' + (rotateDegree) + 'deg)';
+                        
+
+                    },
+
+                }))
+            }
+            if (typeof Alpine !== "undefined") {
+            registerShadowParallax();
+        } else {
+            document.addEventListener('alpine:init', () => {
+                registerShadowParallax();
+            });
+        }  
+
+        </script>
+    }   
+}
+
+templ CornerWrapper() {
+    <div x-data="shadowParallax11" @mousemove.window="mouseMove" @touchmove.window="mouseMove" class="[@media(max-width:764px)]:hidden [@media(max-height:700px)]:hidden">
+
+        <div  @mousemove.window="shadowMove(1.8, 0.9)" @touchmove.window="shadowMove(1.8, 1.1)"
+            class=" absolute h-[3rem] w-[5rem] right-[4vw] bottom-[13vh] border-b-[1.5rem] border-r-[1.5rem] border-gray-300  "
+        
+        ></div>
+        <div  @mousemove.window="shadowMove(1.4, 0.6)" @touchmove.window="shadowMove(1.4, 0.8)"
+            class="  absolute h-[3rem] w-[5rem] right-[4vw] bottom-[13vh] border-b-[1.5rem] border-r-[1.5rem] border-gray-400"
+        
+        ></div>
+        <div @mousemove.window="shadowMove(1, 0.3)" @touchmove.window="shadowMove(1, 0.5)"
+            class="absolute h-[3rem] w-[5rem] right-[4vw] bottom-[13vh] border-b-[1.5rem] border-r-[1.5rem] border-zinc-500"
+            
+        ></div>
+
+        <div  @mousemove.window="shadowMove(1.8, 0.9)"    @touchmove.window="shadowMove(1.8, 1.1)"  
+            class=" absolute h-[3rem] w-[5rem] left-[4vw] top-[4vh] border-t-[1.5rem] border-l-[1.5rem] border-gray-300"
+            
+        ></div>
+        <div @mousemove.window="shadowMove(1.4, 0.6)" @touchmove.window="shadowMove(1.4, 0.8)"
+            class=" absolute h-[3rem] w-[5rem] left-[4vw] top-[4vh] border-t-[1.5rem] border-l-[1.5rem] border-gray-400 "
+        ></div>
+        <div @mousemove.window="shadowMove(1, 0.3)" @touchmove.window="shadowMove(1, 0.5)"
+            class="absolute h-[3rem] w-[5rem] left-[4vw] top-[4vh] border-t-[1.5rem] border-l-[1.5rem] border-zinc-500"
+            
+        ></div>
+    </div>
+}
+
+
+templ theM(){
+    <div class="hidden max-h-[765px]:block md:block">
+    <div class="absolute h-[15vh] w-[15vw] left-[42.5vw] top-[40vh] flex justify-center items-center opacity-20 ">
+        <h1 class="text-[13rem] font-black text-orange-500  ">M</h1>
+        <h1 class="text-[14rem] z-[-1] font-black text-gray-600 absolute">M</h1>
+        <div class="absolute w-[5vw] left-[15vw] border-t-[2px] border-gray-600"></div>
+        <div class="absolute w-[5vw] right-[15vw] border-t-[2px] border-gray-600"></div>
+
+    </div>
+    </div>
+}
+

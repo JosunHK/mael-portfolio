@@ -244,7 +244,7 @@ func SideMenu() templ.Component {
 			templ_7745c5c3_Var11 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "<span class=\"fixed top-4 left-4 rounded-xl bg-emerald-100 px-2 mr-8 block xl:hidden z-10 text-md shadow-xs border border-gray-600\">MAEL</span><div class=\"fixed top-2 right-2 block xl:hidden z-[70] \" x-data=\"sideMenu\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 8, "<span class=\"fixed top-4 left-4 rounded-xl bg-emerald-100 px-2 mr-8 block xl:hidden z-10 text-md shadow-xs border border-gray-600 [@media(max-height:700px)]:block\">MAEL</span><div class=\"fixed top-2 right-2 block xl:hidden z-[70] [@media(max-height:700px)]:block\" x-data=\"sideMenu\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -382,10 +382,6 @@ func SideMenuContent() templ.Component {
 			return templ_7745c5c3_Err
 		}
 		templ_7745c5c3_Err = NavLinkMobile("CHARACTERS", "/characters/body", "/characters").Render(ctx, templ_7745c5c3_Buffer)
-		if templ_7745c5c3_Err != nil {
-			return templ_7745c5c3_Err
-		}
-		templ_7745c5c3_Err = NavLinkMobile("STORYBOARD", "/storyboard/body", "storyboard").Render(ctx, templ_7745c5c3_Buffer)
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

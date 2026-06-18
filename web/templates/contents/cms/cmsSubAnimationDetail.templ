@@ -3,10 +3,10 @@ package cmsTemplates
 import (
 	"fmt"
 	gocva "github.com/gungun974/gocva"
-	"mael/cmd/util/animation"
+	//"mael/cmd/util/animation"
 	"mael/cmd/util/templ"
 	"mael/db/generated"
-	"mael/web/templates/components/animation"
+	//"mael/web/templates/components/animation"
 	cmsComp "mael/web/templates/components/cms"
 	button "mael/web/templates/components/ui/button"
 	"mael/web/templates/components/ui/card"
@@ -72,7 +72,7 @@ templ subAnimationPreview(animation sqlc.SubAnimation) {
 			Class: "border-2 border-dashed border-cms-border w-full h-full bg-cms-background flex justify-center items-center",
 		}) {
 			if animation.FramesCount.Valid {
-				@animationComponent.SimpleSubAnimationSlider(animation, animationUtil.GetSubAnimationPaths(animation.ID))
+				//@animationComponent.SimpleSubAnimationSlider(animation, animationUtil.GetSubAnimationPaths(animation.ID))
 			} else {
 				@label.Label(
 					label.Props{
