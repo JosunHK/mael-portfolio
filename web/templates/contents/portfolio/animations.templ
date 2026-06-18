@@ -10,6 +10,8 @@ import (
 	"mael/web/templates/components/ui/card"
 	"mael/web/templates/components/ui/icon"
 	"mael/web/templates/components/ui/label"
+	"mael/web/templates/components/animation/animationDesignFront"
+	
 )
 
 templ Animations(animations []sqlc.Animation, thumbDesktop sqlc.Animation, thumbMobile sqlc.Animation) {
@@ -24,13 +26,17 @@ templ Animations(animations []sqlc.Animation, thumbDesktop sqlc.Animation, thumb
 templ AnimationsShowcase(animations []sqlc.Animation) {
 	<div
 		id="animation-slide-container"
-		class="fixed top-0 max-md:mb-4 min-h-[400px] max-md:bottom-4"
+		class="fixed top-0 max-md:mb-4 min-h-[400px] max-md:bottom-4 "
 		x-data="showcaseSlider"
+		
 	>
 		@AnimationShowcaseButtons(len(animations))
+			
 		<div
 			class="h-[85dvh] md:h-screen max-w-screen w-screen overflow-scroll max-md:px-[4.5dvw] md:pl-[5dvw] gap-[4.5dvw] max-md:mb-4 scrollbar-hide snap-x scroll-smooth relative whitespace-nowrap md:block flex flex-row"
 		>
+			
+
 			for i, animation := range animations {
 				<div
 					id={ fmt.Sprintf("animation-slide-%d", i) }
@@ -50,24 +56,44 @@ templ AnimationsShowcase(animations []sqlc.Animation) {
 							</div>
 						}
 					</div>
-					<div class="flex justify-center items-end w-full gap-4 mt-8 md:h-full md:mt-0 z-20 relative">
+					<div class="flex justify-center items-center  w-full gap-4 mt-8 md:h-full md:mt-0 z-20 relative [@media(max-height:700px)]:items-start">
 						@card.Card(card.Props{
 							Attrs: templ.Attributes{
 								"x-data": "animationSliderData",
 							},
-							Class: `border-0 flex justify-center items-center h-[80dvh] w-screen md:h-[90%] md:w-[85%] md:px-12 py-2 flex-col bg-transparent shadow-none`,
+							Class: `border-0 flex justify-center items-center h-screen w-screen md:h-[90%] md:w-[93%]  md:px-12 py-2 flex-col bg-transparent shadow-none `,
 						}) {
+							
+							
 							@animationComponent.AnimationReelSlider(animation, animationUtil.GetAnimationPaths(animation.ID), i)
+							<div 	x-data="animationSliderInsert" 
+									x-init="insertVerMain" 
+									ver-id={ fmt.Sprintf("animation-main-%d", animation.ID) }
+									class="absolute"
+							></div>
 							for _, subAnimation := range animationUtil.GetSubAnimations(ctx, animation.ID) {
-								@animationComponent.SubAnimationReelSlider(subAnimation, animationUtil.GetSubAnimationPaths(subAnimation.ID), i)
+								@animationComponent.SubAnimationReelSlider(subAnimation, animationUtil.GetSubAnimationPaths(subAnimation.ID), i, animation)
+								<div class="absolute" x-data="animationSliderInsert" x-init="insertVerSub" ver-id={ fmt.Sprintf("animation-sub-%d", subAnimation.ID) }></div>
+
 							}
+						
 						}
+						
+							
 					</div>
+						
 				</div>
 			}
+			
 		</div>
+
+		@FrontDesign.AnimationFrontDesign()
+		
+		
 	</div>
 }
+
+
 
 templ AnimationShowcaseButtons(animationCount int) {
 	<div
@@ -125,6 +151,7 @@ templ ShowcaseSliderScript(animationCount int) {
                     isShowPrev: false,
                     isShowNext: true,
                     isShowUp: true,
+					touchCord: 0,
                     init(){
                         const hash = window.location.hash;
                         if(!hash) return;
@@ -198,6 +225,19 @@ templ ShowcaseSliderScript(animationCount int) {
                     getIsShowDown(){
                         return this.isShowDown+"";
                     },
+					touchStart(e){
+						this.touchCord = e.touches[0].clientX;
+					},
+					touchEnd(e){
+						let touchEndX = e.changedTouches[0].clientX;						
+						let swipeDistance = this.touchCord - touchEndX;
+						const threshold = 70;
+						if (swipeDistance > threshold) {
+							this.toNext();
+						} else if (swipeDistance < -threshold) {
+							this.toPrev();
+						}
+					},
                 }))
             }
             if (typeof Alpine !== "undefined") {

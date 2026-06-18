@@ -182,6 +182,21 @@ templ animationDetailForm(animation sqlc.Animation, thumbMode sqlc.ThumbMode) {
 					</a>
 				}
 			}
+			@table.Row(table.Props{
+				Class: "border-cms-border border-b-1 hover:bg-cms-background max-xl:flex max-xl:flex-col max-xl:gap-2",
+			}) {
+				@table.Cell(table.Props{}) {
+					Sub Title:
+				}
+				@table.Cell(table.Props{}) {
+					@cmsComp.Input(
+						input.Props{
+							Name:  "subName",
+							Value: animation.SubName,
+						},
+					)
+				}
+			}	
 		}
 	}
 }

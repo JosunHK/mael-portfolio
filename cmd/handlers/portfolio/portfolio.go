@@ -26,7 +26,7 @@ func Animations(c echo.Context) templ.Component {
 		return portfolioTemplates.Animations([]sqlc.Animation{}, sqlc.Animation{}, sqlc.Animation{})
 	}
   
-  res, err := queries.GetUploadedAnimations(c.Request().Context())
+  	res, err := queries.GetUploadedAnimations(c.Request().Context())
 	if err != nil {
 		return portfolioTemplates.Animations([]sqlc.Animation{}, sqlc.Animation{}, sqlc.Animation{})
 	}

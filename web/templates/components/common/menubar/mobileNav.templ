@@ -68,11 +68,11 @@ templ NavLinkMobile(title string, toPath string, toURL string) {
 }
 
 templ SideMenu() {
-	<span class="fixed top-4 left-4 rounded-xl bg-emerald-100 px-2 mr-8 block xl:hidden z-10 text-md shadow-xs border border-gray-600">
+	<span class="fixed top-4 left-4 rounded-xl bg-emerald-100 px-2 mr-8 block xl:hidden z-10 text-md shadow-xs border border-gray-600 [@media(max-height:700px)]:block">
 		MAEL
 	</span>
 	<div
-		class="fixed top-2 right-2 block xl:hidden z-[70] "
+		class="fixed top-2 right-2 block xl:hidden z-[70] [@media(max-height:700px)]:block"
 		x-data="sideMenu"
 	>
 		@button.Button(button.Props{
@@ -122,7 +122,7 @@ templ SideMenuContent() {
 	<div Class="flex-col items-center w-full gap-3 rounded-none border-none flex pt-14">
 		@NavLinkMobile("ANIMATIONS", "/animation/body", "/animation")
 		@NavLinkMobile("CHARACTERS", "/characters/body", "/characters")
-		@NavLinkMobile("STORYBOARD", "/storyboard/body", "storyboard")
+		//@NavLinkMobile("STORYBOARD", "/storyboard/body", "storyboard")
 		@NavLinkMobile("ABOUT ME", "/about/body", "about")
 	</div>
 }

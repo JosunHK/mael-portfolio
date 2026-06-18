@@ -11,10 +11,10 @@ import templruntime "github.com/a-h/templ/runtime"
 import (
 	"fmt"
 	gocva "github.com/gungun974/gocva"
-	"mael/cmd/util/animation"
+	//"mael/cmd/util/animation"
 	"mael/cmd/util/templ"
 	"mael/db/generated"
-	"mael/web/templates/components/animation"
+	//"mael/web/templates/components/animation"
 	cmsComp "mael/web/templates/components/cms"
 	button "mael/web/templates/components/ui/button"
 	"mael/web/templates/components/ui/card"
@@ -235,10 +235,6 @@ func subAnimationPreview(animation sqlc.SubAnimation) templ.Component {
 				}
 				ctx = templ.InitializeContext(ctx)
 				if animation.FramesCount.Valid {
-					templ_7745c5c3_Err = animationComponent.SimpleSubAnimationSlider(animation, animationUtil.GetSubAnimationPaths(animation.ID)).Render(ctx, templ_7745c5c3_Buffer)
-					if templ_7745c5c3_Err != nil {
-						return templ_7745c5c3_Err
-					}
 				} else {
 					templ_7745c5c3_Var10 := templruntime.GeneratedTemplate(func(templ_7745c5c3_Input templruntime.GeneratedComponentInput) (templ_7745c5c3_Err error) {
 						templ_7745c5c3_W, ctx := templ_7745c5c3_Input.Writer, templ_7745c5c3_Input.Context

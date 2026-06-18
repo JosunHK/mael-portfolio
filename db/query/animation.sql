@@ -61,6 +61,7 @@ UPDATE animation
 Set label = ?,
     fps = ?,
     animation_desc = ?,
+    sub_name = ?,
     frames_count = COALESCE(?, frames_count),
     height = COALESCE(?, height),
     width = COALESCE(?, width)

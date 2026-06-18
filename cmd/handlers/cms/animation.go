@@ -374,6 +374,7 @@ func ModifyDetail(c echo.Context) *resError.Error {
 		Label:         req.Label,
 		AnimationDesc: req.Desc,
 		Fps:           req.Fps,
+		SubName:       req.SubName,
 		FramesCount:   res.FramesCount,
 		Width:         res.Width,
 		Height:        res.Height,
@@ -397,9 +398,14 @@ func ValidateAnimationDetail(detail cmsStruct.ModifyAnimationReq) error {
 		return fmt.Errorf("Invalid fps value")
 	}
 
+	subName := detail.SubName
+	if len(subName) > 30 {
+		return fmt.Errorf("SubName is too long")
+	}
+
 	desc := detail.Desc
 	if len(desc) > 1000 {
-		return fmt.Errorf("Invalid fps value")
+		return fmt.Errorf("Description is too long")
 	}
 
 	return nil
@@ -417,7 +423,7 @@ func ValidateSubAnimationDetail(detail cmsStruct.ModifySubAnimationReq) error {
 
 	desc := detail.Desc
 	if len(desc) > 1000 {
-		return fmt.Errorf("Invalid fps value")
+		return fmt.Errorf("Description is too long")
 	}
 
 	return nil
