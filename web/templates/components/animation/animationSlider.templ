@@ -519,7 +519,7 @@ templ AnimationReelSlider(animation sqlc.Animation, paths []string, index int) {
 			},
 		}) {
 			for _, path := range paths {
-				<img class="tv-glow h-fit max-h-full md:h-[calc(85dvh*0.9)] md:max-h-full rounded-lg" loading="lazy" src={ path }/>
+				<img class=" h-fit max-h-full md:h-[calc(85dvh*0.9)] md:max-h-full rounded-lg" loading="lazy" src={ path }/>
 			}
 		}
 		<div
@@ -527,7 +527,7 @@ templ AnimationReelSlider(animation sqlc.Animation, paths []string, index int) {
 			x-show="getIsShowControl"
 			data-animation-control-index={ fmt.Sprintf("%d", index) }
 		>
-			<div class="p-2 border border-zinc-800/80 bg-stone-500 rounded-lg max-md:backdrop-blur-md mt-18 inward-shadow  bottom-1 w-[80%] flex flex-col gap-2 [@media(min-height:700px)and(max-width:500px)]:h-[20vh] [@media(max-height:500px)]:gap-0">
+			<div class="p-2 border border-zinc-800/80 bg-stone-300 rounded-lg max-md:backdrop-blur-md mt-18 inward-light-shadow  bottom-1 w-[80%] flex flex-col gap-2 [@media(min-height:700px)and(max-width:500px)]:h-[20vh] [@media(max-height:500px)]:gap-0">
 				<div class="flex sm:justify-between max-sm:flex-col max-sm:gap-1 ">
 					<span class="[@media(max-height:500px)]:text-[2vh]">{ animation.Label }</span>
 					<div class="my-0 gap-2 flex flex-row items-start">
@@ -731,7 +731,7 @@ templ SubAnimationReelSlider(animation sqlc.SubAnimation, paths []string, index 
 			},
 		}) {
 			for _, path := range paths {
-				<img class="tv-glow h-fit max-h-full md:max-h-full md:h-[calc(85dvh*0.9)] rounded-lg" loading="lazy" src={ path }/>
+				<img class="h-fit max-h-full md:max-h-full md:h-[calc(85dvh*0.9)] rounded-lg" loading="lazy" src={ path }/>
 			}
 		}
 		<div
@@ -740,7 +740,7 @@ templ SubAnimationReelSlider(animation sqlc.SubAnimation, paths []string, index 
 			data-animation-control-index={ fmt.Sprintf("%d", index) }
 		>
 			
-			<div class="p-2 border border-zinc-800/80 bg-stone-500 rounded-lg max-md:backdrop-blur-md mt-18 inward-shadow  bottom-2 w-[80%] flex flex-col gap-2 [@media(min-height:700px)and(max-width:500px)]:h-[20vh] [@media(max-height:500px)]:gap-0">
+			<div class="p-2 border border-zinc-800/80 bg-stone-300 rounded-lg max-md:backdrop-blur-md mt-18 inward-light-shadow  bottom-2 w-[80%] flex flex-col gap-2 [@media(min-height:700px)and(max-width:500px)]:h-[20vh] [@media(max-height:500px)]:gap-0">
 				<div class="flex sm:justify-between max-sm:flex-col max-sm:gap-1">
 					<span class="[@media(max-height:500px)]:text-[2vh]">{ mainAnimation.Label }</span>
 					<div class="my-0 gap-2 flex flex-row items-start">
