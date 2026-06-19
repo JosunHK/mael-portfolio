@@ -80,11 +80,12 @@ templ CursorScript() {
             cursor.children[2].style.width = "0px"
             cursor.children[2].style.height = "0px"
         });
-
+        
+        const isOn9Device = (/iPhone|iPad/i.test(navigator.userAgent))
 
         document.body.addEventListener('click', function (e) {
             if(e.pointerType === "mouse"){
-                isMouseInViewport = true;
+                isMouseInViewport = !isOn9Device;
                 const cursor = $("#custom-cursor");
                 if (!cursor) return;
                 cursor.style.opacity = "1";
@@ -96,7 +97,7 @@ templ CursorScript() {
             }
         });
 
-        const isOn9Device = (/iPhone|iPad/i.test(navigator.userAgent))
+        
         if (isOn9Device){
             $("body").classList.remove("no-cursor")
         }
