@@ -527,9 +527,9 @@ templ AnimationReelSlider(animation sqlc.Animation, paths []string, index int) {
 			x-show="getIsShowControl"
 			data-animation-control-index={ fmt.Sprintf("%d", index) }
 		>
-			<div class="p-2 border border-zinc-800/80 bg-stone-500 rounded-lg max-md:backdrop-blur-md mt-18 inward-shadow  bottom-1 w-[80%] flex flex-col gap-2 [@media(min-height:700px)and(max-width:500px)]:h-[20vh]">
-				<div class="flex sm:justify-between max-sm:flex-col max-sm:gap-1">
-					<span>{ animation.Label }</span>
+			<div class="p-2 border border-zinc-800/80 bg-stone-500 rounded-lg max-md:backdrop-blur-md mt-18 inward-shadow  bottom-1 w-[80%] flex flex-col gap-2 [@media(min-height:700px)and(max-width:500px)]:h-[20vh] [@media(max-height:500px)]:gap-0">
+				<div class="flex sm:justify-between max-sm:flex-col max-sm:gap-1 ">
+					<span class="[@media(max-height:500px)]:text-[2vh]">{ animation.Label }</span>
 					<div class="my-0 gap-2 flex flex-row items-start">
 						@layerBtnCurrent(animation.SubName)
 						for _, subAnimation := range animationUtil.GetSubAnimations(ctx, animation.ID) {
@@ -740,9 +740,9 @@ templ SubAnimationReelSlider(animation sqlc.SubAnimation, paths []string, index 
 			data-animation-control-index={ fmt.Sprintf("%d", index) }
 		>
 			
-			<div class="p-2 border border-zinc-800/80 bg-stone-500 rounded-lg max-md:backdrop-blur-md mt-18 inward-shadow  bottom-2 w-[80%] flex flex-col gap-2 [@media(min-height:700px)and(max-width:500px)]:h-[20vh]">
+			<div class="p-2 border border-zinc-800/80 bg-stone-500 rounded-lg max-md:backdrop-blur-md mt-18 inward-shadow  bottom-2 w-[80%] flex flex-col gap-2 [@media(min-height:700px)and(max-width:500px)]:h-[20vh] [@media(max-height:500px)]:gap-0">
 				<div class="flex sm:justify-between max-sm:flex-col max-sm:gap-1">
-					<span>{ mainAnimation.Label }</span>
+					<span class="[@media(max-height:500px)]:text-[2vh]">{ mainAnimation.Label }</span>
 					<div class="my-0 gap-2 flex flex-row items-start">
 						@layerBtn(mainAnimation.SubName, fmt.Sprintf("animation-main-%d", animation.MainID), fmt.Sprintf("animation-main-%d", animation.MainID))
 						for _, subAnimation := range animationUtil.GetSubAnimations(ctx, animation.MainID) {

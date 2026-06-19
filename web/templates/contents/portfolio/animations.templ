@@ -159,6 +159,10 @@ templ ShowcaseSliderScript(animationCount int) {
                             this.currentSlide = hash.split("#animation-slide-")[1]*1;
                             this.handleButtonShow()
                         }
+						if(this.currentSlide === this.maxSlideIndex && this.currentSlide === 0){
+							this.isShowNext = false 
+                            this.isShowPrev = false
+						}
                     },
                     focusTop(){
                         window.location = "#top"
@@ -187,7 +191,10 @@ templ ShowcaseSliderScript(animationCount int) {
                         } else if(this.currentSlide === 0) {
                             this.isShowNext = true 
                             this.isShowPrev = false
-                        } else {
+                        } else if(this.currentSlide === this.maxSlideIndex && this.currentSlide === 0){
+							this.isShowNext = false 
+                            this.isShowPrev = false
+						} else{
                             this.isShowPrev = true 
                             this.isShowNext = true 
                         }
