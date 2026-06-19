@@ -80,14 +80,16 @@ templ CursorScript() {
             cursor.children[2].style.width = "0px"
             cursor.children[2].style.height = "0px"
         });
-        
-        const isOn9Device = (/iPhone|iPad/i.test(navigator.userAgent))
 
+        const isOn9Device = (/iPhone|iPad/i.test(navigator.userAgent))
+        if (isOn9Device){
+                    $("body").classList.remove("no-cursor")
+                }
         document.body.addEventListener('click', function (e) {
             if(e.pointerType === "mouse"){
                 isMouseInViewport = !isOn9Device;
                 const cursor = $("#custom-cursor");
-                if (!cursor) return;
+                if (!cursor || !isMouseInViewport) return;
                 cursor.style.opacity = "1";
             } else {
                 isMouseInViewport = false;
@@ -96,12 +98,6 @@ templ CursorScript() {
                 cursor.style.opacity = "0";
             }
         });
-
-        
-        if (isOn9Device){
-            $("body").classList.remove("no-cursor")
-        }
-
 
         //determinds if mouse is in viewport or not
         document.body.addEventListener('mouseenter', function () {
