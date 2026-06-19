@@ -151,12 +151,14 @@ templ ShowcaseSliderScript(animationCount int) {
                     isShowUp: true,
 					touchCord: 0,
                     init(){
+						this.handleButtonShow()
                         const hash = window.location.hash;
-                        if(!hash) return;
+                        if(!hash) return;							
                         if(hash.includes("#animation-slide-")){
                             this.currentSlide = hash.split("#animation-slide-")[1]*1;
                             this.handleButtonShow()
                         }
+						
 						
                     },
                     focusTop(){
@@ -180,13 +182,16 @@ templ ShowcaseSliderScript(animationCount int) {
                         }
                     },
                     handleButtonShow(){
-                        if(this.currentSlide === this.maxSlideIndex) {
+						if (this.maxSlideIndex === 0){
+							this.isShowPrev = false
+                            this.isShowNext = false
+						}else if(this.currentSlide === this.maxSlideIndex) {
                             this.isShowPrev = true 
                             this.isShowNext = false
                         } else if(this.currentSlide === 0) {
                             this.isShowNext = true 
                             this.isShowPrev = false
-                        } else{
+                        } else {
                             this.isShowPrev = true 
                             this.isShowNext = true 
                         }
