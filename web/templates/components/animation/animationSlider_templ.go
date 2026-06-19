@@ -962,7 +962,7 @@ func startBtn() templ.Component {
 					}()
 				}
 				ctx = templ.InitializeContext(ctx)
-				templ_7745c5c3_Err = icon.Pause().Render(ctx, templ_7745c5c3_Buffer)
+				templ_7745c5c3_Err = icon.Pause2().Render(ctx, templ_7745c5c3_Buffer)
 				if templ_7745c5c3_Err != nil {
 					return templ_7745c5c3_Err
 				}
