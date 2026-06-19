@@ -659,14 +659,14 @@ func AnimationReelSlider(animation sqlc.Animation, paths []string, index int) te
 				}
 				ctx = templ.InitializeContext(ctx)
 				for _, path := range paths {
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 29, "<img class=\"tv-glow h-fit max-h-full md:h-[calc(85dvh*0.9)] md:max-h-full rounded-lg\" loading=\"lazy\" src=\"")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 29, "<img class=\" h-fit max-h-full md:h-[calc(85dvh*0.9)] md:max-h-full rounded-lg\" loading=\"lazy\" src=\"")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 					var templ_7745c5c3_Var31 string
 					templ_7745c5c3_Var31, templ_7745c5c3_Err = templ.JoinStringErrs(path)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/animation/animationSlider.templ`, Line: 522, Col: 115}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/animation/animationSlider.templ`, Line: 522, Col: 108}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var31))
 					if templ_7745c5c3_Err != nil {
@@ -702,7 +702,7 @@ func AnimationReelSlider(animation sqlc.Animation, paths []string, index int) te
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 32, "\"><div class=\"p-2 border border-zinc-800/80 bg-stone-500 rounded-lg max-md:backdrop-blur-md mt-18 inward-shadow  bottom-1 w-[80%] flex flex-col gap-2 [@media(min-height:700px)and(max-width:500px)]:h-[20vh] [@media(max-height:500px)]:gap-0\"><div class=\"flex sm:justify-between max-sm:flex-col max-sm:gap-1 \"><span class=\"[@media(max-height:500px)]:text-[2vh]\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 32, "\"><div class=\"p-2 border border-zinc-800/80 bg-stone-300 rounded-lg max-md:backdrop-blur-md mt-18 inward-light-shadow  bottom-1 w-[80%] flex flex-col gap-2 [@media(min-height:700px)and(max-width:500px)]:h-[20vh] [@media(max-height:500px)]:gap-0\"><div class=\"flex sm:justify-between max-sm:flex-col max-sm:gap-1 \"><span class=\"[@media(max-height:500px)]:text-[2vh]\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -1387,14 +1387,14 @@ func SubAnimationReelSlider(animation sqlc.SubAnimation, paths []string, index i
 				}
 				ctx = templ.InitializeContext(ctx)
 				for _, path := range paths {
-					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 39, "<img class=\"tv-glow h-fit max-h-full md:max-h-full md:h-[calc(85dvh*0.9)] rounded-lg\" loading=\"lazy\" src=\"")
+					templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 39, "<img class=\"h-fit max-h-full md:max-h-full md:h-[calc(85dvh*0.9)] rounded-lg\" loading=\"lazy\" src=\"")
 					if templ_7745c5c3_Err != nil {
 						return templ_7745c5c3_Err
 					}
 					var templ_7745c5c3_Var59 string
 					templ_7745c5c3_Var59, templ_7745c5c3_Err = templ.JoinStringErrs(path)
 					if templ_7745c5c3_Err != nil {
-						return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/animation/animationSlider.templ`, Line: 734, Col: 115}
+						return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/animation/animationSlider.templ`, Line: 734, Col: 107}
 					}
 					_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var59))
 					if templ_7745c5c3_Err != nil {
@@ -1430,7 +1430,7 @@ func SubAnimationReelSlider(animation sqlc.SubAnimation, paths []string, index i
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 42, "\"><div class=\"p-2 border border-zinc-800/80 bg-stone-500 rounded-lg max-md:backdrop-blur-md mt-18 inward-shadow  bottom-2 w-[80%] flex flex-col gap-2 [@media(min-height:700px)and(max-width:500px)]:h-[20vh] [@media(max-height:500px)]:gap-0\"><div class=\"flex sm:justify-between max-sm:flex-col max-sm:gap-1\"><span class=\"[@media(max-height:500px)]:text-[2vh]\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 42, "\"><div class=\"p-2 border border-zinc-800/80 bg-stone-300 rounded-lg max-md:backdrop-blur-md mt-18 inward-light-shadow  bottom-2 w-[80%] flex flex-col gap-2 [@media(min-height:700px)and(max-width:500px)]:h-[20vh] [@media(max-height:500px)]:gap-0\"><div class=\"flex sm:justify-between max-sm:flex-col max-sm:gap-1\"><span class=\"[@media(max-height:500px)]:text-[2vh]\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

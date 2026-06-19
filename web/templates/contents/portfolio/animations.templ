@@ -97,7 +97,7 @@ templ AnimationsShowcase(animations []sqlc.Animation) {
 
 templ AnimationShowcaseButtons(animationCount int) {
 	<div
-		class="h-full w-screen absolute bottom-6 md:bottom-0 flex flex-row justify-between items-end md:items-center left-0 z-50 px-4 pointer-events-none"
+		class="h-full w-screen absolute bottom-6 md:bottom-0 flex flex-row justify-between items-end md:items-center left-0  px-4 "
 	>
 		@button.Button(button.Props{
 			Class: "pointer-events-auto data-[isshow=false]:opacity-0 data-[isshow=false]:scale-10 md:flex hidden",
@@ -159,10 +159,7 @@ templ ShowcaseSliderScript(animationCount int) {
                             this.currentSlide = hash.split("#animation-slide-")[1]*1;
                             this.handleButtonShow()
                         }
-						if(this.currentSlide === this.maxSlideIndex && this.currentSlide === 0){
-							this.isShowNext = false 
-                            this.isShowPrev = false
-						}
+						
                     },
                     focusTop(){
                         window.location = "#top"
@@ -191,10 +188,7 @@ templ ShowcaseSliderScript(animationCount int) {
                         } else if(this.currentSlide === 0) {
                             this.isShowNext = true 
                             this.isShowPrev = false
-                        } else if(this.currentSlide === this.maxSlideIndex && this.currentSlide === 0){
-							this.isShowNext = false 
-                            this.isShowPrev = false
-						} else{
+                        } else{
                             this.isShowPrev = true 
                             this.isShowNext = true 
                         }

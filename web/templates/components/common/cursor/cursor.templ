@@ -96,9 +96,15 @@ templ CursorScript() {
             }
         });
 
+        const isOn9Device = (/iPhone|iPad/i.test(navigator.userAgent))
+        if (isOn9Device){
+            $("body").classList.remove("no-cursor")
+        }
+
+
         //determinds if mouse is in viewport or not
         document.body.addEventListener('mouseenter', function () {
-            isMouseInViewport = true;
+            isMouseInViewport = !isOn9Device;
         });
 
         document.body.addEventListener('mouseleave', function () {
