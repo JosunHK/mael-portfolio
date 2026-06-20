@@ -87,7 +87,7 @@ func AnimationsShowcase(animations []sqlc.Animation) templ.Component {
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<div class=\"h-[85dvh] md:h-screen max-w-screen w-screen overflow-scroll max-md:px-[4.5dvw] md:pl-[5dvw] gap-[4.5dvw] max-md:mb-4 scrollbar-hide snap-x scroll-smooth relative whitespace-nowrap md:block flex flex-row\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<div class=\"h-[100dvh] md:h-screen max-w-screen w-screen overflow-scroll max-md:px-[4.5dvw] md:pl-[5dvw] gap-[4.5dvw] max-md:mb-4 scrollbar-hide snap-x scroll-smooth relative whitespace-nowrap md:block flex flex-row\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
