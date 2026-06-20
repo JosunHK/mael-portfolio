@@ -157,7 +157,7 @@ func theM() templ.Component {
 			templ_7745c5c3_Var6 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<div class=\"absolute h-[25dvh] w-[25dvw] left-[0] right-0 ml-auto mr-auto top-[25dvh] md:top-[30dvh] flex justify-center items-center \"><img src=\"static/asset/Watermark_MAEL.PNG\"></div>")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 4, "<div class=\"absolute h-[25dvh] w-[25dvw] left-[0] right-0 ml-auto mr-auto top-[25dvh] md:top-[30dvh] flex justify-center items-center z-5 \"><img src=\"static/asset/Watermark_MAEL.PNG\"></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
