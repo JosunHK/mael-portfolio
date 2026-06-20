@@ -527,9 +527,9 @@ templ AnimationReelSlider(animation sqlc.Animation, paths []string, index int) {
 			x-show="getIsShowControl"
 			data-animation-control-index={ fmt.Sprintf("%d", index) }
 		>
-			<div class="p-2 border border-zinc-800/80 bg-stone-300 rounded-lg max-md:backdrop-blur-md mt-18 inward-light-shadow  bottom-1 w-[80%] flex flex-col gap-2 [@media(min-height:700px)and(max-width:500px)]:h-[20vh] [@media(max-height:500px)]:gap-0">
+			<div class="p-2 border border-zinc-800/80 bg-stone-300 rounded-lg max-md:backdrop-blur-md mt-18 inward-light-shadow  bottom-1 w-[80%] flex flex-col gap-2 [@media(min-height:700px)and(max-width:500px)]:h-[20dvh] [@media(max-height:500px)]:gap-0">
 				<div class="flex sm:justify-between max-sm:flex-col max-sm:gap-1 ">
-					<span class="[@media(max-height:500px)]:text-[2vh]">{ animation.Label }</span>
+					<span class="[@media(max-height:500px)]:text-[2dvh]">{ animation.Label }</span>
 					<div class="my-0 gap-2 flex flex-row items-start">
 						@layerBtnCurrent(animation.SubName)
 						for _, subAnimation := range animationUtil.GetSubAnimations(ctx, animation.ID) {
@@ -560,7 +560,7 @@ templ AnimationReelSlider(animation sqlc.Animation, paths []string, index int) {
 
 templ layerBtnCurrent(label string) {
 	@button.Button(button.Props{
-		Class: "text-[0.7rem] [@media(max-height:700px)]:text-[1.5vh]",
+		Class: "text-[0.7rem] [@media(max-height:700px)]:text-[1.5dvh]",
 		Attrs: templ.Attributes{
 			"cursor-clickable": "true",
 		},
@@ -575,7 +575,7 @@ templ layerBtnCurrent(label string) {
 
 templ layerBtn(label string, refId string, refClass string) {
 	@button.Button(button.Props{
-		Class: "text-[0.7rem] [@media(max-height:700px)]:text-[1.5vh]",
+		Class: "text-[0.7rem] [@media(max-height:700px)]:text-[1.5dvh]",
 		Attrs: templ.Attributes{
 			"x-data":           "layerBtn",
 			"data-ref-id":      refId,
@@ -594,7 +594,7 @@ templ layerBtn(label string, refId string, refClass string) {
 
 templ startBtn(){
 	@button.Button(button.Props{
-		Class: "text-[0.7rem] [@media(max-height:700px)]:text-[1.5vh]",
+		Class: "text-[0.7rem] [@media(max-height:700px)]:text-[1.5dvh]",
 		Attrs: templ.Attributes{
 			"x-data":			"layerBtn",
 			"@click":           "playBtn",
@@ -628,7 +628,7 @@ templ startBtn(){
 
 templ prevLayerBtn(){
 	@button.Button(button.Props{
-		Class: "text-[0.7rem] [@media(max-height:700px)]:text-[1.5vh]",
+		Class: "text-[0.7rem] [@media(max-height:700px)]:text-[1.5dvh]",
 		Attrs: templ.Attributes{
 			"x-data":			"layerBtn",
 			"@click":           "prevFrame",
@@ -649,7 +649,7 @@ templ prevLayerBtn(){
 
 templ nextLayerBtn(){
 	@button.Button(button.Props{
-		Class: "text-[0.7rem] [@media(max-height:700px)]:text-[1.5vh]",
+		Class: "text-[0.7rem] [@media(max-height:700px)]:text-[1.5dvh]",
 		Attrs: templ.Attributes{
 			"x-data":			"layerBtn",
 			"@click":           "nextFrame",
@@ -671,7 +671,7 @@ templ nextLayerBtn(){
 
 templ firstLayerBtn(){
 	@button.Button(button.Props{
-		Class: "text-[0.7rem] [@media(max-height:700px)]:text-[1.5vh]",
+		Class: "text-[0.7rem] [@media(max-height:700px)]:text-[1.5dvh]",
 		Attrs: templ.Attributes{
 			"x-data":			"layerBtn",
 			"cursor-clickable": "true",
@@ -693,7 +693,7 @@ templ firstLayerBtn(){
 templ lastLayerBtn(){
 	
 	@button.Button(button.Props{
-		Class: "text-[0.7rem] [@media(max-height:700px)]:text-[1.5vh]",
+		Class: "text-[0.7rem] [@media(max-height:700px)]:text-[1.5dvh]",
 		Attrs: templ.Attributes{
 			"x-data":			"layerBtn",
 			"@click":           "lastFrame",
@@ -740,7 +740,7 @@ templ SubAnimationReelSlider(animation sqlc.SubAnimation, paths []string, index 
 			data-animation-control-index={ fmt.Sprintf("%d", index) }
 		>
 			
-			<div class="p-2 border border-zinc-800/80 bg-stone-300 rounded-lg max-md:backdrop-blur-md mt-18 inward-light-shadow  bottom-2 w-[80%] flex flex-col gap-2 [@media(min-height:700px)and(max-width:500px)]:h-[20vh] [@media(max-height:500px)]:gap-0">
+			<div class="p-2 border border-zinc-800/80 bg-stone-300 rounded-lg max-md:backdrop-blur-md mt-18 inward-light-shadow  bottom-2 w-[80%] flex flex-col gap-2 [@media(min-height:700px)and(max-width:500px)]:h-[20dvh] [@media(max-height:500px)]:gap-0">
 				<div class="flex sm:justify-between max-sm:flex-col max-sm:gap-1">
 					<span class="[@media(max-height:500px)]:text-[2vh]">{ mainAnimation.Label }</span>
 					<div class="my-0 gap-2 flex flex-row items-start">
