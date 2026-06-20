@@ -689,7 +689,7 @@ func AnimationReelSlider(animation sqlc.Animation, paths []string, index int) te
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 31, " <div class=\" fixed bottom-2 [@media(max-height:700px)]:h-[22%] w-screen flex justify-center left-0 \" x-show=\"getIsShowControl\" data-animation-control-index=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 31, " <div class=\" fixed bottom-2 [@media(max-height:700px)]:h-[22dvh] w-screen flex justify-center left-0 \" x-show=\"getIsShowControl\" data-animation-control-index=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -1417,7 +1417,7 @@ func SubAnimationReelSlider(animation sqlc.SubAnimation, paths []string, index i
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 41, " <div class=\"fixed bottom-2 [@media(max-height:700px)]:h-[22%] w-screen flex justify-center left-0 \" x-show=\"getIsShowControl\" data-animation-control-index=\"")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 41, " <div class=\"fixed bottom-2 [@media(max-height:700px)]:h-[22dvh] w-screen flex justify-center left-0 \" x-show=\"getIsShowControl\" data-animation-control-index=\"")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
