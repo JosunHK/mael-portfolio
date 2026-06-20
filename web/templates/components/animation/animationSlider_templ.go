@@ -702,14 +702,14 @@ func AnimationReelSlider(animation sqlc.Animation, paths []string, index int) te
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 32, "\"><div class=\"p-2 border border-zinc-800/80 bg-stone-300 rounded-lg max-md:backdrop-blur-md mt-18 inward-light-shadow  bottom-1 w-[80%] flex flex-col gap-2 [@media(min-height:700px)and(max-width:500px)]:h-[20vh] [@media(max-height:500px)]:gap-0\"><div class=\"flex sm:justify-between max-sm:flex-col max-sm:gap-1 \"><span class=\"[@media(max-height:500px)]:text-[2vh]\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 32, "\"><div class=\"p-2 border border-zinc-800/80 bg-stone-300 rounded-lg max-md:backdrop-blur-md mt-18 inward-light-shadow  bottom-1 w-[80%] flex flex-col gap-2 [@media(min-height:700px)and(max-width:500px)]:h-[20dvh] [@media(max-height:500px)]:gap-0\"><div class=\"flex sm:justify-between max-sm:flex-col max-sm:gap-1 \"><span class=\"[@media(max-height:500px)]:text-[2dvh]\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 			var templ_7745c5c3_Var33 string
 			templ_7745c5c3_Var33, templ_7745c5c3_Err = templ.JoinStringErrs(animation.Label)
 			if templ_7745c5c3_Err != nil {
-				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/animation/animationSlider.templ`, Line: 532, Col: 74}
+				return templ.Error{Err: templ_7745c5c3_Err, FileName: `web/templates/components/animation/animationSlider.templ`, Line: 532, Col: 75}
 			}
 			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString(templ.EscapeString(templ_7745c5c3_Var33))
 			if templ_7745c5c3_Err != nil {
@@ -836,7 +836,7 @@ func layerBtnCurrent(label string) templ.Component {
 			return nil
 		})
 		templ_7745c5c3_Err = button.Button(button.Props{
-			Class: "text-[0.7rem] [@media(max-height:700px)]:text-[1.5vh]",
+			Class: "text-[0.7rem] [@media(max-height:700px)]:text-[1.5dvh]",
 			Attrs: templ.Attributes{
 				"cursor-clickable": "true",
 			},
@@ -897,7 +897,7 @@ func layerBtn(label string, refId string, refClass string) templ.Component {
 			return nil
 		})
 		templ_7745c5c3_Err = button.Button(button.Props{
-			Class: "text-[0.7rem] [@media(max-height:700px)]:text-[1.5vh]",
+			Class: "text-[0.7rem] [@media(max-height:700px)]:text-[1.5dvh]",
 			Attrs: templ.Attributes{
 				"x-data":           "layerBtn",
 				"data-ref-id":      refId,
@@ -1011,7 +1011,7 @@ func startBtn() templ.Component {
 			return nil
 		})
 		templ_7745c5c3_Err = button.Button(button.Props{
-			Class: "text-[0.7rem] [@media(max-height:700px)]:text-[1.5vh]",
+			Class: "text-[0.7rem] [@media(max-height:700px)]:text-[1.5dvh]",
 			Attrs: templ.Attributes{
 				"x-data":           "layerBtn",
 				"@click":           "playBtn",
@@ -1089,7 +1089,7 @@ func prevLayerBtn() templ.Component {
 			return nil
 		})
 		templ_7745c5c3_Err = button.Button(button.Props{
-			Class: "text-[0.7rem] [@media(max-height:700px)]:text-[1.5vh]",
+			Class: "text-[0.7rem] [@media(max-height:700px)]:text-[1.5dvh]",
 			Attrs: templ.Attributes{
 				"x-data":           "layerBtn",
 				"@click":           "prevFrame",
@@ -1167,7 +1167,7 @@ func nextLayerBtn() templ.Component {
 			return nil
 		})
 		templ_7745c5c3_Err = button.Button(button.Props{
-			Class: "text-[0.7rem] [@media(max-height:700px)]:text-[1.5vh]",
+			Class: "text-[0.7rem] [@media(max-height:700px)]:text-[1.5dvh]",
 			Attrs: templ.Attributes{
 				"x-data":           "layerBtn",
 				"@click":           "nextFrame",
@@ -1245,7 +1245,7 @@ func firstLayerBtn() templ.Component {
 			return nil
 		})
 		templ_7745c5c3_Err = button.Button(button.Props{
-			Class: "text-[0.7rem] [@media(max-height:700px)]:text-[1.5vh]",
+			Class: "text-[0.7rem] [@media(max-height:700px)]:text-[1.5dvh]",
 			Attrs: templ.Attributes{
 				"x-data":           "layerBtn",
 				"cursor-clickable": "true",
@@ -1323,7 +1323,7 @@ func lastLayerBtn() templ.Component {
 			return nil
 		})
 		templ_7745c5c3_Err = button.Button(button.Props{
-			Class: "text-[0.7rem] [@media(max-height:700px)]:text-[1.5vh]",
+			Class: "text-[0.7rem] [@media(max-height:700px)]:text-[1.5dvh]",
 			Attrs: templ.Attributes{
 				"x-data":           "layerBtn",
 				"@click":           "lastFrame",
@@ -1430,7 +1430,7 @@ func SubAnimationReelSlider(animation sqlc.SubAnimation, paths []string, index i
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 42, "\"><div class=\"p-2 border border-zinc-800/80 bg-stone-300 rounded-lg max-md:backdrop-blur-md mt-18 inward-light-shadow  bottom-2 w-[80%] flex flex-col gap-2 [@media(min-height:700px)and(max-width:500px)]:h-[20vh] [@media(max-height:500px)]:gap-0\"><div class=\"flex sm:justify-between max-sm:flex-col max-sm:gap-1\"><span class=\"[@media(max-height:500px)]:text-[2vh]\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 42, "\"><div class=\"p-2 border border-zinc-800/80 bg-stone-300 rounded-lg max-md:backdrop-blur-md mt-18 inward-light-shadow  bottom-2 w-[80%] flex flex-col gap-2 [@media(min-height:700px)and(max-width:500px)]:h-[20dvh] [@media(max-height:500px)]:gap-0\"><div class=\"flex sm:justify-between max-sm:flex-col max-sm:gap-1\"><span class=\"[@media(max-height:500px)]:text-[2vh]\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}

@@ -167,7 +167,7 @@ func AnimationsShowcase(animations []sqlc.Animation) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "</div><div class=\"flex justify-center items-center  w-full gap-4 mt-8 md:h-full md:mt-0 z-20 relative [@media(max-height:700px)]:items-start\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "</div><div class=\"flex justify-center items-center h-full w-full gap-4 mt-8 md:h-full md:mt-0 z-20 relative [@media(max-height:700px)]:items-start\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -233,7 +233,7 @@ func AnimationsShowcase(animations []sqlc.Animation) templ.Component {
 				Attrs: templ.Attributes{
 					"x-data": "animationSliderData",
 				},
-				Class: `border-0 flex justify-center items-center h-screen w-screen md:h-[90%] md:w-[93%]  md:px-12 py-2 flex-col bg-transparent shadow-none `,
+				Class: `border-0 flex justify-center items-center h-full w-screen md:h-[90%] md:w-[93%]  md:px-12 py-2 flex-col bg-transparent shadow-none `,
 			}).Render(templ.WithChildren(ctx, templ_7745c5c3_Var7), templ_7745c5c3_Buffer)
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
