@@ -167,7 +167,7 @@ func AnimationsShowcase(animations []sqlc.Animation) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "</div><div class=\"flex justify-center items-center h-full w-full gap-4 mt-8 md:h-full md:mt-0 z-20 relative [@media(max-height:700px)]:items-start\">")
+			templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 9, "</div><div class=\"flex justify-center items-center h-[100dvh] w-[dvw] gap-4 mt-8 md:h-full md:mt-0 z-20 relative [@media(max-height:700px)]:items-start\">")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
