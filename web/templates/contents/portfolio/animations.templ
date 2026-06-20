@@ -15,7 +15,7 @@ import (
 )
 
 templ Animations(animations []sqlc.Animation, thumbDesktop sqlc.Animation, thumbMobile sqlc.Animation) {
-	<div id="content" class="relative scrollbar-hide h-[100dvh]">
+	<div id="content" class="relative scrollbar-hide ">
 		
 		@AnimationsShowcase(animations)
 	</div>
@@ -24,7 +24,7 @@ templ Animations(animations []sqlc.Animation, thumbDesktop sqlc.Animation, thumb
 templ AnimationsShowcase(animations []sqlc.Animation) {
 	<div
 		id="animation-slide-container"
-		class="fixed top-0 max-md:mb-4 min-h-[400px] max-md:bottom-4 "
+		class="fixed top-0 max-md:mb-4 max-md:bottom-4 h-[100dvh]"
 		x-data="showcaseSlider"
 		
 	>

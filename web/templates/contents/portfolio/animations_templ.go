@@ -42,7 +42,7 @@ func Animations(animations []sqlc.Animation, thumbDesktop sqlc.Animation, thumbM
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div id=\"content\" class=\"relative scrollbar-hide h-[100dvh]\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 1, "<div id=\"content\" class=\"relative scrollbar-hide \">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -79,7 +79,7 @@ func AnimationsShowcase(animations []sqlc.Animation) templ.Component {
 			templ_7745c5c3_Var2 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<div id=\"animation-slide-container\" class=\"fixed top-0 max-md:mb-4 min-h-[400px] max-md:bottom-4 \" x-data=\"showcaseSlider\">")
+		templ_7745c5c3_Err = templruntime.WriteString(templ_7745c5c3_Buffer, 3, "<div id=\"animation-slide-container\" class=\"fixed top-0 max-md:mb-4 max-md:bottom-4 h-[100dvh]\" x-data=\"showcaseSlider\">")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
